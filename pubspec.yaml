@@ -1,8 +1,8 @@
 name: sensors_analytics_flutter_plugin
-description: A new flutter plugin project.
+description: A flutter plugin project for sensors analytics SDK.
 version: 0.0.1
 author: "zuowei <ziven.xiang@foxmail.com>"
-homepage: "http://www.sensorsdata.cn"
+homepage: "https://github.com/sensorsdata/sensors_analytics_flutter_plugin"
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
