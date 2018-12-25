@@ -28,6 +28,17 @@ xcuserdata/
 *.dSYM.zip
 *.dSYM
 
+#flutter 默认 ignore
+.DS_Store
+.dart_tool/
+
+.packages
+.pub/
+pubspec.lock
+
+build/
+
+
 # CocoaPods
 #
 # We recommend against adding the Pods directory to your .gitignore. However
