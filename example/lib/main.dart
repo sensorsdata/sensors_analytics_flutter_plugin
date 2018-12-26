@@ -78,7 +78,7 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               leading: Icon(Icons.phone),
               title: Text('trackTimerEnd'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.trackTimerEnd('Cell_2_Click',{'key1':null,'key2':'value2'});},
+              onTap: (){ SensorsAnalyticsFlutterPlugin.trackTimerEnd('TestTrackTimer',{'key1':null,'key2':'value2'});},
             ),
             ListTile(
               leading: Icon(Icons.phone),
