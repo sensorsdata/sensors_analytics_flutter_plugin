@@ -2,33 +2,32 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+// This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
   static const MethodChannel _channel =
       const MethodChannel('sensors_analytics_flutter_plugin');
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
+  static Future<String> get getDistinctId async {
+    return await _channel.invokeMethod('getDistinctId');
   }
 
-  static Future<String> get distinctId async {
-    final String version = await _channel.invokeMethod('getDistinctId');
-    return version;
-  }
-
-  static void track(String event ,Map<String,dynamic> properties ) {
-    assert(event != null);
-    List<dynamic> params = [event,properties];
+  static void track(String eventName ,Map<String,dynamic> properties ) {
+    List<dynamic> params = [eventName,properties];
     _channel.invokeMethod('track',params);
   }
 
-  static void trackTimerStart(String event) {
-    List<dynamic> params = [event];
+  static void trackInstallation(String eventName ,Map<String,dynamic> properties ) {
+    List<dynamic> params = [eventName,properties];
+    _channel.invokeMethod('trackInstallation',params);
+  }
+
+  static void trackTimerStart(String eventName) {
+    List<String> params = [eventName];
     _channel.invokeMethod('trackTimerStart',params);
   }
 
-  static void trackTimerEnd(String event ,Map<String,dynamic> properties ) {
-    List<dynamic> params = [event,properties];
+  static void trackTimerEnd(String eventName ,Map<String,dynamic> properties ) {
+    List<dynamic> params = [eventName,properties];
     _channel.invokeMethod('trackTimerEnd',params);
   }
 
@@ -37,7 +36,7 @@ class SensorsAnalyticsFlutterPlugin {
   } 
 
   static void login(String loginId){
-    List<dynamic> params = [loginId];
+    List<String> params = [loginId];
     _channel.invokeMethod('login',params);
   }
 
@@ -45,33 +44,33 @@ class SensorsAnalyticsFlutterPlugin {
     _channel.invokeMethod('logout');
   }
 
-  static void trackViewScreenWithUrl(String url ,Map<String,dynamic> properties ) {
+  static void trackViewScreen(String url ,Map<String,dynamic> properties ) {
     List<dynamic> params = [url,properties];
-    _channel.invokeMethod('trackViewScreenWithUrl',params);
+    _channel.invokeMethod('trackViewScreen',params);
   }  
 
-  static void profileSet(Map<String,dynamic> profileDict){
-    List<dynamic> params = [profileDict];
+  static void profileSet(Map<String,dynamic> profileProperties){
+    List<dynamic> params = [profileProperties];
     _channel.invokeMethod('profileSet',params);
   }
 
-  static void profileSetOnce(Map<String,dynamic> profileDict){
-    List<dynamic> params = [profileDict];
+  static void profileSetOnce(Map<String,dynamic> profileProperties){
+    List<dynamic> params = [profileProperties];
     _channel.invokeMethod('profileSetOnce',params);
   }
 
-  static void profileUnset(String profile){
-    List<dynamic> params = [profile];
+  static void profileUnset(String profilePropertity){
+    List<dynamic> params = [profilePropertity];
     _channel.invokeMethod('profileUnset',params);
   } 
 
-  static void profileIncrement(String profile, dynamic amount) {
-    List<dynamic> params = [profile,amount];
+  static void profileIncrement(String profilePropertity, num number) {
+    List<dynamic> params = [profilePropertity,number];
     _channel.invokeMethod('profileIncrement',params);
   }
 
-  static void profileAppend(String profile, List<dynamic> content) {
-    List<dynamic> params = [profile,content];
+  static void profileAppend(String profilePropertity, List<String> content) {
+    List<dynamic> params = [profilePropertity,content];
     _channel.invokeMethod('profileAppend',params);
   }
 

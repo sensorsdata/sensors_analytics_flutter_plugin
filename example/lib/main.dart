@@ -12,8 +12,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  String _distinctId = 'Unknown';
+  String _distinctId = '';
 
   @override
   void initState() {
@@ -23,15 +22,11 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
     String distinctId;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-     // platformVersion = await SensorsAnalyticsFlutterPlugin.platformVersion;
-      distinctId = await SensorsAnalyticsFlutterPlugin.distinctId;
-     SensorsAnalyticsFlutterPlugin.track('FutterEventTest',{'key1':null,'key2':'value2'});
+      distinctId = await SensorsAnalyticsFlutterPlugin.getDistinctId;
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
       distinctId = 'Failed to get distinctId.';
 
     }
@@ -42,7 +37,6 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
       _distinctId = distinctId;
 
     });
@@ -53,88 +47,39 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Plugin example app: $_distinctId'),
+          title: Text('Flutter Plugin for Sensors Analytics.'),
         ),
-        //body: Center(
-        //  child: Text('Running on: $_platformVersion\n'),
-        //),
         body: ListView(
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.map),
-              title: Text(_distinctId),
+              title: Text('This is the official Flutter Plugin for Sensors Analytics.'),
               onTap: (){},
             ),
             ListTile(
-              leading: Icon(Icons.photo_album),
-              title: Text('track'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.track('Cell_1_Click',{'key1':null,'key2':'value2'});},
+              leading: Icon(Icons.account_circle),
+              title: Text('注册成功/登录成功时调用 login '),
+              onTap: (){ SensorsAnalyticsFlutterPlugin.login('传入你们服务端分配给用户的登录 ID');},
             ),
             ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('trackTimerStart'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.trackTimerStart('TestTrackTimer');},
+              leading: Icon(Icons.event),
+              title: Text('触发激活事件 trackInstallation '),
+              onTap: (){ SensorsAnalyticsFlutterPlugin.trackInstallation('AppInstall',{});},
             ),
             ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('trackTimerEnd'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.trackTimerEnd('TestTrackTimer',{'key1':null,'key2':'value2'});},
+              leading: Icon(Icons.event),
+              title: Text('追踪事件 track'),
+              onTap: (){ SensorsAnalyticsFlutterPlugin.track('ViewProduct',{'ProductID':123456,'ProductCatalog':'Laptop Computer'});},
             ),
             ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('clearTrackTimer'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.clearTrackTimer();},
+              leading: Icon(Icons.assessment),
+              title: Text('设置用户属性 profileSet'),
+              onTap: (){ SensorsAnalyticsFlutterPlugin.profileSet({'Age':18,'Sex':'Male'});},
             ),
             ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('login'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.login('NewID_uid');},
-            ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('logout'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.logout;},
-            ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('trackViewScreenWithUrl'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.trackViewScreenWithUrl('trackViewScreenWithUrl',{'key1':null,'key2':'value2'});},
-            ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('profileSet'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.profileSet({'name':'liming','age':100,'address':['beijing','hunan']});},
-            ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('profileSetOnce'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.profileSetOnce({'key1':'value1','key2':'value2'});},
-            ), 
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('profileUnset'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.profileUnset('key1');},
-            ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('profileIncrement'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.profileIncrement('age',10);},
-            ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('profileAppend'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.profileAppend('address',['shanghai','guangzhou']);},
-            ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('profileDelete'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.profileDelete();},
-            ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('clearKeychainData'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.clearKeychainData();},
-            ),
+              title: Text('https://github.com/sensorsdata/sensors_analytics_flutter_plugin'),
+              onTap: (){},
+            )
+
           ],
         ),
       ),
