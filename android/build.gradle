@@ -14,6 +14,9 @@ buildscript {
 
 rootProject.allprojects {
     repositories {
+       maven {
+          url 'https://dl.bintray.com/zouyuhan/maven'
+        }
         google()
         jcenter()
     }
@@ -31,4 +34,8 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+}
+
+dependencies {
+    api 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:latest.integration'
 }
