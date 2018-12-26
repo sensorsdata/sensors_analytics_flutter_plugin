@@ -33,12 +33,12 @@ public class App extends FlutterApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        //初始化 SDK 
         initSensorsDataSDK(this);
     }
 
     /**
-     * 初始化 SDK 、设置公共属性、开启自动采集
+     * 初始化 SDK 、开启自动采集
      */
     private void initSensorsDataSDK(Context context) {
         try {
