@@ -7,7 +7,7 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodTrackTimerStart = @"tr
 static NSString* const SensorsAnalyticsFlutterPluginMethodTrackTimerEnd = @"trackTimerEnd";
 static NSString* const SensorsAnalyticsFlutterPluginMethodTrackTimerClear = @"clearTrackTimer";
 static NSString* const SensorsAnalyticsFlutterPluginMethodTrackInstallation = @"trackInstallation";
-static NSString* const SensorsAnalyticsFlutterPluginMethodTrackViewScreenWithUrl = @"trackViewScreenWithUrl";
+static NSString* const SensorsAnalyticsFlutterPluginMethodTrackViewScreenWithUrl = @"trackViewScreen";
 
 static NSString* const SensorsAnalyticsFlutterPluginMethodLogin = @"login";
 static NSString* const SensorsAnalyticsFlutterPluginMethodLogout = @"logout";

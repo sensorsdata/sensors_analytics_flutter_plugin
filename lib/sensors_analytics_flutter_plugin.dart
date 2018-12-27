@@ -12,21 +12,25 @@ class SensorsAnalyticsFlutterPlugin {
   }
 
   static void track(String eventName ,Map<String,dynamic> properties ) {
+    assert(eventName != null);
     List<dynamic> params = [eventName,properties];
     _channel.invokeMethod('track',params);
   }
 
   static void trackInstallation(String eventName ,Map<String,dynamic> properties ) {
+    assert(eventName != null);
     List<dynamic> params = [eventName,properties];
     _channel.invokeMethod('trackInstallation',params);
   }
 
   static void trackTimerStart(String eventName) {
+    assert(eventName != null);
     List<String> params = [eventName];
     _channel.invokeMethod('trackTimerStart',params);
   }
 
   static void trackTimerEnd(String eventName ,Map<String,dynamic> properties ) {
+    assert(eventName != null);
     List<dynamic> params = [eventName,properties];
     _channel.invokeMethod('trackTimerEnd',params);
   }
@@ -36,6 +40,7 @@ class SensorsAnalyticsFlutterPlugin {
   } 
 
   static void login(String loginId){
+    assert(loginId != null);
     List<String> params = [loginId];
     _channel.invokeMethod('login',params);
   }
@@ -45,6 +50,7 @@ class SensorsAnalyticsFlutterPlugin {
   }
 
   static void trackViewScreen(String url ,Map<String,dynamic> properties ) {
+    assert(url != null);
     List<dynamic> params = [url,properties];
     _channel.invokeMethod('trackViewScreen',params);
   }  
