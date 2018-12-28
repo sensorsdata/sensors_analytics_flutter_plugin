@@ -52,6 +52,10 @@ class _MyAppState extends State<MyApp> {
         body: ListView(
           children: <Widget>[
             ListTile(
+              title: Text(_distinctId),
+              onTap: (){},
+            ),
+            ListTile(
               title: Text('This is the official Flutter Plugin for Sensors Analytics.'),
               onTap: (){},
             ),
