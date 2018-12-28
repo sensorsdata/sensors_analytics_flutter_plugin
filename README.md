@@ -1,37 +1,104 @@
-# sensors_analytics_flutter_plugin
 
-SensorsAnalyticsSDK 的 [Flutter](https://flutter.io) 插件.
-同时支持 iOS & Android.
+神策 [`sensors_analytics_flutter_plugin`](https://pub.dartlang.org/packages/sensors_analytics_flutter_plugin) 插件，封装了神策 iOS & Android SDK 常用 API ，使用此插件，可以完成埋点的统计上报。
 
-* track()
-* getDistinctId()
-* trackInstallation()
-* profileSet()
-
-## 工程中添加插件
-在 flutter 工程添加 dependency:
+## 1. 在项目中添加安装插件
+在 Flutter 项目的 `pubspec.yam` 文件中添加 `sensors_analytics_flutter_plugin` 依赖
 
 ```yml
 dependencies:
-  ...
+  # 添加神策 flutter plugin 
   sensors_analytics_flutter_plugin: any
 ```
 
-终端执行命令
+执行 flutter packages get 命令安装插件
 
 ```shell
-  flutter packages get sensors_analytics_flutter_plugin 
-  flutter packages upgrade sensors_analytics_flutter_plugin
+  flutter packages get  
 ```
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
-## Android
 
-## iOS
+[Flutter 官网文档](https://flutter.io/docs)
+## 2. Android 端
+在程序的入口 **Application** 的 `onCreate()` 中调用 `SensorsDataAPI.sharedInstance()` 初始化 SDK：
 
-**初始化 SDK**
+```java
+import io.flutter.app.FlutterApplication;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
+import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
+
+public class App extends FlutterApplication {
+
+    // debug 模式的数据接收地址 （测试，测试项目）
+    final static String SA_SERVER_URL_DEBUG = "【测试项目】数据接收地址";
+
+    // release 模式的数据接收地址（发版，正式项目）
+    final static String SA_SERVER_URL_RELEASE = "【正式项目】数据接收地址";
+
+    // SDK Debug 模式选项
+    //   SensorsDataAPI.DebugMode.DEBUG_OFF - 关闭 Debug 模式
+    //   SensorsDataAPI.DebugMode.DEBUG_ONLY - 打开 Debug 模式，校验数据，但不进行数据导入
+    //   SensorsDataAPI.DebugMode.DEBUG_AND_TRACK - 打开 Debug 模式，校验数据，并将数据导入到 Sensors Analytics 中
+    // TODO 注意！请不要在正式发布的 App 中使用 DEBUG_AND_TRACK /DEBUG_ONLY 模式！ 请使用 DEBUG_OFF 模式！！！
+
+    // debug 时，初始化 SDK 使用测试项目数据接收 URL 、使用 DEBUG_AND_TRACK 模式；release 时，初始化 SDK 使用正式项目数据接收 URL 、使用 DEBUG_OFF 模式。
+    private boolean isDebugMode;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // 在 Application 的 onCreate 初始化神策 SDK
+        initSensorsDataSDK(this);
+    }
+
+    /**
+     * 初始化 SDK 、开启自动采集
+     */
+    private void initSensorsDataSDK(Context context) {
+        try {
+            // 初始化 SDK
+            SensorsDataAPI.sharedInstance(
+                    context,                                                                                  // 传入 Context
+                    (isDebugMode = isDebugMode(context)) ? SA_SERVER_URL_DEBUG : SA_SERVER_URL_RELEASE,       // 数据接收的 URL
+                    isDebugMode ? SensorsDataAPI.DebugMode.DEBUG_AND_TRACK : SensorsDataAPI.DebugMode.DEBUG_OFF); // Debug 模式选项
+
+            // 打开自动采集, 并指定追踪哪些 AutoTrack 事件
+            List<SensorsDataAPI.AutoTrackEventType> eventTypeList = new ArrayList<>();
+            eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_START);// $AppStart（启动事件）
+            eventTypeList.add(SensorsDataAPI.AutoTrackEventType.APP_END);// $AppEnd（退出事件）
+            SensorsDataAPI.sharedInstance().enableAutoTrack(eventTypeList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param context App 的 Context
+     * @return debug return true,release return false
+     * 用于判断是 debug 包，还是 relase 包
+     */
+    public static boolean isDebugMode(Context context) {
+        try {
+            ApplicationInfo info = context.getApplicationInfo();
+            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+}
+
+```
+
+## 3. iOS 端
+
+在程序的入口（如 AppDelegate.m ）中引入 `SensorsAnalyticsSDK.h`，并在初始化方法（如 `- application:didFinishLaunchingWithOptions:launchOptions` ）中调用 `sharedInstanceWithServerURL:andLaunchOptions:andDebugMode:` 初始化 SDK。
+
 
  ```objective-c
  #import "SensorsAnalyticsSDK.h"
@@ -51,12 +118,14 @@ return YES;
 }
 
 - (void)initSensorsAnalyticsWithLaunchOptions:(NSDictionary *)launchOptions {
-// 初始化 SDK
-[SensorsAnalyticsSDK sharedInstanceWithServerURL:SA_SERVER_URL
-andLaunchOptions:launchOptions
+
+ // 初始化 SDK
+ [SensorsAnalyticsSDK sharedInstanceWithServerURL:SA_SERVER_URL
+                                        andLaunchOptions:launchOptions
+                                        andDebugMode:SA_DEBUG_MODE];
 
 // 打开自动采集, 并指定追踪哪些 AutoTrack 事件 
-//目前 autoTrack flutter 只支持 $AppStart 和 $AppEnd
+//目前 flutter 只支持 $AppStart 和 $AppEnd
 [[SensorsAnalyticsSDK sharedInstance] enableAutoTrack:SensorsAnalyticsEventTypeAppStart|
 SensorsAnalyticsEventTypeAppEnd];
 
@@ -68,37 +137,24 @@ SensorsAnalyticsEventTypeAppEnd];
 ![](https://www.sensorsdata.cn/manual/img/ios_autotrack_1.png)
 
 
-## dart 代码中使用插件
-Import `sensors_analytics_flutter_plugin.dart`
+## 3. Flutter 中使用插件
+在具体 dart 文件中导入 `sensors_analytics_flutter_plugin.dart`
 
 ```dart
 import 'package:sensors_analytics_flutter_plugin/sensors_analytics_flutter_plugin.dart';
 ```
-## Demo Code
+### 3.1 埋点事件
+
+例如，触发事件名为 AddToFav ，对应的事件属性有：ProductID 和 UserLevel 的事件：
+
 ```dart
-      String distinctId;
-    // distinctId messages may fail, so we use a try/catch PlatformException.
-    try {
-      distinctId = await SensorsAnalyticsFlutterPlugin.distinctId;
-    } on PlatformException {
-      distinctId = 'Failed to get distinctId.';
-    }
+SensorsAnalyticsFlutterPlugin.track("AddToFav",{"ProductID":123456,"UserLevel":"VIP"});
+```
 
-    SensorsAnalyticsFlutterPlugin.track('Cell_1_Click',{'key1':null,'key2':'value2'});
-    SensorsAnalyticsFlutterPlugin.trackTimerStart('TestTrackTimer');
-    SensorsAnalyticsFlutterPlugin.trackTimerEnd('Cell_2_Click',{'key1':null,'key2':'value2'});
-    SensorsAnalyticsFlutterPlugin.clearTrackTimer();
-    SensorsAnalyticsFlutterPlugin.trackInstallation('AppInstall',{});
-    SensorsAnalyticsFlutterPlugin.login('NewID_uid');
-    SensorsAnalyticsFlutterPlugin.logout();
-    SensorsAnalyticsFlutterPlugin.trackViewScreen('UrlForViewScreen',{'key1':null,'key2':'value2'});
-    SensorsAnalyticsFlutterPlugin.profileSet({'name':'liming','age':100,'address':['beijing','hunan']});
-    SensorsAnalyticsFlutterPlugin.profileSetOnce({'key1':'value1','key2':'value2'});
-    SensorsAnalyticsFlutterPlugin.profileUnset('key1');
-    SensorsAnalyticsFlutterPlugin.profileIncrement('age',10);
-    SensorsAnalyticsFlutterPlugin.profileAppend('address',['shanghai','guangzhou']);
-    SensorsAnalyticsFlutterPlugin.profileDelete();
+### 3.2 设置用户属性
 
-    //删除 SensorsAnalyticsSDK 存在 keychain 的数据，仅支持iOS
-    SensorsAnalyticsFlutterPlugin.clearKeychainData();
+例如，设置用户 Age 属性：
+
+```dart
+SensorsAnalyticsFlutterPlugin.profileSet({"Age":18});
 ```
