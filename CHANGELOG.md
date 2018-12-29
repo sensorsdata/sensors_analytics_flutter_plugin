@@ -1,3 +1,8 @@
-## 0.0.1
 
-* TODO: Describe initial release.
+## 1.0.0
+
+* 事件追踪
+* 用户属性修改
+* App激活
+* 用户登陆
+* 其他
