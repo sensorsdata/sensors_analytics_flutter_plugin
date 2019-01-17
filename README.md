@@ -137,13 +137,13 @@ SensorsAnalyticsEventTypeAppEnd];
 ![](https://www.sensorsdata.cn/manual/img/ios_autotrack_1.png)
 
 
-## 3. Flutter 中使用插件
+## 4. Flutter 中使用插件
 在具体 dart 文件中导入 `sensors_analytics_flutter_plugin.dart`
 
 ```dart
 import 'package:sensors_analytics_flutter_plugin/sensors_analytics_flutter_plugin.dart';
 ```
-### 3.1 埋点事件
+### 4.1 埋点事件
 
 例如，触发事件名为 AddToFav ，对应的事件属性有：ProductID 和 UserLevel 的事件：
 
@@ -151,7 +151,7 @@ import 'package:sensors_analytics_flutter_plugin/sensors_analytics_flutter_plugi
 SensorsAnalyticsFlutterPlugin.track("AddToFav",{"ProductID":123456,"UserLevel":"VIP"});
 ```
 
-### 3.2 设置用户属性
+### 4.2 设置用户属性
 
 例如，设置用户 Age 属性：
 
