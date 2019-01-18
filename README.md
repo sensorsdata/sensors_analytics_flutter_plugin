@@ -133,8 +133,8 @@ SensorsAnalyticsEventTypeAppEnd];
  ```
 **开启需要的 subspecs** 
 
-修改 Pod 中 SensorsAnalyticsSDK 项目的编译选项，如下图：
-![](https://www.sensorsdata.cn/manual/img/ios_autotrack_1.png)
+修改 Pod 中 SensorsAnalyticsSDK 项目的编译选项.
+**Pod -> Build Settings ->Preprocessor Macros**
 
 
 ## 4. Flutter 中使用插件
