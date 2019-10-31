@@ -38,6 +38,15 @@ pubspec.lock
 
 build/
 
+.idea/workspace.xml
+.idea
+## Directory-based project format:
+.idea/
+
+gradle/
+gradlew
+gradlew.bat
+*.iml
 
 # CocoaPods
 #

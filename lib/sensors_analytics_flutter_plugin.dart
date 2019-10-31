@@ -162,13 +162,13 @@ class SensorsAnalyticsFlutterPlugin {
   /// profileUnset 
   /// 删除一个用户属性.
   ///
-  /// @param profilePropertity String 用户属性.
+  /// @param profileProperty String 用户属性.
   ///
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.profileUnset('key1');
   ///
-  static void profileUnset(String profilePropertity){
-    List<dynamic> params = [profilePropertity];
+  static void profileUnset(String profileProperty){
+    List<dynamic> params = [profileProperty];
     _channel.invokeMethod('profileUnset',params);
   } 
 
@@ -176,14 +176,14 @@ class SensorsAnalyticsFlutterPlugin {
   /// profileIncrement 
   /// 给一个数值类型的Profile增加一个数值. 只能对数值型属性进行操作，若该属性未设置，则添加属性并设置默认值为0
   ///
-  /// @param profilePropertity String 用户属性.
+  /// @param profileProperty String 用户属性.
   /// @param number 增加的数值，可以为负数
   ///
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.profileIncrement('age',10);
   ///
-  static void profileIncrement(String profilePropertity, num number) {
-    List<dynamic> params = [profilePropertity,number];
+  static void profileIncrement(String profileProperty, num number) {
+    List<dynamic> params = [profileProperty,number];
     _channel.invokeMethod('profileIncrement',params);
   }
 
@@ -191,14 +191,14 @@ class SensorsAnalyticsFlutterPlugin {
   /// profileAppend 
   /// 给一个 List 类型的 Profile 增加一些值
   ///
-  /// @param profilePropertity String 用户属性.
+  /// @param profileProperty String 用户属性.
   /// @param content List<String> 增加的值，List 中元素必须为 String
   ///
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.profileAppend('address',['Beijing','Shanghai']);
   ///
-  static void profileAppend(String profilePropertity, List<String> content) {
-    List<dynamic> params = [profilePropertity,content];
+  static void profileAppend(String profileProperty, List<String> content) {
+    List<dynamic> params = [profileProperty,content];
     _channel.invokeMethod('profileAppend',params);
   }
 
@@ -223,6 +223,44 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   static void clearKeychainData() {
     _channel.invokeMethod('clearKeychainData');
-  } 
+  }
 
+  ///
+  /// registerSuperProperties
+  /// 设置公共属性
+  ///
+  /// @param superProperties Map<String,dynamic> 公共属性.
+  ///
+  /// 使用示例：
+  /// SensorsAnalyticsFlutterPlugin.registerSuperProperties({'key1':'value1','key2':'value2'});
+  ///
+  static void registerSuperProperties(Map<String,dynamic> superProperties){
+    List<dynamic> params = [superProperties];
+    _channel.invokeMethod('registerSuperProperties',params);
+  }
+
+  ///
+  /// unregisterSuperProperty
+  /// 删除一个指定的公共属性.
+  ///
+  /// @param superProperty String 公共属性.
+  ///
+  /// 使用示例：
+  /// SensorsAnalyticsFlutterPlugin.unregisterSuperProperty('key1');
+  ///
+  static void unregisterSuperProperty(String superProperty){
+    List<dynamic> params = [superProperty];
+    _channel.invokeMethod('unregisterSuperProperty',params);
+  }
+
+  ///
+  /// clearSuperProperties
+  /// 删除本地存储的所有公共属性
+  ///
+  /// 使用示例：
+  /// SensorsAnalyticsFlutterPlugin.clearSuperProperties();
+  ///
+  static void clearSuperProperties() {
+    _channel.invokeMethod('clearSuperProperties');
+  }
 }

@@ -25,7 +25,12 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 27
+
+    try {
+        compileSdkVersion rootProject.ext.compileSdkVersion
+    } catch(Exception e){
+        compileSdkVersion 28
+    }
 
     defaultConfig {
         minSdkVersion 16

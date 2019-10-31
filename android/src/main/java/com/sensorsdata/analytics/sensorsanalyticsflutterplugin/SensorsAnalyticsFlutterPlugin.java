@@ -62,6 +62,15 @@ public class SensorsAnalyticsFlutterPlugin implements MethodCallHandler {
                 case "profileSetOnce":
                     profileSetOnce(list);
                     break;
+                case "registerSuperProperties":
+                    registerSuperProperties(list);
+                    break;
+                case "unregisterSuperProperty":
+                    unregisterSuperProperty(list);
+                    break;
+                case "clearSuperProperties":
+                    clearSuperProperties();
+                    break;
                 case "profileUnset":
                     profileUnset(list);
                     break;
@@ -208,6 +217,30 @@ public class SensorsAnalyticsFlutterPlugin implements MethodCallHandler {
         SensorsDataAPI.sharedInstance().trackTimerEnd(assertEventName((String) list.get(0)), assertProperties((Map) list.get(1)));
     }
 
+    /**
+     * registerSuperProperties 设置公共属性
+     */
+    private void registerSuperProperties(List list) {
+        JSONObject properties = assertProperties((Map) list.get(0));
+        if (properties == null) {
+            return;
+        }
+        SensorsDataAPI.sharedInstance().registerSuperProperties(properties);
+    }
+
+    /**
+     * unregisterSuperProperty 删除某个公共属性
+     */
+    private void unregisterSuperProperty(List list) {
+        SensorsDataAPI.sharedInstance().unregisterSuperProperty((String) list.get(0));
+    }
+
+    /**
+     * clearSuperProperties 清除本地存储的所有公共属性
+     */
+    private void clearSuperProperties() {
+        SensorsDataAPI.sharedInstance().clearSuperProperties();
+    }
 
     private JSONObject assertProperties(Map map) {
         if (map != null) {

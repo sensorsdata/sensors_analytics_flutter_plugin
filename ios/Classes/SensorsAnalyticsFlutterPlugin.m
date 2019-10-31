@@ -21,6 +21,9 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodProfileIncrement = @"p
 static NSString* const SensorsAnalyticsFlutterPluginMethodProfileAppend = @"profileAppend";
 static NSString* const SensorsAnalyticsFlutterPluginMethodProfileDelete = @"profileDelete";
 
+static NSString* const SensorsAnalyticsFlutterPluginMethodRegisterSuperProperties = @"registerSuperProperties";
+static NSString* const SensorsAnalyticsFlutterPluginMethodUnregisterSuperProperty = @"unregisterSuperProperty";
+static NSString* const SensorsAnalyticsFlutterPluginMethodClearSuperProperties = @"clearSuperProperties";
 
 
 @implementation SensorsAnalyticsFlutterPlugin
@@ -116,8 +119,20 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodProfileDelete = @"prof
     }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodProfileDelete]){
         [self profileDelete];
         result(nil);
-    }
-    else {
+    }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodRegisterSuperProperties]){
+        NSDictionary* propertyDict = arguments[0];
+        argumentSetNSNullToNil(&propertyDict);
+        [self registerSuperProperties:propertyDict];
+        result(nil);
+    }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodUnregisterSuperProperty]){
+        NSString* property = arguments[0];
+        argumentSetNSNullToNil(&property);
+        [self unregisterSuperProperty:property];
+        result(nil);
+    }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodClearSuperProperties]){
+        [self clearSuperProperties];
+        result(nil);
+    }else {
         result(FlutterMethodNotImplemented);
     }
 }
@@ -182,6 +197,18 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodProfileDelete = @"prof
 
 -(NSString *)getDistinctId{
     return SensorsAnalyticsSDK.sharedInstance.distinctId;
+}
+
+-(void)registerSuperProperties:(NSDictionary *)propertyDict{
+    [SensorsAnalyticsSDK.sharedInstance registerSuperProperties:propertyDict];
+}
+
+-(void)unregisterSuperProperty:(NSString *)property{
+    [SensorsAnalyticsSDK.sharedInstance unregisterSuperProperty:property];
+}
+
+- (void)clearSuperProperties {
+   [SensorsAnalyticsSDK.sharedInstance clearSuperProperties];
 }
 
 static inline void argumentSetNSNullToNil(id *arg){
