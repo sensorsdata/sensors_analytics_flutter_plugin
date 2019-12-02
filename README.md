@@ -101,14 +101,12 @@ public class App extends FlutterApplication {
 
 
  ```objective-c
- #import "SensorsAnalyticsSDK.h"
+#import "SensorsAnalyticsSDK.h"
 
 #ifdef DEBUG
 #define SA_SERVER_URL @"<#【测试项目】数据接收地址#>"
-#define SA_DEBUG_MODE SensorsAnalyticsDebugAndTrack
 #else
 #define SA_SERVER_URL @"<#【正式项目】数据接收地址#>"
-#define SA_DEBUG_MODE SensorsAnalyticsDebugOff
 #endif
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
