@@ -122,6 +122,7 @@ public class App extends FlutterApplication {
     // 需要在主线程中初始化 SDK
     [SensorsAnalyticsSDK startWithConfigOptions:options];
 }
+```
 
 ## 4. Flutter 中使用插件
 在具体 dart 文件中导入 `sensors_analytics_flutter_plugin.dart`
