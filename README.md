@@ -97,7 +97,7 @@ public class App extends FlutterApplication {
 
 ## 3. iOS 端
 
-在程序的入口（如 AppDelegate.m ）中引入 `SensorsAnalyticsSDK.h`，并在初始化方法（如 `- application:didFinishLaunchingWithOptions:launchOptions` ）中调用 `sharedInstanceWithServerURL:andLaunchOptions:andDebugMode:` 初始化 SDK。
+在程序的入口（如 AppDelegate.m ）中引入 `SensorsAnalyticsSDK.h`，并在初始化方法（如 `- application:didFinishLaunchingWithOptions:launchOptions` ）中调用 `startWithConfigOptions:` 主线程同步初始化 SDK。
 
 
  ```objective-c
@@ -113,29 +113,17 @@ public class App extends FlutterApplication {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-[self initSensorsAnalyticsWithLaunchOptions:launchOptions];
-return YES;
+    [self initSensorsAnalyticsWithLaunchOptions:launchOptions];
+    return YES;
 }
 
 - (void)initSensorsAnalyticsWithLaunchOptions:(NSDictionary *)launchOptions {
-
- // 初始化 SDK
- [SensorsAnalyticsSDK sharedInstanceWithServerURL:SA_SERVER_URL
-                                        andLaunchOptions:launchOptions
-                                        andDebugMode:SA_DEBUG_MODE];
-
-// 打开自动采集, 并指定追踪哪些 AutoTrack 事件 
-//目前 flutter 只支持 $AppStart 和 $AppEnd
-[[SensorsAnalyticsSDK sharedInstance] enableAutoTrack:SensorsAnalyticsEventTypeAppStart|
-SensorsAnalyticsEventTypeAppEnd];
-
+    // 设置神策 SDK 自动采集 options（Flutter 项目只支持 App 启动、退出自动采集）
+    SAConfigOptions *options = [[SAConfigOptions alloc] initWithServerURL:SA_SERVER_URL launchOptions:launchOptions];
+    options.autoTrackEventType = SensorsAnalyticsEventTypeAppStart | SensorsAnalyticsEventTypeAppEnd;
+    // 需要在主线程中初始化 SDK
+    [SensorsAnalyticsSDK startWithConfigOptions:options];
 }
- ```
-**开启需要的 subspecs** 
-
-修改 Pod 中 SensorsAnalyticsSDK 项目的编译选项.
-**Pod -> Build Settings ->Preprocessor Macros**
-
 
 ## 4. Flutter 中使用插件
 在具体 dart 文件中导入 `sensors_analytics_flutter_plugin.dart`
