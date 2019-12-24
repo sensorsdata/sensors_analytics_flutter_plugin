@@ -17,7 +17,7 @@ dependencies:
 ```
 
 
-[具体使用请参考文档](https://www.sensorsdata.cn/manual/sdk_flutter.html)
+[具体文档](https://www.sensorsdata.cn/manual/sdk_flutter.html)
 
 ## License
 
