@@ -14,7 +14,6 @@
 
 ## 使用方式   
 在 Flutter 项目的 `pubspec.yaml` 文件中添加 `sensors_analytics_flutter_plugin` 依赖
-
 ```yml
 dependencies:
   # 添加神策 flutter plugin 
@@ -22,7 +21,6 @@ dependencies:
 ```
 
 执行 flutter packages get 命令安装插件
-
 ```shell
   flutter pub get  
 ```
