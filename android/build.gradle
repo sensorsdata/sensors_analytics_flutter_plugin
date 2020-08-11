@@ -8,15 +8,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.5.0'
     }
 }
 
 rootProject.allprojects {
     repositories {
-       maven {
-          url 'https://dl.bintray.com/zouyuhan/maven'
-        }
         google()
         jcenter()
     }
@@ -25,16 +22,10 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-
-    try {
-        compileSdkVersion rootProject.ext.compileSdkVersion
-    } catch(Exception e){
-        compileSdkVersion 28
-    }
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 16
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -42,5 +33,5 @@ android {
 }
 
 dependencies {
-    api 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:latest.integration'
+    api 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:4.2.1'
 }

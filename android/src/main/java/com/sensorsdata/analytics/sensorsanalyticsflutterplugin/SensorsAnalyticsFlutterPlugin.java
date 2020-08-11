@@ -1,26 +1,38 @@
 package com.sensorsdata.analytics.sensorsanalyticsflutterplugin;
 
+import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+
+import com.sensorsdata.analytics.android.sdk.SALog;
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
+
+import org.json.JSONObject;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
-import android.text.TextUtils;
-import com.sensorsdata.analytics.android.sdk.SALog;
-import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
-import org.json.JSONObject;
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * Sensors Analytics Flutter Plugin
- **/
-
-public class SensorsAnalyticsFlutterPlugin implements MethodCallHandler {
-
+ */
+public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
+    private MethodChannel channel;
     private static final String TAG = "SA.SensorsAnalyticsFlutterPlugin";
+
+    @Override
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "sensors_analytics_flutter_plugin");
+        channel.setMethodCallHandler(this);
+    }
 
     public static void registerWith(Registrar registrar) {
         final MethodChannel channel = new MethodChannel(registrar.messenger(), "sensors_analytics_flutter_plugin");
@@ -28,7 +40,7 @@ public class SensorsAnalyticsFlutterPlugin implements MethodCallHandler {
     }
 
     @Override
-    public void onMethodCall(MethodCall call, Result result) {
+    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         try {
             List list = (List) call.arguments;
             switch (call.method) {
@@ -86,6 +98,12 @@ public class SensorsAnalyticsFlutterPlugin implements MethodCallHandler {
                 case "getDistinctId":
                     getDistinctId(result);
                     break;
+                case "profilePushId":
+                    profilePushId(list);
+                    break;
+                case "profileUnsetPushId":
+                    profileUnsetPushId(list);
+                    break;
                 default:
                     result.notImplemented();
                     break;
@@ -94,7 +112,11 @@ public class SensorsAnalyticsFlutterPlugin implements MethodCallHandler {
             e.printStackTrace();
             SALog.d(TAG, e.getMessage());
         }
+    }
 
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        channel.setMethodCallHandler(null);
     }
 
     /**
@@ -240,6 +262,20 @@ public class SensorsAnalyticsFlutterPlugin implements MethodCallHandler {
      */
     private void clearSuperProperties() {
         SensorsDataAPI.sharedInstance().clearSuperProperties();
+    }
+
+    /**
+     * 保存用户推送 ID 到用户表
+     */
+    private void profilePushId(List list){
+        SensorsDataAPI.sharedInstance().profilePushId((String)list.get(0), (String)list.get(1));
+    }
+
+    /**
+     * 删除用户设置的 pushId
+     */
+    private void profileUnsetPushId(List list){
+        SensorsDataAPI.sharedInstance().profileUnsetPushId((String)list.get(0));
     }
 
     private JSONObject assertProperties(Map map) {

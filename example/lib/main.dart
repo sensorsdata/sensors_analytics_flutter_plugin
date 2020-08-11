@@ -13,6 +13,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _distinctId = '';
+  var parameters;
 
   @override
   void initState() {
@@ -22,7 +23,8 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String distinctId;
+    String distinctId="";
+
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       distinctId = await SensorsAnalyticsFlutterPlugin.getDistinctId;
@@ -52,7 +54,7 @@ class _MyAppState extends State<MyApp> {
         body: ListView(
           children: <Widget>[
             ListTile(
-              title: Text(_distinctId),
+              title: Text(_distinctId??""),
               onTap: (){},
             ),
             ListTile(
@@ -72,12 +74,25 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               leading: Icon(Icons.event),
               title: Text('追踪事件 track'),
-              onTap: (){ SensorsAnalyticsFlutterPlugin.track('ViewProduct',{'ProductID':123456,'ProductCatalog':'Laptop Computer'});},
+              onTap: (){
+                  print("======触发事件2");
+                  SensorsAnalyticsFlutterPlugin.track('ViewProduct',parameters ?? <String, dynamic>{});
+                },
             ),
             ListTile(
               leading: Icon(Icons.assessment),
-              title: Text('设置用户属性 profileSet'),
+              title: Text('设置用户属性 profileSet2'),
               onTap: (){ SensorsAnalyticsFlutterPlugin.profileSet({'Age':18,'Sex':'Male'});},
+            ),
+            ListTile(
+              leading: Icon(Icons.assessment),
+              title: Text('设置用户推送 ID 到用户表'),
+              onTap: (){ SensorsAnalyticsFlutterPlugin.profilePushId("jgId", "12312312312");},
+            ),
+            ListTile(
+              leading: Icon(Icons.assessment),
+              title: Text('删除用户设置的 pushId'),
+              onTap: (){ SensorsAnalyticsFlutterPlugin.profileUnsetPushId("jgId");},
             ),
             ListTile(
               title: Text('https://github.com/sensorsdata/sensors_analytics_flutter_plugin'),

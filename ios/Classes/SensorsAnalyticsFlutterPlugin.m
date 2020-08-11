@@ -24,6 +24,8 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodProfileDelete = @"prof
 static NSString* const SensorsAnalyticsFlutterPluginMethodRegisterSuperProperties = @"registerSuperProperties";
 static NSString* const SensorsAnalyticsFlutterPluginMethodUnregisterSuperProperty = @"unregisterSuperProperty";
 static NSString* const SensorsAnalyticsFlutterPluginMethodClearSuperProperties = @"clearSuperProperties";
+static NSString* const SensorsAnalyticsFlutterPluginMethodProfilePushKey = @"profilePushId";
+static NSString* const SensorsAnalyticsFlutterPluginMethodProfileUnsetPushKey = @"profileUnsetPushId";
 
 
 @implementation SensorsAnalyticsFlutterPlugin
@@ -132,7 +134,19 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodClearSuperProperties =
     }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodClearSuperProperties]){
         [self clearSuperProperties];
         result(nil);
-    }else {
+    }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodProfilePushKey]){
+        NSString *pushKey = arguments[0];
+        argumentSetNSNullToNil(&pushKey);
+        NSString *pushId = arguments[1];
+        argumentSetNSNullToNil(&pushId);
+        [self profilePushKey:pushKey pushId:pushId];
+        result(nil);
+    }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodProfileUnsetPushKey]){
+        NSString *pushKey = arguments[0];
+        argumentSetNSNullToNil(&pushKey);
+        [self profileUnsetPushKey:pushKey];
+        result(nil);
+    } else {
         result(FlutterMethodNotImplemented);
     }
 }
@@ -209,6 +223,14 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodClearSuperProperties =
 
 - (void)clearSuperProperties {
    [SensorsAnalyticsSDK.sharedInstance clearSuperProperties];
+}
+
+- (void)profilePushKey:(NSString *)pushTypeKey pushId:(nonnull NSString *)pushId {
+    [SensorsAnalyticsSDK.sharedInstance profilePushKey:pushTypeKey pushId:pushId];
+}
+
+- (void)profileUnsetPushKey:(NSString *)pushTypeKey {
+    [SensorsAnalyticsSDK.sharedInstance profileUnsetPushKey:pushTypeKey];
 }
 
 static inline void argumentSetNSNullToNil(id *arg){

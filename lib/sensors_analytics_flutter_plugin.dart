@@ -21,10 +21,10 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.track('eventname',{'key1':'value1','key2':'value2'});
   ///
-  static void track(String eventName ,Map<String,dynamic> properties ) {
+  static void track(String eventName, Map<String, dynamic> properties) {
     assert(eventName != null);
-    List<dynamic> params = [eventName,properties];
-    _channel.invokeMethod('track',params);
+    List<dynamic> params = [eventName, properties];
+    _channel.invokeMethod('track', params);
   }
 
   ///
@@ -37,10 +37,11 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.trackInstallation('AppInstall',{'key1':'value1','key2':'value2'});
   ///
-  static void trackInstallation(String eventName ,Map<String,dynamic> properties ) {
+  static void trackInstallation(
+      String eventName, Map<String, dynamic> properties) {
     assert(eventName != null);
-    List<dynamic> params = [eventName,properties];
-    _channel.invokeMethod('trackInstallation',params);
+    List<dynamic> params = [eventName, properties];
+    _channel.invokeMethod('trackInstallation', params);
   }
 
   ///
@@ -56,7 +57,7 @@ class SensorsAnalyticsFlutterPlugin {
   static void trackTimerStart(String eventName) {
     assert(eventName != null);
     List<String> params = [eventName];
-    _channel.invokeMethod('trackTimerStart',params);
+    _channel.invokeMethod('trackTimerStart', params);
   }
 
   ///
@@ -70,12 +71,11 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：（计时器事件名称 viewTimer ）
   /// SensorsAnalyticsFlutterPlugin.trackTimerEnd('viewTimer',{});
   ///
-  static void trackTimerEnd(String eventName ,Map<String,dynamic> properties ) {
+  static void trackTimerEnd(String eventName, Map<String, dynamic> properties) {
     assert(eventName != null);
-    List<dynamic> params = [eventName,properties];
-    _channel.invokeMethod('trackTimerEnd',params);
+    List<dynamic> params = [eventName, properties];
+    _channel.invokeMethod('trackTimerEnd', params);
   }
-
 
   ///
   /// clearTrackTimer
@@ -86,7 +86,7 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   static void clearTrackTimer() {
     _channel.invokeMethod('clearTrackTimer');
-  } 
+  }
 
   ///
   /// login.
@@ -96,10 +96,10 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.login('login_id');
   ///
-  static void login(String loginId){
+  static void login(String loginId) {
     assert(loginId != null);
     List<String> params = [loginId];
-    _channel.invokeMethod('login',params);
+    _channel.invokeMethod('login', params);
   }
 
   ///
@@ -109,12 +109,12 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.logout();
   ///
-  static void logout(){
+  static void logout() {
     _channel.invokeMethod('logout');
   }
 
   ///
-  /// trackViewScreen 
+  /// trackViewScreen
   /// 页面浏览
   ///
   /// @param url String 页面标示.
@@ -123,15 +123,14 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.trackViewScreen('urlForView',{'key1':'value1','key2':'value2'});
   ///
-  static void trackViewScreen(String url ,Map<String,dynamic> properties ) {
+  static void trackViewScreen(String url, Map<String, dynamic> properties) {
     assert(url != null);
-    List<dynamic> params = [url,properties];
-    _channel.invokeMethod('trackViewScreen',params);
-  }  
-
+    List<dynamic> params = [url, properties];
+    _channel.invokeMethod('trackViewScreen', params);
+  }
 
   ///
-  /// profileSet 
+  /// profileSet
   /// 设置用户属性值
   ///
   /// @param profileProperties Map<String,dynamic> 用户属性.
@@ -139,13 +138,13 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.profileSet({'key1':'value1','key2':'value2'});
   ///
-  static void profileSet(Map<String,dynamic> profileProperties){
+  static void profileSet(Map<String, dynamic> profileProperties) {
     List<dynamic> params = [profileProperties];
-    _channel.invokeMethod('profileSet',params);
+    _channel.invokeMethod('profileSet', params);
   }
 
   ///
-  /// profileSetOnce 
+  /// profileSetOnce
   /// 设置用户属性值，与 profileSet 不同的是：如果之前存在，则忽略，否则，新创建.
   ///
   /// @param profileProperties Map<String,dynamic> 用户属性.
@@ -153,13 +152,13 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.profileSetOnce({'key1':'value1','key2':'value2'});
   ///
-  static void profileSetOnce(Map<String,dynamic> profileProperties){
+  static void profileSetOnce(Map<String, dynamic> profileProperties) {
     List<dynamic> params = [profileProperties];
-    _channel.invokeMethod('profileSetOnce',params);
+    _channel.invokeMethod('profileSetOnce', params);
   }
 
   ///
-  /// profileUnset 
+  /// profileUnset
   /// 删除一个用户属性.
   ///
   /// @param profileProperty String 用户属性.
@@ -167,13 +166,13 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.profileUnset('key1');
   ///
-  static void profileUnset(String profileProperty){
+  static void profileUnset(String profileProperty) {
     List<dynamic> params = [profileProperty];
-    _channel.invokeMethod('profileUnset',params);
-  } 
+    _channel.invokeMethod('profileUnset', params);
+  }
 
   ///
-  /// profileIncrement 
+  /// profileIncrement
   /// 给一个数值类型的Profile增加一个数值. 只能对数值型属性进行操作，若该属性未设置，则添加属性并设置默认值为0
   ///
   /// @param profileProperty String 用户属性.
@@ -183,12 +182,12 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.profileIncrement('age',10);
   ///
   static void profileIncrement(String profileProperty, num number) {
-    List<dynamic> params = [profileProperty,number];
-    _channel.invokeMethod('profileIncrement',params);
+    List<dynamic> params = [profileProperty, number];
+    _channel.invokeMethod('profileIncrement', params);
   }
 
   ///
-  /// profileAppend 
+  /// profileAppend
   /// 给一个 List 类型的 Profile 增加一些值
   ///
   /// @param profileProperty String 用户属性.
@@ -198,26 +197,25 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.profileAppend('address',['Beijing','Shanghai']);
   ///
   static void profileAppend(String profileProperty, List<String> content) {
-    List<dynamic> params = [profileProperty,content];
-    _channel.invokeMethod('profileAppend',params);
+    List<dynamic> params = [profileProperty, content];
+    _channel.invokeMethod('profileAppend', params);
   }
 
-
   ///
-  /// profileDelete 
+  /// profileDelete
   /// 删除当前用户的所有记录
-  /// 
+  ///
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.profileDelete();
   ///
   static void profileDelete() {
     _channel.invokeMethod('profileDelete');
-  } 
-  
+  }
+
   ///
-  /// clearKeychainData 
+  /// clearKeychainData
   /// 删除当前 keychain 记录 (仅 iOS 使用)
-  /// 
+  ///
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.clearKeychainData();
   ///
@@ -234,9 +232,9 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.registerSuperProperties({'key1':'value1','key2':'value2'});
   ///
-  static void registerSuperProperties(Map<String,dynamic> superProperties){
+  static void registerSuperProperties(Map<String, dynamic> superProperties) {
     List<dynamic> params = [superProperties];
-    _channel.invokeMethod('registerSuperProperties',params);
+    _channel.invokeMethod('registerSuperProperties', params);
   }
 
   ///
@@ -248,9 +246,9 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.unregisterSuperProperty('key1');
   ///
-  static void unregisterSuperProperty(String superProperty){
+  static void unregisterSuperProperty(String superProperty) {
     List<dynamic> params = [superProperty];
-    _channel.invokeMethod('unregisterSuperProperty',params);
+    _channel.invokeMethod('unregisterSuperProperty', params);
   }
 
   ///
@@ -262,5 +260,25 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   static void clearSuperProperties() {
     _channel.invokeMethod('clearSuperProperties');
+  }
+
+  ///
+  /// 保存用户推送 ID 到用户表
+  ///
+  /// 使用示例：
+  /// SensorsAnalyticsFlutterPlugin.profilePushId("jiguang"，"12123123");
+  ///
+  static void profilePushId(String pushTypeKey, String pushId) {
+    _channel.invokeMethod("profilePushId", [pushTypeKey, pushId]);
+  }
+
+  ///
+  /// 删除用户设置的 pushId
+  ///
+  /// 使用示例：
+  /// SensorsAnalyticsFlutterPlugin.profileUnsetPushId("jiguang");
+  ///
+  static void profileUnsetPushId(String pushTypeKey) {
+    _channel.invokeMethod("profileUnsetPushId", [pushTypeKey]);
   }
 }
