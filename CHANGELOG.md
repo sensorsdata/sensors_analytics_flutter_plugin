@@ -1,7 +1,10 @@
+## 1.0.3
+
+* 属性中适配 DateTime 实例
+
 ## 1.0.2
 
 * 新增 profilePushId 和 profileUnsetPushId 接口
-
 
 ## 1.0.0
 
