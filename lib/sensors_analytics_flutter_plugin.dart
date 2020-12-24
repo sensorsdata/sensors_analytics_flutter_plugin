@@ -23,6 +23,7 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   static void track(String eventName, Map<String, dynamic> properties) {
     assert(eventName != null);
+    _convertDateTime(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('track', params);
   }
@@ -40,6 +41,7 @@ class SensorsAnalyticsFlutterPlugin {
   static void trackInstallation(
       String eventName, Map<String, dynamic> properties) {
     assert(eventName != null);
+    _convertDateTime(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('trackInstallation', params);
   }
@@ -73,6 +75,7 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   static void trackTimerEnd(String eventName, Map<String, dynamic> properties) {
     assert(eventName != null);
+    _convertDateTime(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('trackTimerEnd', params);
   }
@@ -125,6 +128,7 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   static void trackViewScreen(String url, Map<String, dynamic> properties) {
     assert(url != null);
+    _convertDateTime(properties);
     List<dynamic> params = [url, properties];
     _channel.invokeMethod('trackViewScreen', params);
   }
@@ -139,6 +143,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.profileSet({'key1':'value1','key2':'value2'});
   ///
   static void profileSet(Map<String, dynamic> profileProperties) {
+    _convertDateTime(profileProperties);
     List<dynamic> params = [profileProperties];
     _channel.invokeMethod('profileSet', params);
   }
@@ -153,6 +158,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.profileSetOnce({'key1':'value1','key2':'value2'});
   ///
   static void profileSetOnce(Map<String, dynamic> profileProperties) {
+    _convertDateTime(profileProperties);
     List<dynamic> params = [profileProperties];
     _channel.invokeMethod('profileSetOnce', params);
   }
@@ -233,6 +239,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.registerSuperProperties({'key1':'value1','key2':'value2'});
   ///
   static void registerSuperProperties(Map<String, dynamic> superProperties) {
+    _convertDateTime(superProperties);
     List<dynamic> params = [superProperties];
     _channel.invokeMethod('registerSuperProperties', params);
   }
@@ -280,5 +287,19 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   static void profileUnsetPushId(String pushTypeKey) {
     _channel.invokeMethod("profileUnsetPushId", [pushTypeKey]);
+  }
+
+  /// 如果 map 中的 value 字段是 DateTime 类型，将其转换成
+  static void _convertDateTime(Map<String, dynamic> map){
+    if(map != null){
+      map.updateAll((key, value){
+        if(value is DateTime){
+          String timeString =  value.toLocal().toString();
+          int lastDotIndex = timeString.lastIndexOf(".");
+          return timeString.substring(0, lastDotIndex);
+        }
+        return value;
+      });
+    }
   }
 }
