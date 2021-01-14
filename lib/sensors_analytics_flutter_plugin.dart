@@ -289,6 +289,14 @@ class SensorsAnalyticsFlutterPlugin {
     _channel.invokeMethod("profileUnsetPushId", [pushTypeKey]);
   }
 
+  ///
+  /// 开启数据采集，此方法合规功能，需要配合 SAConfigOptions.disableDataCollect() 方法一起使用，并且此方法只针对 Android 平台：
+  /// 详情请参考：https://manual.sensorsdata.cn/sa/latest/page-22252691.html
+  ///
+  static void enableDataCollect(){
+    _channel.invokeMethod("enableDataCollect");
+  }
+
   /// 如果 map 中的 value 字段是 DateTime 类型，将其转换成
   static void _convertDateTime(Map<String, dynamic> map){
     if(map != null){
