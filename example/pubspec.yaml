@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  #sensors_analytics_flutter_plugin: ^1.0.4
+  #sensors_analytics_flutter_plugin: ^1.0.5
 
   sensors_analytics_flutter_plugin:
     # When depending on this package from a real application you should use:
