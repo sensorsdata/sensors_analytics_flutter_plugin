@@ -33,5 +33,5 @@ android {
 }
 
 dependencies {
-    api 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:4.4.8'
+    api 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:4.4.9'
 }
