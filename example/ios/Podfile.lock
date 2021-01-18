@@ -1,6 +1,6 @@
 PODS:
   - Flutter (1.0.0)
-  - sensors_analytics_flutter_plugin (1.0.2):
+  - sensors_analytics_flutter_plugin (1.0.5):
     - Flutter
     - SensorsAnalyticsSDK
   - SensorsAnalyticsSDK (2.2.4):
@@ -23,9 +23,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  sensors_analytics_flutter_plugin: 67005f4a6591e48b68618f18dd5a68e842598056
+  sensors_analytics_flutter_plugin: 28c92a16312453a6834eda00ee94d27a5406adf1
   SensorsAnalyticsSDK: d898a6b6427dc842fa8c54c4cfb17dcc8a7e2220
 
-PODFILE CHECKSUM: 8685ee79ad9489b94b9f1ac3974f4638bb57b02e
+PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
 
 COCOAPODS: 1.9.3

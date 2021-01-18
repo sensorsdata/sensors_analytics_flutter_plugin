@@ -34,6 +34,7 @@ public class App extends FlutterApplication {
                 SensorsAnalyticsAutoTrackEventType.APP_CLICK)
                 .enableTrackAppCrash()
                 .enableVisualizedAutoTrack(true)
+                //.disableDataCollect()
                 .enableVisualizedAutoTrackConfirmDialog(true);
         SensorsDataAPI.startWithConfigOptions(this, configOptions);
         SensorsDataAPI.sharedInstance(this).trackFragmentAppViewScreen();

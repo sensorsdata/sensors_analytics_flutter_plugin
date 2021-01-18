@@ -104,6 +104,9 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
                 case "profileUnsetPushId":
                     profileUnsetPushId(list);
                     break;
+                case "enableDataCollect":
+                    enableDataCollect();
+                    break;
                 default:
                     result.notImplemented();
                     break;
@@ -276,6 +279,13 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
      */
     private void profileUnsetPushId(List list){
         SensorsDataAPI.sharedInstance().profileUnsetPushId((String)list.get(0));
+    }
+
+    /**
+     * 开启数据采集
+     */
+    private void enableDataCollect(){
+        SensorsDataAPI.sharedInstance().enableDataCollect();
     }
 
     private JSONObject assertProperties(Map map) {

@@ -114,6 +114,12 @@ class _MyAppState extends State<MyApp> {
               },
             ),
             ListTile(
+              title: Text("合规功能测试"),
+              onTap: () {
+                SensorsAnalyticsFlutterPlugin.enableDataCollect();
+              },
+            ),
+            ListTile(
               title: Text(
                   'https://github.com/sensorsdata/sensors_analytics_flutter_plugin'),
               onTap: () {},

@@ -26,6 +26,7 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodUnregisterSuperPropert
 static NSString* const SensorsAnalyticsFlutterPluginMethodClearSuperProperties = @"clearSuperProperties";
 static NSString* const SensorsAnalyticsFlutterPluginMethodProfilePushKey = @"profilePushId";
 static NSString* const SensorsAnalyticsFlutterPluginMethodProfileUnsetPushKey = @"profileUnsetPushId";
+static NSString* const SensorsAnalyticsFlutterPluginMethodEnableDataCollect = @"enableDataCollect";
 
 
 @implementation SensorsAnalyticsFlutterPlugin
@@ -146,7 +147,9 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodProfileUnsetPushKey = 
         argumentSetNSNullToNil(&pushKey);
         [self profileUnsetPushKey:pushKey];
         result(nil);
-    } else {
+    } else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodEnableDataCollect]){
+        result(nil);
+     } else {
         result(FlutterMethodNotImplemented);
     }
 }
