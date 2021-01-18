@@ -6,3 +6,6 @@
 
 build/
 /.idea
+
+pubspec.lock
+example/pubspec.lock
