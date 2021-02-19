@@ -10,7 +10,9 @@ import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import org.json.JSONObject;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +46,63 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
         try {
             List list = (List) call.arguments;
             switch (call.method) {
+                case "setServerUrl":
+                    setServerUrl(list);
+                    break;
+                case "getPresetProperties":
+                    getPresetProperties(result);
+                    break;
+                case "enableLog":
+                    enableLog(list);
+                    break;
+                case "setFlushNetworkPolicy":
+                    setFlushNetworkPolicy(list);
+                    break;
+                case "setFlushInterval":
+                    setFlushInterval(list);
+                    break;
+                case "getFlushInterval":
+                    getFlushInterval(result);
+                    break;
+                case "getFlushBulkSize":
+                    getFlushBulkSize(result);
+                    break;
+                case "setFlushBulkSize":
+                    setFlushBulkSize(list);
+                    break;
+                case "getAnonymousId":
+                    getAnonymousId(result);
+                    break;
+                case "getLoginId":
+                    getLoginId(result);
+                    break;
+                case "identify":
+                    identify(list);
+                    break;
+                case "trackAppInstall":
+                    trackAppInstall(list);
+                    break;
+                case "flush":
+                    flush();
+                    break;
+                case "deleteAll":
+                    deleteAll();
+                    break;
+                case "getSuperProperties":
+                    getSuperProperties(result);
+                    break;
+                case "enableNetworkRequest":
+                    enableNetworkRequest(list);
+                    break;
+                case "itemSet":
+                    itemSet(list);
+                    break;
+                case "itemDelete":
+                    itemDelete(list);
+                    break;
+                case "isNetworkRequestEnable":
+                    isNetworkRequestEnable(result);
+                    break;
                 case "track":
                     track(list);
                     break;
@@ -51,7 +110,16 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
                     trackInstallation(list);
                     break;
                 case "trackTimerStart":
-                    trackTimerStart(list);
+                    trackTimerStart(list, result);
+                    break;
+                case "trackTimerPause":
+                    trackTimerPause(list);
+                    break;
+                case "trackTimerResume":
+                    trackTimerResume(list);
+                    break;
+                case "removeTimer":
+                    removeTimer(list);
                     break;
                 case "trackTimerEnd":
                     trackTimerEnd(list);
@@ -120,6 +188,121 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
+    }
+
+    private void isNetworkRequestEnable(Result result) {
+        result.success(SensorsDataAPI.sharedInstance().isNetworkRequestEnable());
+    }
+
+    private void itemDelete(List list) {
+        SensorsDataAPI.sharedInstance().itemDelete((String) list.get(0), (String) list.get(1));
+    }
+
+    private void itemSet(List list) {
+        SensorsDataAPI.sharedInstance().itemSet((String) list.get(0), (String) list.get(1), assertProperties2(list.get(2)));
+    }
+
+    private void enableNetworkRequest(List list) {
+        SensorsDataAPI.sharedInstance().enableNetworkRequest((Boolean) list.get(0));
+    }
+
+    private void getSuperProperties(Result result) {
+        JSONObject jsonObject = SensorsDataAPI.sharedInstance().getSuperProperties();
+        if (jsonObject != null) {
+            Iterator<String> keys = jsonObject.keys();
+            Map<String, Object> map = new HashMap<>();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                Object value = jsonObject.opt(key);
+                map.put(key, value);
+            }
+            result.success(map);
+        } else {
+            result.success(null);
+        }
+    }
+
+    private void deleteAll() {
+        SensorsDataAPI.sharedInstance().deleteAll();
+    }
+
+    private void flush() {
+        SensorsDataAPI.sharedInstance().flush();
+    }
+
+    private void trackAppInstall(List list) {
+        SensorsDataAPI.sharedInstance().trackAppInstall(assertProperties2(list.get(0)), (Boolean) list.get(1));
+    }
+
+    private void identify(List list) {
+        SensorsDataAPI.sharedInstance().identify((String) list.get(0));
+    }
+
+    private void getLoginId(Result result) {
+        result.success(SensorsDataAPI.sharedInstance().getLoginId());
+    }
+
+    private void getAnonymousId(Result result) {
+        result.success(SensorsDataAPI.sharedInstance().getAnonymousId());
+    }
+
+    private void getFlushBulkSize(Result result) {
+        result.success(SensorsDataAPI.sharedInstance().getFlushBulkSize());
+    }
+
+    private void setFlushBulkSize(List list) {
+        SensorsDataAPI.sharedInstance().setFlushBulkSize((Integer) list.get(0));
+    }
+
+    private void getFlushInterval(Result result) {
+        result.success(SensorsDataAPI.sharedInstance().getFlushInterval());
+    }
+
+    /**
+     * 设置两次数据发送的最小时间间隔
+     */
+    private void setFlushInterval(List list) {
+        SensorsDataAPI.sharedInstance().setFlushInterval((Integer) list.get(0));
+    }
+
+    /**
+     * 设置 flush 时网络发送策略，默认 3G、4G、WI-FI 环境下都会尝试 flush
+     */
+    private void setFlushNetworkPolicy(List list) {
+        SensorsDataAPI.sharedInstance().setFlushNetworkPolicy((Integer) list.get(0));
+    }
+
+    /**
+     * 设置是否开启 log
+     */
+    private void enableLog(List list) {
+        SensorsDataAPI.sharedInstance().enableLog((Boolean) list.get(0));
+    }
+
+    /**
+     * 获取预制属性
+     */
+    private void getPresetProperties(Result result) {
+        JSONObject jsonObject = SensorsDataAPI.sharedInstance().getPresetProperties();
+        if (jsonObject != null) {
+            Iterator<String> keys = jsonObject.keys();
+            Map<String, Object> map = new HashMap<>();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                Object value = jsonObject.opt(key);
+                map.put(key, value);
+            }
+            result.success(map);
+        } else {
+            result.success(null);
+        }
+    }
+
+    /**
+     * set server url
+     */
+    private void setServerUrl(List list) {
+        SensorsDataAPI.sharedInstance().setServerUrl((String) list.get(0), (Boolean) list.get(1));
     }
 
     /**
@@ -231,8 +414,21 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
     /**
      * trackTimerStart 计时开始
      */
-    private void trackTimerStart(List list) {
-        SensorsDataAPI.sharedInstance().trackTimerStart(assertEventName((String) list.get(0)));
+    private void trackTimerStart(List list, Result result) {
+        String tmp = SensorsDataAPI.sharedInstance().trackTimerStart(assertEventName((String) list.get(0)));
+        result.success(tmp);
+    }
+
+    private void trackTimerPause(List list) {
+        SensorsDataAPI.sharedInstance().trackTimerPause(assertEventName((String) list.get(0)));
+    }
+
+    private void trackTimerResume(List list) {
+        SensorsDataAPI.sharedInstance().trackTimerResume(assertEventName((String) list.get(0)));
+    }
+
+    private void removeTimer(List list) {
+        SensorsDataAPI.sharedInstance().removeTimer(assertEventName((String) list.get(0)));
     }
 
     /**
@@ -270,27 +466,36 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
     /**
      * 保存用户推送 ID 到用户表
      */
-    private void profilePushId(List list){
-        SensorsDataAPI.sharedInstance().profilePushId((String)list.get(0), (String)list.get(1));
+    private void profilePushId(List list) {
+        SensorsDataAPI.sharedInstance().profilePushId((String) list.get(0), (String) list.get(1));
     }
 
     /**
      * 删除用户设置的 pushId
      */
-    private void profileUnsetPushId(List list){
-        SensorsDataAPI.sharedInstance().profileUnsetPushId((String)list.get(0));
+    private void profileUnsetPushId(List list) {
+        SensorsDataAPI.sharedInstance().profileUnsetPushId((String) list.get(0));
     }
 
     /**
      * 开启数据采集
      */
-    private void enableDataCollect(){
+    private void enableDataCollect() {
         SensorsDataAPI.sharedInstance().enableDataCollect();
     }
 
     private JSONObject assertProperties(Map map) {
         if (map != null) {
             return new JSONObject(map);
+        } else {
+            SALog.d(TAG, "传入的属性为空");
+            return null;
+        }
+    }
+
+    private JSONObject assertProperties2(Object map) {
+        if (map != null) {
+            return new JSONObject((Map) map);
         } else {
             SALog.d(TAG, "传入的属性为空");
             return null;

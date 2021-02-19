@@ -44,6 +44,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+
+    dynamic tmpResult;
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -123,7 +126,214 @@ class _MyAppState extends State<MyApp> {
               title: Text(
                   'https://github.com/sensorsdata/sensors_analytics_flutter_plugin'),
               onTap: () {},
-            )
+            ),
+            ListTile(
+              title: Text('set server url'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.setServerUrl("https://newsdktest.datasink.sensorsdata.cn/sa?project=zhujiagui&token=5a394d2405c147ca", true);
+              },
+            ),
+            ListTile(
+              title: Text('getPresetProperties'),
+              onTap: () async {
+                dynamic map =
+                    await SensorsAnalyticsFlutterPlugin.getPresetProperties();
+                print("getPresetProperties===$map");
+              },
+            ),
+            ListTile(
+              title: Text('enableLog'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.enableLog(false);
+                print("enableLog==333=");
+              },
+            ),
+            ListTile(
+              title: Text('setFlushNetworkPolicy'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.setFlushNetworkPolicy(
+                    [SANetworkType.TYPE_WIFI]);
+                print("setFlushNetworkPolicy===");
+              },
+            ),
+            ListTile(
+              title: Text('setFlushInterval'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.setFlushInterval(60 * 1000);
+                print("setFlushInterval===");
+              },
+            ),
+            ListTile(
+              title: Text('getFlushInterval'),
+              onTap: () async {
+                dynamic result =
+                await SensorsAnalyticsFlutterPlugin.getFlushInterval();
+                print("getFlushInterval===$result");
+              },
+            ),
+            ListTile(
+              title: Text('setFlushBulkSize'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.setFlushInterval(60*60*1000);
+                SensorsAnalyticsFlutterPlugin.setFlushBulkSize(100);
+                print("setFlushBulkSize===");
+                dynamic result = await SensorsAnalyticsFlutterPlugin.getFlushBulkSize();
+                print("getFlushBulkSize===$result");
+                for(int index=0;index<=100;index++){
+                  SensorsAnalyticsFlutterPlugin.track(
+                      'ViewProduct2', <String, dynamic>{
+                    "a_time": DateTime.now(),
+                    "product_name": "Apple 12 max pro"
+                  });
+                }
+                print("track end=====");
+              },
+            ),
+            ListTile(
+              title: Text('getFlushBulkSize'),
+              onTap: () async {
+                dynamic result =
+                    await SensorsAnalyticsFlutterPlugin.getFlushBulkSize();
+                print("getFlushBulkSize===$result");
+              },
+            ),
+            ListTile(
+              title: Text('getAnonymousId'),
+              onTap: () async {
+                dynamic result =
+                    await SensorsAnalyticsFlutterPlugin.getAnonymousId();
+                print("getAnonymousId===$result");
+              },
+            ),
+            ListTile(
+              title: Text('getLoginId'),
+              onTap: () async {
+                //SensorsAnalyticsFlutterPlugin.login("aa212132");
+                dynamic result =
+                    await SensorsAnalyticsFlutterPlugin.getLoginId();
+                print("getLoginId===$result");
+              },
+            ),
+            ListTile(
+              title: Text('identify'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.identify("qwe");
+                print("identify===");
+              },
+            ),
+            ListTile(
+              title: Text('trackAppInstall'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.trackAppInstall(
+                    {"age": 888}, false);
+                print("trackAppInstall==");
+              },
+            ),
+            ListTile(
+              title: Text('trackTimerStart'),
+              onTap: () async {
+                tmpResult =
+                    await SensorsAnalyticsFlutterPlugin.trackTimerStart(
+                        "hello_event");
+                print("trackTimerStart===$tmpResult");
+              },
+            ),
+            ListTile(
+              title: Text('trackTimerPause'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.trackTimerPause("hello_event");
+                print("trackTimerPause===");
+              },
+            ),
+            ListTile(
+              title: Text('trackTimerResume'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.trackTimerResume("hello_event");
+                print("trackTimerResume===");
+              },
+            ),
+            ListTile(
+              title: Text('removeTimer'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.removeTimer("hello_event");
+                print("removeTimer===");
+              },
+            ),
+            ListTile(
+              title: Text('end timer'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.trackTimerEnd(
+                    tmpResult, null);
+                print("end timer===");
+              },
+            ),
+            ListTile(
+              title: Text('flush'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.flush();
+                print("flush===");
+              },
+            ),
+            ListTile(
+              title: Text('deleteAll'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.deleteAll();
+                print("deleteAll===");
+              },
+            ),
+            ListTile(
+              title: Text('setsuperproperties'),
+              onTap: () async {
+                 SensorsAnalyticsFlutterPlugin.registerSuperProperties(
+                     {"age":100});
+                print("getSuperProperties===");
+              },
+            ),
+            ListTile(
+              title: Text('getSuperProperties'),
+              onTap: () async {
+                dynamic map =
+                    await SensorsAnalyticsFlutterPlugin.getSuperProperties();
+                print("getSuperProperties===$map");
+              },
+            ),
+            ListTile(
+              title: Text('enableNetworkRequest'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.enableNetworkRequest(true);
+                print("enableNetworkRequest===");
+              },
+            ),
+            ListTile(
+              title: Text('itemSet'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.itemSet(
+                    "aaatype", "aaaid", {"age": 999});
+                print("itemSet===");
+              },
+            ),
+            ListTile(
+              title: Text('itemDelete'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.itemDelete("aaatype", "aaaid");
+                print("itemDelete===");
+              },
+            ),
+            ListTile(
+              title: Text('isNetworkRequestEnable'),
+              onTap: () async {
+                dynamic result = await SensorsAnalyticsFlutterPlugin
+                    .isNetworkRequestEnable();
+                print("isNetworkRequestEnable===$result");
+              },
+            ),
+            ListTile(
+              title: Text('enableDataCollect'),
+              onTap: () async {
+                 SensorsAnalyticsFlutterPlugin.enableDataCollect();
+                print("enableDataCollect===");
+              },
+            ),
           ],
         ),
       ),

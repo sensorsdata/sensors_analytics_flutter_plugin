@@ -51,8 +51,8 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodEnableDataCollect = @"
     }else if([method isEqualToString:SensorsAnalyticsFlutterPluginMethodTrackTimerStart]){
         NSString* event = arguments[0];
         argumentSetNSNullToNil(&event);
-        [self trackTimerStart:event];
-        result(nil);
+        NSString *eventId = [self trackTimerStart:event];
+        result(eventId);
     }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodTrackTimerEnd]){
         NSString* event = arguments[0];
         argumentSetNSNullToNil(&event);
@@ -147,9 +147,99 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodEnableDataCollect = @"
         argumentSetNSNullToNil(&pushKey);
         [self profileUnsetPushKey:pushKey];
         result(nil);
-    } else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodEnableDataCollect]){
+    } else if ([method isEqualToString:@"setServerUrl"]){
+        NSString *serverUrl = arguments[0];
+        argumentSetNSNullToNil(&serverUrl);
+        NSNumber *isRequestRemoteConfig = arguments[1];
+        argumentSetNSNullToNil(&isRequestRemoteConfig);
+        [self setServerUrl:serverUrl isRequestRemoteConfig:isRequestRemoteConfig.boolValue];
         result(nil);
-     } else {
+    } else if ([method isEqualToString:@"getPresetProperties"]){
+        NSDictionary *properties = [self getPresetProperties];
+        result(properties);
+    }  else if ([method isEqualToString:@"enableLog"]){
+        NSString *enable = arguments[0];
+        argumentSetNSNullToNil(&enable);
+        [self enableLog:enable.boolValue];
+        result(nil);
+    }  else if ([method isEqualToString:@"setFlushNetworkPolicy"]){
+        NSNumber *flushNetworkPolicy = arguments[0];
+        argumentSetNSNullToNil(&flushNetworkPolicy);
+        [self setFlushNetworkPolicy:flushNetworkPolicy.integerValue];
+        result(nil);
+    }  else if ([method isEqualToString:@"setFlushInterval"]){
+        NSNumber *flushInterval = arguments[0];
+        argumentSetNSNullToNil(&flushInterval);
+        [self setFlushInterval:flushInterval.unsignedLongLongValue];
+        result(nil);
+    } else if([method isEqualToString:@"getFlushInterval"]){
+        result(@([self getFlushInterval]));
+    } else if ([method isEqualToString:@"setFlushBulkSize"]){
+        NSNumber *flushBulkSize = arguments[0];
+        argumentSetNSNullToNil(&flushBulkSize);
+        [self setFlushBulkSize:flushBulkSize.unsignedLongLongValue];
+        result(nil);
+    } else if([method isEqualToString:@"getFlushBulkSize"]){
+        result(@([self getFlushBulkSize]));
+    } else if ([method isEqualToString:@"getAnonymousId"]){
+        NSString *anonymousId = [self getAnonymousId];
+        result(anonymousId);
+    }  else if ([method isEqualToString:@"getLoginId"]){
+        NSString *loginId = [self getLoginId];
+        result(loginId);
+    }  else if ([method isEqualToString:@"identify"]){
+        NSString *distinctId = arguments[0];
+        argumentSetNSNullToNil(&distinctId);
+        [self identify:distinctId];
+        result(nil);
+    }  else if ([method isEqualToString:@"trackAppInstall"]){
+        NSDictionary *properties = arguments[0];
+        argumentSetNSNullToNil(&properties);
+        NSNumber *disableCallback = arguments[1];
+        argumentSetNSNullToNil(&disableCallback);
+        [self trackAppInstall:properties disableCallback:disableCallback.boolValue];
+        result(nil);
+    }  else if ([method isEqualToString:@"trackTimerPause"]){
+        NSString *eventName = arguments[0];
+        argumentSetNSNullToNil(&eventName);
+        [self trackTimerPause:eventName];
+        result(nil);
+    }  else if ([method isEqualToString:@"trackTimerResume"]){
+        NSString *eventName = arguments[0];
+        argumentSetNSNullToNil(&eventName);
+        [self trackTimerResume:eventName];
+        result(nil);
+    }  else if ([method isEqualToString:@"removeTimer"]){
+        NSString *eventName = arguments[0];
+        argumentSetNSNullToNil(&eventName);
+        [self removeTimer:eventName];
+        result(nil);
+    }  else if ([method isEqualToString:@"flush"]){
+        [self flush];
+        result(nil);
+    }  else if ([method isEqualToString:@"deleteAll"]){
+        [self deleteAll];
+        result(nil);
+    }  else if ([method isEqualToString:@"getSuperProperties"]){
+        NSDictionary *properties = [self getSuperProperties];
+        result(properties);
+    }  else if ([method isEqualToString:@"itemSet"]){
+        NSString *itemType = arguments[0];
+        argumentSetNSNullToNil(&itemType);
+        NSString *itemId = arguments[1];
+        argumentSetNSNullToNil(&itemId);
+        NSDictionary *properties = arguments[2];
+        argumentSetNSNullToNil(&properties);
+        [self itemSet:itemType itemId:itemId properties:properties];
+    }  else if ([method isEqualToString:@"itemDelete"]){
+        NSString *itemType = arguments[0];
+        argumentSetNSNullToNil(&itemType);
+        NSString *itemId = arguments[1];
+        argumentSetNSNullToNil(&itemId);
+        [self itemDelete:itemType itemId:itemId];
+    }  else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodEnableDataCollect]){
+        result(nil);
+    } else {
         result(FlutterMethodNotImplemented);
     }
 }
@@ -157,8 +247,8 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodEnableDataCollect = @"
 -(void)track:(NSString *)event properties:(nullable NSDictionary *)properties{
     [SensorsAnalyticsSDK.sharedInstance track:event withProperties:properties];
 }
--(void)trackTimerStart:(NSString *)event{
-    [SensorsAnalyticsSDK.sharedInstance trackTimerStart:event];
+-(NSString *)trackTimerStart:(NSString *)event{
+    return [SensorsAnalyticsSDK.sharedInstance trackTimerStart:event];
 }
 -(void)trackTimerEnd:(NSString *)event properties:(nullable NSDictionary *)properties {
     [SensorsAnalyticsSDK.sharedInstance trackTimerEnd:event withProperties:properties];
@@ -181,7 +271,10 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodEnableDataCollect = @"
 }
 
 -(void)trackViewScreenWithUrl:(NSString *)url porperties:(nullable NSDictionary *)properties {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [SensorsAnalyticsSDK.sharedInstance trackViewScreen:url withProperties:properties];
+#pragma clang diagnostic pop
 }
 
 -(void)profileSet:(NSDictionary *)profileDict{
@@ -234,6 +327,98 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodEnableDataCollect = @"
 
 - (void)profileUnsetPushKey:(NSString *)pushTypeKey {
     [SensorsAnalyticsSDK.sharedInstance profileUnsetPushKey:pushTypeKey];
+}
+
+- (void)setServerUrl:(NSString *)serverUrl isRequestRemoteConfig:(BOOL)isRequestRemoteConfig {
+    [SensorsAnalyticsSDK.sharedInstance setServerUrl:serverUrl isRequestRemoteConfig:isRequestRemoteConfig];
+}
+
+- (NSDictionary *)getPresetProperties {
+    return [SensorsAnalyticsSDK.sharedInstance getPresetProperties];
+}
+
+- (void)enableLog:(BOOL)enable {
+    [SensorsAnalyticsSDK.sharedInstance enableLog:enable];
+}
+
+- (void)setFlushNetworkPolicy:(NSInteger)networkPolicy {
+    [SensorsAnalyticsSDK.sharedInstance setFlushNetworkPolicy:networkPolicy];
+}
+
+- (void)setFlushInterval:(UInt64)FlushInterval {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    [SensorsAnalyticsSDK.sharedInstance setFlushInterval:FlushInterval];
+#pragma clang diagnostic pop
+}
+
+- (void)setFlushBulkSize:(UInt64)flushBulkSize {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    [SensorsAnalyticsSDK.sharedInstance setFlushBulkSize:flushBulkSize];
+#pragma clang diagnostic pop
+}
+
+- (UInt64)getFlushBulkSize {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    return SensorsAnalyticsSDK.sharedInstance.flushBulkSize;
+#pragma clang diagnostic pop
+}
+
+- (UInt64)getFlushInterval {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    return SensorsAnalyticsSDK.sharedInstance.flushInterval;
+#pragma clang diagnostic pop
+}
+
+- (NSString *)getAnonymousId {
+    return SensorsAnalyticsSDK.sharedInstance.anonymousId;
+}
+
+- (NSString *)getLoginId {
+    return SensorsAnalyticsSDK.sharedInstance.loginId;
+}
+
+- (void)identify:(NSString *)distinctId {
+    [SensorsAnalyticsSDK.sharedInstance identify:distinctId];
+}
+
+- (void)trackAppInstall:(NSDictionary *)properties disableCallback:(BOOL)disableCallback {
+    [SensorsAnalyticsSDK.sharedInstance trackInstallation:@"$AppInstall" withProperties:properties disableCallback:disableCallback];
+}
+
+- (void)trackTimerPause:(NSString *)eventName {
+    [SensorsAnalyticsSDK.sharedInstance trackTimerPause:eventName];
+}
+
+- (void)trackTimerResume:(NSString *)eventName {
+    [SensorsAnalyticsSDK.sharedInstance trackTimerResume:eventName];
+}
+
+- (void)removeTimer:(NSString *)eventName {
+    [SensorsAnalyticsSDK.sharedInstance removeTimer:eventName];
+}
+
+- (void)flush {
+    [SensorsAnalyticsSDK.sharedInstance flush];
+}
+
+- (void)deleteAll {
+    [SensorsAnalyticsSDK.sharedInstance deleteAll];
+}
+
+- (NSDictionary *)getSuperProperties {
+    return [SensorsAnalyticsSDK.sharedInstance currentSuperProperties];
+}
+
+- (void)itemSet:(NSString *)itemType itemId:(NSString *)itemId properties:(NSDictionary *)properties {
+    [SensorsAnalyticsSDK.sharedInstance itemSetWithType:itemType itemId:itemId properties:properties];
+}
+
+- (void)itemDelete:(NSString *)itemType itemId:(NSString *)itemId  {
+    [SensorsAnalyticsSDK.sharedInstance itemDeleteWithType:itemType itemId:itemId];
 }
 
 static inline void argumentSetNSNullToNil(id *arg){
