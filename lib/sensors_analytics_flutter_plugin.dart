@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
   static const MethodChannel _channel =
-      const MethodChannel('sensors_analytics_flutter_plugin');
+  const MethodChannel('sensors_analytics_flutter_plugin');
 
   static Future<String> get getDistinctId async {
     return await _channel.invokeMethod('getDistinctId');
@@ -38,28 +39,49 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.trackInstallation('AppInstall',{'key1':'value1','key2':'value2'});
   ///
-  static void trackInstallation(
-      String eventName, Map<String, dynamic> properties) {
+  static void trackInstallation(String eventName,
+      Map<String, dynamic> properties) {
     assert(eventName != null);
     _convertDateTime(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('trackInstallation', params);
   }
 
+  /// 初始化事件的计时器，计时单位为秒。
   ///
-  /// trackTimerStart
-  /// 开始计时
-  ///
-  /// 初始化事件的计时器，默认计时单位为秒(计时开始).
-  /// @param eventName 事件的名称.
-  ///
-  /// 使用示例：（计时器事件名称 viewTimer ）
-  /// SensorsAnalyticsFlutterPlugin.trackTimerStart('viewTimer');
-  ///
-  static void trackTimerStart(String eventName) {
+  /// @param eventName 事件的名称
+  /// @return 交叉计时的事件名称
+  static Future<String> trackTimerStart(String eventName) async {
     assert(eventName != null);
     List<String> params = [eventName];
-    _channel.invokeMethod('trackTimerStart', params);
+    return await _channel.invokeMethod('trackTimerStart', params);
+  }
+
+  /// 暂停事件计时器，计时单位为秒。
+  ///
+  /// [eventName] 事件的名称
+  static void trackTimerPause(String eventName) {
+    assert(eventName != null);
+    List<String> params = [eventName];
+    _channel.invokeMethod('trackTimerPause', params);
+  }
+
+  /// 恢复事件计时器，计时单位为秒。
+  ///
+  /// [eventName] 事件的名称
+  static void trackTimerResume(String eventName) {
+    assert(eventName != null);
+    List<String> params = [eventName];
+    _channel.invokeMethod('trackTimerResume', params);
+  }
+
+  /// 删除事件的计时器
+  ///
+  /// [eventName] 事件名称
+  static void removeTimer(String eventName) {
+    assert(eventName != null);
+    List<String> params = [eventName];
+    _channel.invokeMethod('removeTimer', params);
   }
 
   ///
@@ -293,16 +315,16 @@ class SensorsAnalyticsFlutterPlugin {
   /// 开启数据采集，此方法合规功能，需要配合 SAConfigOptions.disableDataCollect() 方法一起使用，并且此方法只针对 Android 平台：
   /// 详情请参考：https://manual.sensorsdata.cn/sa/latest/page-22252691.html
   ///
-  static void enableDataCollect(){
+  static void enableDataCollect() {
     _channel.invokeMethod("enableDataCollect");
   }
 
   /// 如果 map 中的 value 字段是 DateTime 类型，将其转换成
-  static void _convertDateTime(Map<String, dynamic> map){
-    if(map != null){
-      map.updateAll((key, value){
-        if(value is DateTime){
-          String timeString =  value.toLocal().toString();
+  static void _convertDateTime(Map<String, dynamic> map) {
+    if (map != null) {
+      map.updateAll((key, value) {
+        if (value is DateTime) {
+          String timeString = value.toLocal().toString();
           int lastDotIndex = timeString.lastIndexOf(".");
           return timeString.substring(0, lastDotIndex);
         }
@@ -310,4 +332,194 @@ class SensorsAnalyticsFlutterPlugin {
       });
     }
   }
+
+  //TODO 本次新增方法分隔符
+
+  /// 设置当前 serverUrl
+  /// [serverUrl] 当前 serverUrl
+  /// [isRequestRemoteConfig] 是否立即请求当前 serverUrl 的远程配置，默认是 false
+  static void setServerUrl(String serverUrl,
+      [bool isRequestRemoteConfig = false]) {
+    _channel.invokeMethod("setServerUrl", [serverUrl, isRequestRemoteConfig ?? false]);
+  }
+
+  /// 返回预置属性
+  static Future<Map<String, dynamic>> getPresetProperties() async {
+    return await _channel
+        .invokeMapMethod<String, dynamic>("getPresetProperties");
+  }
+
+  /// 设置是否开启 log
+  /// [enable] true 表示开启，false 表示关闭
+  static void enableLog(bool enable) {
+    _channel.invokeMethod("enableLog", [enable]);
+  }
+
+  /// 设置 flush 时网络发送策略，默认 3G、4G、5G、WI-FI 环境下都会尝试 flush
+  static void setFlushNetworkPolicy(List<SANetworkType> networkType) {
+    if (networkType != null && networkType.isNotEmpty) {
+      int result = 0;
+      networkType.forEach((element) {
+        switch (element) {
+          case SANetworkType.TYPE_NONE:
+            result |= 0;
+            break;
+          case SANetworkType.TYPE_2G:
+            result |= 1;
+            break;
+          case SANetworkType.TYPE_3G:
+            result |= 1 << 1;
+            break;
+          case SANetworkType.TYPE_4G:
+            result |= 1 << 2;
+            break;
+          case SANetworkType.TYPE_5G:
+            result |= 1 << 4;
+            break;
+          case SANetworkType.TYPE_WIFI:
+            result |= 1 << 3;
+            break;
+          case SANetworkType.TYPE_ALL:
+            result |= 0xFF;
+            break;
+        }
+      });
+      _channel.invokeMethod("setFlushNetworkPolicy", [result]);
+    }
+  }
+
+  /// 设置两次数据发送的最小时间间隔
+  /// [flushInterval] 时间间隔，单位毫秒
+  static void setFlushInterval(int flushInterval) {
+    _channel.invokeMethod("setFlushInterval", [flushInterval]);
+  }
+
+  /// 两次数据发送的最小时间间隔，单位毫秒
+  /// 默认值为 15 * 1000 毫秒
+  /// 在每次调用 track、signUp 以及 profileSet 等接口的时候，都会检查如下条件，以判断是否向服务器上传数据:
+  /// 1. 是否是 WIFI/3G/4G 网络条件
+  /// 2. 是否满足发送条件之一:
+  /// 1) 与上次发送的时间间隔是否大于 flushInterval
+  /// 2) 本地缓存日志数目是否大于 flushBulkSize
+  /// 如果满足这两个条件，则向服务器发送一次数据；如果不满足，则把数据加入到队列中，等待下次检查时把整个队列的内
+  /// 容一并发送。需要注意的是，为了避免占用过多存储，队列最多只缓存 20MB 数据。
+  ///
+  /// 返回时间间隔，单位毫秒
+  static Future<int> getFlushInterval() async {
+    return await _channel.invokeMethod("getFlushInterval");
+  }
+
+  /// 设置本地缓存日志的最大条目数，最小 50 条
+  /// [flushBulkSize] 时间间隔，单位毫秒
+  static void setFlushBulkSize(int flushBulkSize) {
+    _channel.invokeMethod("setFlushBulkSize", [flushBulkSize]);
+  }
+
+  /// 返回本地缓存日志的最大条目数
+  /// 默认值为 100 条
+  /// 在每次调用 track、signUp 以及 profileSet 等接口的时候，都会检查如下条件，以判断是否向服务器上传数据:
+  /// 1. 是否是 WIFI/3G/4G 网络条件
+  /// 2. 是否满足发送条件之一:
+  /// 1) 与上次发送的时间间隔是否大于 flushInterval
+  /// 2) 本地缓存日志数目是否大于 flushBulkSize
+  /// 如果满足这两个条件，则向服务器发送一次数据；如果不满足，则把数据加入到队列中，等待下次检查时把整个队列的内
+  /// 容一并发送。需要注意的是，为了避免占用过多存储，队列最多只缓存 32MB 数据。
+  ///
+  /// 返回本地缓存日志的最大条目数
+  static Future<int> getFlushBulkSize() async {
+    return await _channel.invokeMethod("getFlushBulkSize");
+  }
+
+  /// 获取当前用户的匿名 ID
+  static Future<String> getAnonymousId() async {
+    return await _channel.invokeMethod("getAnonymousId");
+  }
+
+  /// 获取当前用户的 loginId
+  static Future<String> getLoginId() async {
+    return await _channel.invokeMethod("getLoginId");
+  }
+
+  /// 设置当前用户的 distinctId。一般情况下，如果是一个注册用户，则应该使用注册系统内
+  /// 的 user_id，如果是个未注册用户，则可以选择一个不会重复的匿名 ID，如设备 ID 等，如果
+  /// 客户没有调用 identify，则使用SDK自动生成的匿名 ID
+  ///
+  /// [distinctId] 当前用户的 distinctId，仅接受数字、下划线和大小写字母
+  static void identify(String distinctId) {
+    _channel.invokeMethod("identify", [distinctId]);
+  }
+
+  /// 记录 $AppInstall 事件，用于在 App 首次启动时追踪渠道来源，并设置追踪渠道事件的属性。
+  /// 注意：如果之前使用 trackInstallation 触发的激活事件，需要继续保持原来的调用，无需改成 trackAppInstall，否则会导致激活事件数据分离。
+  /// 这是 Sensors Analytics 进阶功能，请参考文档 https://sensorsdata.cn/manual/track_installation.html
+  ///
+  /// [properties] 渠道追踪事件的属性
+  /// [disableCallback] 是否关闭这次渠道匹配的回调请求
+  static void trackAppInstall(
+      [Map<String, dynamic> properties, bool disableCallback = false]) {
+    _channel.invokeMethod("trackAppInstall", [properties, disableCallback]);
+  }
+
+  /// 将所有本地缓存的日志发送到 Sensors Analytics.
+  static void flush() {
+    _channel.invokeMethod("flush");
+  }
+
+  /// 删除本地缓存的全部事件
+  static void deleteAll() {
+    _channel.invokeMethod("deleteAll");
+  }
+
+  /// 获取事件公共属性
+  static Future<Map<String, dynamic>> getSuperProperties() async {
+    return await _channel
+        .invokeMapMethod<String, dynamic>("getSuperProperties");
+  }
+
+  /// 设置是否允许请求网络，默认是 true。此方法只针对 Android 平台有效
+  ///
+  /// [isRequest] boolean
+  static void enableNetworkRequest(bool isRequest) {
+    if (Platform.isAndroid) {
+      _channel.invokeMethod("enableNetworkRequest", [isRequest]);
+    }
+  }
+
+  /// 设置 item
+  ///
+  /// [itemType] item 类型
+  /// [itemId] item ID
+  /// [properties] item 相关属性
+  static void itemSet(String itemType, String itemId,
+      [Map<String, dynamic> properties]) {
+    _channel.invokeMethod("itemSet", [itemType, itemId, properties]);
+  }
+
+  /// 删除 item
+  ///
+  /// [itemType] item 类型
+  /// [itemId] item ID
+  static void itemDelete(String itemType, String itemId) {
+    _channel.invokeMethod("itemDelete", [itemType, itemId]);
+  }
+
+  /// 是否请求网络，默认是 true。此方法只针对 Android 平台有效
+  ///
+  /// 返回是否请求网络
+  static Future<bool> isNetworkRequestEnable() async {
+    if (Platform.isAndroid) {
+      return await _channel.invokeMethod("isNetworkRequestEnable");
+    }
+    return true;
+  }
+}
+
+enum SANetworkType {
+  TYPE_NONE,
+  TYPE_2G,
+  TYPE_3G,
+  TYPE_4G,
+  TYPE_WIFI,
+  TYPE_5G,
+  TYPE_ALL
 }
