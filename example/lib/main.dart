@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
         body: ListView(
           children: <Widget>[
             ListTile(
-              title: Text(_distinctId ?? ""),
+              title: Text(_distinctId),
               onTap: () {},
             ),
             ListTile(
