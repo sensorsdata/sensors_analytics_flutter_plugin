@@ -22,8 +22,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.track('eventname',{'key1':'value1','key2':'value2'});
   ///
-  static void track(String eventName, Map<String, dynamic> properties) {
-    assert(eventName != null);
+  static void track(String eventName, Map<String, dynamic>? properties) {
     _convertDateTime(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('track', params);
@@ -40,8 +39,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.trackInstallation('AppInstall',{'key1':'value1','key2':'value2'});
   ///
   static void trackInstallation(String eventName,
-      Map<String, dynamic> properties) {
-    assert(eventName != null);
+      Map<String, dynamic>? properties) {
     _convertDateTime(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('trackInstallation', params);
@@ -52,7 +50,6 @@ class SensorsAnalyticsFlutterPlugin {
   /// @param eventName 事件的名称
   /// @return 交叉计时的事件名称
   static Future<String> trackTimerStart(String eventName) async {
-    assert(eventName != null);
     List<String> params = [eventName];
     return await _channel.invokeMethod('trackTimerStart', params);
   }
@@ -61,7 +58,6 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   /// [eventName] 事件的名称
   static void trackTimerPause(String eventName) {
-    assert(eventName != null);
     List<String> params = [eventName];
     _channel.invokeMethod('trackTimerPause', params);
   }
@@ -70,7 +66,6 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   /// [eventName] 事件的名称
   static void trackTimerResume(String eventName) {
-    assert(eventName != null);
     List<String> params = [eventName];
     _channel.invokeMethod('trackTimerResume', params);
   }
@@ -79,7 +74,6 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   /// [eventName] 事件名称
   static void removeTimer(String eventName) {
-    assert(eventName != null);
     List<String> params = [eventName];
     _channel.invokeMethod('removeTimer', params);
   }
@@ -95,8 +89,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：（计时器事件名称 viewTimer ）
   /// SensorsAnalyticsFlutterPlugin.trackTimerEnd('viewTimer',{});
   ///
-  static void trackTimerEnd(String eventName, Map<String, dynamic> properties) {
-    assert(eventName != null);
+  static void trackTimerEnd(String eventName, Map<String, dynamic>? properties) {
     _convertDateTime(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('trackTimerEnd', params);
@@ -122,7 +115,6 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.login('login_id');
   ///
   static void login(String loginId) {
-    assert(loginId != null);
     List<String> params = [loginId];
     _channel.invokeMethod('login', params);
   }
@@ -148,8 +140,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.trackViewScreen('urlForView',{'key1':'value1','key2':'value2'});
   ///
-  static void trackViewScreen(String url, Map<String, dynamic> properties) {
-    assert(url != null);
+  static void trackViewScreen(String url, Map<String, dynamic>? properties) {
     _convertDateTime(properties);
     List<dynamic> params = [url, properties];
     _channel.invokeMethod('trackViewScreen', params);
@@ -320,7 +311,7 @@ class SensorsAnalyticsFlutterPlugin {
   }
 
   /// 如果 map 中的 value 字段是 DateTime 类型，将其转换成
-  static void _convertDateTime(Map<String, dynamic> map) {
+  static void _convertDateTime(Map<String, dynamic>? map) {
     if (map != null) {
       map.updateAll((key, value) {
         if (value is DateTime) {
@@ -333,18 +324,16 @@ class SensorsAnalyticsFlutterPlugin {
     }
   }
 
-  //TODO 本次新增方法分隔符
-
   /// 设置当前 serverUrl
   /// [serverUrl] 当前 serverUrl
   /// [isRequestRemoteConfig] 是否立即请求当前 serverUrl 的远程配置，默认是 false
   static void setServerUrl(String serverUrl,
       [bool isRequestRemoteConfig = false]) {
-    _channel.invokeMethod("setServerUrl", [serverUrl, isRequestRemoteConfig ?? false]);
+    _channel.invokeMethod("setServerUrl", [serverUrl, isRequestRemoteConfig]);
   }
 
   /// 返回预置属性
-  static Future<Map<String, dynamic>> getPresetProperties() async {
+  static Future<Map<String, dynamic>?> getPresetProperties() async {
     return await _channel
         .invokeMapMethod<String, dynamic>("getPresetProperties");
   }
@@ -357,7 +346,7 @@ class SensorsAnalyticsFlutterPlugin {
 
   /// 设置 flush 时网络发送策略，默认 3G、4G、5G、WI-FI 环境下都会尝试 flush
   static void setFlushNetworkPolicy(List<SANetworkType> networkType) {
-    if (networkType != null && networkType.isNotEmpty) {
+    if (networkType.isNotEmpty) {
       int result = 0;
       networkType.forEach((element) {
         switch (element) {
@@ -456,7 +445,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// [properties] 渠道追踪事件的属性
   /// [disableCallback] 是否关闭这次渠道匹配的回调请求
   static void trackAppInstall(
-      [Map<String, dynamic> properties, bool disableCallback = false]) {
+      [Map<String, dynamic>? properties, bool disableCallback = false]) {
     _channel.invokeMethod("trackAppInstall", [properties, disableCallback]);
   }
 
@@ -471,7 +460,7 @@ class SensorsAnalyticsFlutterPlugin {
   }
 
   /// 获取事件公共属性
-  static Future<Map<String, dynamic>> getSuperProperties() async {
+  static Future<Map<String, dynamic>?> getSuperProperties() async {
     return await _channel
         .invokeMapMethod<String, dynamic>("getSuperProperties");
   }
@@ -491,7 +480,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// [itemId] item ID
   /// [properties] item 相关属性
   static void itemSet(String itemType, String itemId,
-      [Map<String, dynamic> properties]) {
+      [Map<String, dynamic>? properties]) {
     _channel.invokeMethod("itemSet", [itemType, itemId, properties]);
   }
 
