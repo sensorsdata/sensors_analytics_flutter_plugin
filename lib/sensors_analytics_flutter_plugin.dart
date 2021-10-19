@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
   static const MethodChannel _channel =
-  const MethodChannel('sensors_analytics_flutter_plugin');
+      const MethodChannel('sensors_analytics_flutter_plugin');
 
   static Future<String> get getDistinctId async {
     return await _channel.invokeMethod('getDistinctId');
@@ -23,6 +23,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.track('eventname',{'key1':'value1','key2':'value2'});
   ///
   static void track(String eventName, Map<String, dynamic>? properties) {
+    properties = properties == null ? null : {...properties};
     _convertDateTime(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('track', params);
@@ -38,8 +39,9 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.trackInstallation('AppInstall',{'key1':'value1','key2':'value2'});
   ///
-  static void trackInstallation(String eventName,
-      Map<String, dynamic>? properties) {
+  static void trackInstallation(
+      String eventName, Map<String, dynamic>? properties) {
+    properties = properties == null ? null : {...properties};
     _convertDateTime(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('trackInstallation', params);
@@ -89,7 +91,9 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：（计时器事件名称 viewTimer ）
   /// SensorsAnalyticsFlutterPlugin.trackTimerEnd('viewTimer',{});
   ///
-  static void trackTimerEnd(String eventName, Map<String, dynamic>? properties) {
+  static void trackTimerEnd(
+      String eventName, Map<String, dynamic>? properties) {
+    properties = properties == null ? null : {...properties};
     _convertDateTime(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('trackTimerEnd', params);
@@ -141,6 +145,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.trackViewScreen('urlForView',{'key1':'value1','key2':'value2'});
   ///
   static void trackViewScreen(String url, Map<String, dynamic>? properties) {
+    properties = properties == null ? null : {...properties};
     _convertDateTime(properties);
     List<dynamic> params = [url, properties];
     _channel.invokeMethod('trackViewScreen', params);
@@ -156,6 +161,9 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.profileSet({'key1':'value1','key2':'value2'});
   ///
   static void profileSet(Map<String, dynamic> profileProperties) {
+    if (profileProperties != null) {
+      profileProperties = {...profileProperties};
+    }
     _convertDateTime(profileProperties);
     List<dynamic> params = [profileProperties];
     _channel.invokeMethod('profileSet', params);
@@ -171,6 +179,9 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.profileSetOnce({'key1':'value1','key2':'value2'});
   ///
   static void profileSetOnce(Map<String, dynamic> profileProperties) {
+    if (profileProperties != null) {
+      profileProperties = {...profileProperties};
+    }
     _convertDateTime(profileProperties);
     List<dynamic> params = [profileProperties];
     _channel.invokeMethod('profileSetOnce', params);
@@ -252,6 +263,9 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.registerSuperProperties({'key1':'value1','key2':'value2'});
   ///
   static void registerSuperProperties(Map<String, dynamic> superProperties) {
+    if (superProperties != null) {
+      superProperties = {...superProperties};
+    }
     _convertDateTime(superProperties);
     List<dynamic> params = [superProperties];
     _channel.invokeMethod('registerSuperProperties', params);
@@ -446,6 +460,8 @@ class SensorsAnalyticsFlutterPlugin {
   /// [disableCallback] 是否关闭这次渠道匹配的回调请求
   static void trackAppInstall(
       [Map<String, dynamic>? properties, bool disableCallback = false]) {
+    properties = properties == null ? null : {...properties};
+    _convertDateTime(properties);
     _channel.invokeMethod("trackAppInstall", [properties, disableCallback]);
   }
 
@@ -481,6 +497,8 @@ class SensorsAnalyticsFlutterPlugin {
   /// [properties] item 相关属性
   static void itemSet(String itemType, String itemId,
       [Map<String, dynamic>? properties]) {
+    properties = properties == null ? null : {...properties};
+    _convertDateTime(properties);
     _channel.invokeMethod("itemSet", [itemType, itemId, properties]);
   }
 
