@@ -44,7 +44,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     dynamic tmpResult;
 
     return MaterialApp(
@@ -86,11 +85,15 @@ class _MyAppState extends State<MyApp> {
               title: Text('追踪事件 track'),
               onTap: () {
                 print("======触发事件233");
+                // SensorsAnalyticsFlutterPlugin.track(
+                //     'ViewProduct', <String, dynamic>{
+                //   "a_time": DateTime.now(),
+                //   "product_name": "Apple 12 max pro"
+                // });
+                var map = const {};
+                map = {};
                 SensorsAnalyticsFlutterPlugin.track(
-                    'ViewProduct', <String, dynamic>{
-                  "a_time": DateTime.now(),
-                  "product_name": "Apple 12 max pro"
-                });
+                    "hello", const <String, dynamic>{"address": "xxx road"});
               },
             ),
             ListTile(
@@ -130,7 +133,9 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('set server url'),
               onTap: () async {
-                SensorsAnalyticsFlutterPlugin.setServerUrl("https://newsdktest.datasink.sensorsdata.cn/sa?project=zhujiagui&token=5a394d2405c147ca", true);
+                SensorsAnalyticsFlutterPlugin.setServerUrl(
+                    "https://newsdktest.datasink.sensorsdata.cn/sa?project=zhujiagui&token=5a394d2405c147ca",
+                    true);
               },
             ),
             ListTile(
@@ -167,19 +172,20 @@ class _MyAppState extends State<MyApp> {
               title: Text('getFlushInterval'),
               onTap: () async {
                 dynamic result =
-                await SensorsAnalyticsFlutterPlugin.getFlushInterval();
+                    await SensorsAnalyticsFlutterPlugin.getFlushInterval();
                 print("getFlushInterval===$result");
               },
             ),
             ListTile(
               title: Text('setFlushBulkSize'),
               onTap: () async {
-                SensorsAnalyticsFlutterPlugin.setFlushInterval(60*60*1000);
+                SensorsAnalyticsFlutterPlugin.setFlushInterval(60 * 60 * 1000);
                 SensorsAnalyticsFlutterPlugin.setFlushBulkSize(100);
                 print("setFlushBulkSize===");
-                dynamic result = await SensorsAnalyticsFlutterPlugin.getFlushBulkSize();
+                dynamic result =
+                    await SensorsAnalyticsFlutterPlugin.getFlushBulkSize();
                 print("getFlushBulkSize===$result");
-                for(int index=0;index<=100;index++){
+                for (int index = 0; index <= 100; index++) {
                   SensorsAnalyticsFlutterPlugin.track(
                       'ViewProduct2', <String, dynamic>{
                     "a_time": DateTime.now(),
@@ -232,9 +238,8 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('trackTimerStart'),
               onTap: () async {
-                tmpResult =
-                    await SensorsAnalyticsFlutterPlugin.trackTimerStart(
-                        "hello_event");
+                tmpResult = await SensorsAnalyticsFlutterPlugin.trackTimerStart(
+                    "hello_event");
                 print("trackTimerStart===$tmpResult");
               },
             ),
@@ -262,8 +267,7 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('end timer'),
               onTap: () async {
-                SensorsAnalyticsFlutterPlugin.trackTimerEnd(
-                    tmpResult, null);
+                SensorsAnalyticsFlutterPlugin.trackTimerEnd(tmpResult, null);
                 print("end timer===");
               },
             ),
@@ -284,8 +288,8 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('setsuperproperties'),
               onTap: () async {
-                 SensorsAnalyticsFlutterPlugin.registerSuperProperties(
-                     {"age":100});
+                SensorsAnalyticsFlutterPlugin.registerSuperProperties(
+                    {"age": 100});
                 print("getSuperProperties===");
               },
             ),
@@ -330,7 +334,7 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('enableDataCollect'),
               onTap: () async {
-                 SensorsAnalyticsFlutterPlugin.enableDataCollect();
+                SensorsAnalyticsFlutterPlugin.enableDataCollect();
                 print("enableDataCollect===");
               },
             ),
