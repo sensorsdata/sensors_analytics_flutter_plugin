@@ -1,3 +1,7 @@
+## 2.0.1
+
+* 修复 track 接口时传入 const map 报错
+
 ## 2.0.0
 
 * 支持 null safety
