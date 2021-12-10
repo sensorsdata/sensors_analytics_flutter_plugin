@@ -90,10 +90,8 @@ class _MyAppState extends State<MyApp> {
                 //   "a_time": DateTime.now(),
                 //   "product_name": "Apple 12 max pro"
                 // });
-                var map = const {};
-                map = {};
-                SensorsAnalyticsFlutterPlugin.track(
-                    "hello", const <String, dynamic>{"address": "xxx road"});
+                var map = {/*r"$lib_plugin_version":["flutter:234"],*/"address":"000000000000"};
+                 SensorsAnalyticsFlutterPlugin.track("hello", map);
               },
             ),
             ListTile(
