@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
+  static const String FLUTTER_PLUGIN_VERSION = "2.0.2";
+  static bool hasAddedFlutterPluginVersion = false;
+
   static const MethodChannel _channel =
       const MethodChannel('sensors_analytics_flutter_plugin');
 
@@ -25,6 +28,7 @@ class SensorsAnalyticsFlutterPlugin {
   static void track(String eventName, Map<String, dynamic>? properties) {
     properties = properties == null ? null : {...properties};
     _convertDateTime(properties);
+    _setupLibPluginVersion(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('track', params);
   }
@@ -518,6 +522,20 @@ class SensorsAnalyticsFlutterPlugin {
       return await _channel.invokeMethod("isNetworkRequestEnable");
     }
     return true;
+  }
+
+  ///添加 Flutter 插件版本号
+  static void _setupLibPluginVersion(Map<String, dynamic>? properties) {
+    if (!hasAddedFlutterPluginVersion) {
+      if (properties == null) {
+        properties = {};
+      }
+      List<String>? values = properties[r"$lib_plugin_version"];
+      values = values == null ? [] : [...values];
+      values.add("flutter_plugin:$FLUTTER_PLUGIN_VERSION");
+      properties[r"$lib_plugin_version"] = values;
+      hasAddedFlutterPluginVersion = true;
+    }
   }
 }
 
