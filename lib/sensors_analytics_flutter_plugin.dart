@@ -151,6 +151,7 @@ class SensorsAnalyticsFlutterPlugin {
   static void trackViewScreen(String url, Map<String, dynamic>? properties) {
     properties = properties == null ? null : {...properties};
     _convertDateTime(properties);
+    _setupLibPluginVersion(properties);
     List<dynamic> params = [url, properties];
     _channel.invokeMethod('trackViewScreen', params);
   }
