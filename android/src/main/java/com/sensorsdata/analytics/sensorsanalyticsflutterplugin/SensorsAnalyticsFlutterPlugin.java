@@ -219,10 +219,12 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
                 if (value instanceof JSONArray) {
                     JSONArray jsonArray = (JSONArray) value;
                     if (jsonArray.length() != 0) {
-                        value = new ArrayList();
+                        ArrayList<Object> newValue = new ArrayList<>();
                         for (int index = 0; index < jsonArray.length(); index++) {
-                            ((ArrayList) value).add(jsonArray.opt(index));
+                            newValue.add(jsonArray.opt(index));
                         }
+                        map.put(key, newValue);
+                        continue;
                     }
                 }
                 map.put(key, value);
