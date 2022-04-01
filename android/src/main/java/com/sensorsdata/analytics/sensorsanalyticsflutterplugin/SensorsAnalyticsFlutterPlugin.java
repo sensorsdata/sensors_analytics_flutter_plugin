@@ -7,8 +7,10 @@ import androidx.annotation.NonNull;
 import com.sensorsdata.analytics.android.sdk.SALog;
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -214,6 +216,15 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
             while (keys.hasNext()) {
                 String key = keys.next();
                 Object value = jsonObject.opt(key);
+                if (value instanceof JSONArray) {
+                    JSONArray jsonArray = (JSONArray) value;
+                    if (jsonArray.length() != 0) {
+                        value = new ArrayList();
+                        for (int index = 0; index < jsonArray.length(); index++) {
+                            ((ArrayList) value).add(jsonArray.opt(index));
+                        }
+                    }
+                }
                 map.put(key, value);
             }
             result.success(map);

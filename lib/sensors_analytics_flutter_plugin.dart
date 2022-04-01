@@ -26,7 +26,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.track('eventname',{'key1':'value1','key2':'value2'});
   ///
   static void track(String eventName, Map<String, dynamic>? properties) {
-    properties = properties == null ? null : {...properties};
+    properties = properties == null ? {} : {...properties};
     _convertDateTime(properties);
     _setupLibPluginVersion(properties);
     List<dynamic> params = [eventName, properties];
@@ -149,7 +149,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.trackViewScreen('urlForView',{'key1':'value1','key2':'value2'});
   ///
   static void trackViewScreen(String url, Map<String, dynamic>? properties) {
-    properties = properties == null ? null : {...properties};
+    properties = properties == null ? {} : {...properties};
     _convertDateTime(properties);
     _setupLibPluginVersion(properties);
     List<dynamic> params = [url, properties];
@@ -531,7 +531,11 @@ class SensorsAnalyticsFlutterPlugin {
       if (properties == null) {
         properties = {};
       }
-      List<String>? values = properties[r"$lib_plugin_version"];
+      dynamic tmp = properties[r"$lib_plugin_version"];
+      if ((tmp is! List<String>) && (tmp is! List<String?>)) {
+        properties.remove(r"$lib_plugin_version");
+      }
+      dynamic values = properties[r"$lib_plugin_version"];
       values = values == null ? [] : [...values];
       values.add("flutter_plugin:$FLUTTER_PLUGIN_VERSION");
       properties[r"$lib_plugin_version"] = values;
