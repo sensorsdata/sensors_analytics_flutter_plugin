@@ -97,8 +97,9 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   static void trackTimerEnd(
       String eventName, Map<String, dynamic>? properties) {
-    properties = properties == null ? null : {...properties};
+    properties = properties == null ? {} : {...properties};
     _convertDateTime(properties);
+    _setupLibPluginVersion(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('trackTimerEnd', params);
   }
@@ -122,8 +123,11 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.login('login_id');
   ///
-  static void login(String loginId) {
-    List<String> params = [loginId];
+  static void login(String loginId, [Map<String, dynamic>? properties]) {
+    properties = properties == null ? {} : {...properties};
+    _convertDateTime(properties);
+    _setupLibPluginVersion(properties);
+    List<dynamic> params = [loginId, properties];
     _channel.invokeMethod('login', params);
   }
 

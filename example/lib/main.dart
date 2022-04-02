@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
               leading: Icon(Icons.account_circle),
               title: Text('注册成功/登录成功时调用 login '),
               onTap: () {
-                SensorsAnalyticsFlutterPlugin.login('传入你们服务端分配给用户的登录 ID');
+                SensorsAnalyticsFlutterPlugin.login("sd", {"hello":"world"});
               },
             ),
             ListTile(

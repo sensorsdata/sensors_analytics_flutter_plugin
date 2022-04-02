@@ -336,7 +336,7 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
      * login
      */
     private void login(List list) {
-        SensorsDataAPI.sharedInstance().login((String) list.get(0));
+        SensorsDataAPI.sharedInstance().login((String) list.get(0), assertProperties((Map) list.get(1)));
     }
 
     /**
