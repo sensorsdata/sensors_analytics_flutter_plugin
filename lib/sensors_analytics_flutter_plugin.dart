@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
-  static const String FLUTTER_PLUGIN_VERSION = "2.0.3";
+  static const String FLUTTER_PLUGIN_VERSION = "2.0.4";
   static bool hasAddedFlutterPluginVersion = false;
 
   static const MethodChannel _channel =
