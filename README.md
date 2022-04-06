@@ -17,7 +17,7 @@
 ```yml
 dependencies:
   # 添加神策 flutter plugin 
-  sensors_analytics_flutter_plugin: ^2.0.3
+  sensors_analytics_flutter_plugin: ^2.0.4
 ```
 
 执行 flutter packages get 命令安装插件

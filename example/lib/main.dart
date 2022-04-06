@@ -12,7 +12,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _distinctId = '';
+  String? _distinctId = '';
   var parameters;
 
   @override
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic tmpResult;
+    late dynamic tmpResult;
 
     return MaterialApp(
       home: Scaffold(
@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
               leading: Icon(Icons.account_circle),
               title: Text('注册成功/登录成功时调用 login '),
               onTap: () {
-                SensorsAnalyticsFlutterPlugin.login('传入你们服务端分配给用户的登录 ID');
+                SensorsAnalyticsFlutterPlugin.login("sd", {"hello":"world"});
               },
             ),
             ListTile(
@@ -85,13 +85,30 @@ class _MyAppState extends State<MyApp> {
               title: Text('追踪事件 track'),
               onTap: () {
                 print("======触发事件233");
+
+                dynamic a = "aaa";
+                print(a is String);
+                String? b= "bbb";
+                dynamic c = b;
+                print(c.runtimeType);
+                print(c is String);
+                print(c is! String);
+                print(c is String?);
+                print("======");
+                dynamic d = null;
+                print(d.runtimeType);
+                print(d is String);
+                print(d is! String);
+                print(d is String?);
+
                 // SensorsAnalyticsFlutterPlugin.track(
                 //     'ViewProduct', <String, dynamic>{
                 //   "a_time": DateTime.now(),
                 //   "product_name": "Apple 12 max pro"
                 // });
-                var map = {/*r"$lib_plugin_version":["flutter:234"],*/"address":"000000000000"};
-                 SensorsAnalyticsFlutterPlugin.track("hello", map);
+                List<String?>? list = ["flutter_plugin:12312"];
+                var map = {r"$lib_plugin_version":list, "address":"000000000000"};
+                SensorsAnalyticsFlutterPlugin.track("hello", map);
               },
             ),
             ListTile(
@@ -286,14 +303,17 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('setsuperproperties'),
               onTap: () async {
+                List<String?>? list = ["flutter_plugin:super_set"];
+                var map = {r"$lib_plugin_version":list};
                 SensorsAnalyticsFlutterPlugin.registerSuperProperties(
-                    {"age": 100});
-                print("getSuperProperties===");
+                    map);
+                print("setSuperProperties===");
               },
             ),
             ListTile(
               title: Text('getSuperProperties'),
               onTap: () async {
+                var a = 10;
                 dynamic map =
                     await SensorsAnalyticsFlutterPlugin.getSuperProperties();
                 print("getSuperProperties===$map");

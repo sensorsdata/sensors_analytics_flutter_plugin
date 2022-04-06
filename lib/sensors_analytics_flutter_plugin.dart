@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
-  static const String FLUTTER_PLUGIN_VERSION = "2.0.3";
+  static const String FLUTTER_PLUGIN_VERSION = "2.0.4";
   static bool hasAddedFlutterPluginVersion = false;
 
   static const MethodChannel _channel =
@@ -26,7 +26,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.track('eventname',{'key1':'value1','key2':'value2'});
   ///
   static void track(String eventName, Map<String, dynamic>? properties) {
-    properties = properties == null ? null : {...properties};
+    properties = properties == null ? {} : {...properties};
     _convertDateTime(properties);
     _setupLibPluginVersion(properties);
     List<dynamic> params = [eventName, properties];
@@ -97,8 +97,9 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   static void trackTimerEnd(
       String eventName, Map<String, dynamic>? properties) {
-    properties = properties == null ? null : {...properties};
+    properties = properties == null ? {} : {...properties};
     _convertDateTime(properties);
+    _setupLibPluginVersion(properties);
     List<dynamic> params = [eventName, properties];
     _channel.invokeMethod('trackTimerEnd', params);
   }
@@ -122,8 +123,11 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.login('login_id');
   ///
-  static void login(String loginId) {
-    List<String> params = [loginId];
+  static void login(String loginId, [Map<String, dynamic>? properties]) {
+    properties = properties == null ? {} : {...properties};
+    _convertDateTime(properties);
+    _setupLibPluginVersion(properties);
+    List<dynamic> params = [loginId, properties];
     _channel.invokeMethod('login', params);
   }
 
@@ -149,8 +153,9 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.trackViewScreen('urlForView',{'key1':'value1','key2':'value2'});
   ///
   static void trackViewScreen(String url, Map<String, dynamic>? properties) {
-    properties = properties == null ? null : {...properties};
+    properties = properties == null ? {} : {...properties};
     _convertDateTime(properties);
+    _setupLibPluginVersion(properties);
     List<dynamic> params = [url, properties];
     _channel.invokeMethod('trackViewScreen', params);
   }
@@ -530,7 +535,11 @@ class SensorsAnalyticsFlutterPlugin {
       if (properties == null) {
         properties = {};
       }
-      List<String>? values = properties[r"$lib_plugin_version"];
+      dynamic tmp = properties[r"$lib_plugin_version"];
+      if ((tmp is! List<String>) && (tmp is! List<String?>)) {
+        properties.remove(r"$lib_plugin_version");
+      }
+      dynamic values = properties[r"$lib_plugin_version"];
       values = values == null ? [] : [...values];
       values.add("flutter_plugin:$FLUTTER_PLUGIN_VERSION");
       properties[r"$lib_plugin_version"] = values;
