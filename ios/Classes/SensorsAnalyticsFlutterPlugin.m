@@ -26,8 +26,7 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodUnregisterSuperPropert
 static NSString* const SensorsAnalyticsFlutterPluginMethodClearSuperProperties = @"clearSuperProperties";
 static NSString* const SensorsAnalyticsFlutterPluginMethodProfilePushKey = @"profilePushId";
 static NSString* const SensorsAnalyticsFlutterPluginMethodProfileUnsetPushKey = @"profileUnsetPushId";
-static NSString* const SensorsAnalyticsFlutterPluginMethodEnableDataCollect = @"enableDataCollect";
-
+static NSString* const SensorsAnalyticsFlutterPluginMethodInit = @"init";
 
 @implementation SensorsAnalyticsFlutterPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
@@ -231,13 +230,18 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodEnableDataCollect = @"
         NSDictionary *properties = arguments[2];
         argumentSetNSNullToNil(&properties);
         [self itemSet:itemType itemId:itemId properties:properties];
+        result(nil);
     }  else if ([method isEqualToString:@"itemDelete"]){
         NSString *itemType = arguments[0];
         argumentSetNSNullToNil(&itemType);
         NSString *itemId = arguments[1];
         argumentSetNSNullToNil(&itemId);
         [self itemDelete:itemType itemId:itemId];
-    }  else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodEnableDataCollect]){
+        result(nil);
+    }  else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodInit]){
+        NSDictionary *config = [arguments firstObject];
+        argumentSetNSNullToNil(&config);
+        [self startWithConfig:config];
         result(nil);
     } else {
         result(FlutterMethodNotImplemented);
@@ -342,7 +346,10 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodEnableDataCollect = @"
 }
 
 - (void)setFlushNetworkPolicy:(NSInteger)networkPolicy {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [SensorsAnalyticsSDK.sharedInstance setFlushNetworkPolicy:networkPolicy];
+#pragma clang diagnostic pop
 }
 
 - (void)setFlushInterval:(UInt64)FlushInterval {
@@ -419,6 +426,71 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodEnableDataCollect = @"
 
 - (void)itemDelete:(NSString *)itemType itemId:(NSString *)itemId  {
     [SensorsAnalyticsSDK.sharedInstance itemDeleteWithType:itemType itemId:itemId];
+}
+
+- (void)startWithConfig:(NSDictionary *)config {
+    if (![config isKindOfClass:[NSDictionary class]]) {
+        return;
+    }
+    
+    NSString *serverURL = config[@"serverUrl"];
+    if (![serverURL isKindOfClass:[NSString class]]) {
+        return;
+    }
+    
+    SAConfigOptions *options = [[SAConfigOptions alloc] initWithServerURL:serverURL launchOptions:nil];
+    
+    NSNumber *autoTrack = config[@"autotrackTypes"];
+    if ([autoTrack isKindOfClass:[NSNumber class]]) {
+        options.autoTrackEventType = [autoTrack integerValue];
+    }
+    NSNumber *networkTypes = config[@"networkTypes"];
+    if ([networkTypes isKindOfClass:[NSNumber class]]) {
+        options.flushNetworkPolicy = [networkTypes integerValue];
+    }
+    NSNumber *flushInterval = config[@"flushInterval"];
+    if ([flushInterval isKindOfClass:[NSNumber class]]) {
+        options.flushInterval = [flushInterval integerValue];
+    }
+    NSNumber *flushBulksize = config[@"flushBulkSize"];
+    if ([flushBulksize isKindOfClass:[NSNumber class]]) {
+        options.flushBulkSize = [flushBulksize integerValue];
+    }
+    NSNumber *enableLog = config[@"enableLog"];
+    if ([enableLog isKindOfClass:[NSNumber class]]) {
+        options.enableLog = [enableLog boolValue];
+    }
+    NSNumber *enableEncrypt = config[@"encrypt"];
+    if ([enableEncrypt isKindOfClass:[NSNumber class]]) {
+        options.enableEncrypt = [enableEncrypt boolValue];
+    }
+    
+    NSNumber *enableJavascriptBridge = config[@"javaScriptBridge"];
+    if ([enableJavascriptBridge isKindOfClass:[NSNumber class]]) {
+        options.enableJavaScriptBridge = [enableJavascriptBridge boolValue];
+    }
+    
+    NSDictionary *iOSConfigs = config[@"ios"];
+    if ([iOSConfigs isKindOfClass:[NSDictionary class]] && [iOSConfigs[@"maxCacheSize"] isKindOfClass:[NSNumber class]]) {
+        options.maxCacheSize = [iOSConfigs[@"maxCacheSize"] integerValue];
+    }
+    
+    NSNumber *enableHeatMap = config[@"heatMap"];
+    if ([enableHeatMap isKindOfClass:[NSNumber class]]) {
+        options.enableHeatMap = [enableHeatMap boolValue];
+    }
+    NSDictionary *visualizedSettings = config[@"visualized"];
+    if ([visualizedSettings isKindOfClass:[NSDictionary class]]) {
+        if ([visualizedSettings[@"autoTrack"] isKindOfClass:[NSNumber class]]) {
+            options.enableVisualizedAutoTrack = [visualizedSettings[@"autoTrack"] boolValue];
+        }
+        if ([visualizedSettings[@"properties"] isKindOfClass:[NSNumber class]]) {
+            options.enableVisualizedProperties = [visualizedSettings[@"properties"] boolValue];
+        }
+    }
+    
+    // 开启 SDK
+    [SensorsAnalyticsSDK startWithConfigOptions:options];
 }
 
 static inline void argumentSetNSNullToNil(id *arg){

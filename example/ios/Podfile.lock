@@ -1,11 +1,24 @@
 PODS:
   - Flutter (1.0.0)
-  - sensors_analytics_flutter_plugin (1.0.5):
+  - sensors_analytics_flutter_plugin (2.0.4):
     - Flutter
-    - SensorsAnalyticsSDK
-  - SensorsAnalyticsSDK (2.2.4):
-    - SensorsAnalyticsSDK/Core (= 2.2.4)
-  - SensorsAnalyticsSDK/Core (2.2.4)
+    - SensorsAnalyticsSDK (>= 4.0.0)
+  - SensorsAnalyticsSDK (4.3.4):
+    - SensorsAnalyticsSDK/Core (= 4.3.4)
+  - SensorsAnalyticsSDK/__Store (4.3.4)
+  - SensorsAnalyticsSDK/AutoTrack (4.3.4):
+    - SensorsAnalyticsSDK/Common
+  - SensorsAnalyticsSDK/Base (4.3.4):
+    - SensorsAnalyticsSDK/__Store
+  - SensorsAnalyticsSDK/Common (4.3.4):
+    - SensorsAnalyticsSDK/Extension
+  - SensorsAnalyticsSDK/Core (4.3.4):
+    - SensorsAnalyticsSDK/Common
+    - SensorsAnalyticsSDK/Visualized
+  - SensorsAnalyticsSDK/Extension (4.3.4):
+    - SensorsAnalyticsSDK/Base
+  - SensorsAnalyticsSDK/Visualized (4.3.4):
+    - SensorsAnalyticsSDK/AutoTrack
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -22,10 +35,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sensors_analytics_flutter_plugin/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  sensors_analytics_flutter_plugin: 28c92a16312453a6834eda00ee94d27a5406adf1
-  SensorsAnalyticsSDK: d898a6b6427dc842fa8c54c4cfb17dcc8a7e2220
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  sensors_analytics_flutter_plugin: 3c172b37f8b6883c8ed3cb08ae19a49b84810faf
+  SensorsAnalyticsSDK: 159263992e8bf2e61b18fff55939db826050764c
 
-PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
+PODFILE CHECKSUM: 3aaee2e660a2a825e7c3beecb0e4a334b934f851
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.11.2
