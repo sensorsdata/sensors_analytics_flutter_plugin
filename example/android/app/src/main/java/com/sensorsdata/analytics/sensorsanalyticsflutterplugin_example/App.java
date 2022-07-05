@@ -19,25 +19,25 @@ public class App extends FlutterApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        initSensorsDataAPI();
+        //initSensorsDataAPI();
     }
-
-    /**
-     * 初始化 Sensors Analytics SDK
-     */
-    private void initSensorsDataAPI() {
-        SAConfigOptions configOptions = new SAConfigOptions(SA_SERVER_URL);
-        // 打开自动采集, 并指定追踪哪些 AutoTrack 事件
-        configOptions.setAutoTrackEventType(SensorsAnalyticsAutoTrackEventType.APP_START |
-                SensorsAnalyticsAutoTrackEventType.APP_END |
-                SensorsAnalyticsAutoTrackEventType.APP_VIEW_SCREEN |
-                SensorsAnalyticsAutoTrackEventType.APP_CLICK)
-                .enableTrackAppCrash()
-                .enableVisualizedAutoTrack(true)
-                //.disableDataCollect()
-                .enableVisualizedAutoTrackConfirmDialog(true);
-        SensorsDataAPI.startWithConfigOptions(this, configOptions);
-        SensorsDataAPI.sharedInstance(this).trackFragmentAppViewScreen();
-        SensorsDataAPI.sharedInstance().enableHeatMap();
-    }
+//
+//    /**
+//     * 初始化 Sensors Analytics SDK
+//     */
+//    private void initSensorsDataAPI() {
+//        SAConfigOptions configOptions = new SAConfigOptions(SA_SERVER_URL);
+//        // 打开自动采集, 并指定追踪哪些 AutoTrack 事件
+//        configOptions.setAutoTrackEventType(SensorsAnalyticsAutoTrackEventType.APP_START |
+//                SensorsAnalyticsAutoTrackEventType.APP_END |
+//                SensorsAnalyticsAutoTrackEventType.APP_VIEW_SCREEN |
+//                SensorsAnalyticsAutoTrackEventType.APP_CLICK)
+//                .enableTrackAppCrash()
+//                .enableVisualizedAutoTrack(true)
+//                //.disableDataCollect()
+//                .enableVisualizedAutoTrackConfirmDialog(true);
+//        SensorsDataAPI.startWithConfigOptions(this, configOptions);
+//        SensorsDataAPI.sharedInstance(this).trackFragmentAppViewScreen();
+//        SensorsDataAPI.sharedInstance().enableHeatMap();
+//    }
 }
