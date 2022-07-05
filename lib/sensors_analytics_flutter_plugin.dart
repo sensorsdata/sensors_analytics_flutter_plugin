@@ -3,16 +3,163 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 
+class AndroidConfig {
+  final int maxCacheSize;
+  final bool jellybean;
+  final bool subProcessFlush;
+
+  ///配置 Android 部分功能。[maxCacheSize] 表示 Android 最大缓存量，单位是 byte。
+  ///[jellybean] 表示是否支持 Android JellyBean 版本，JellyBean 版本的 WebView 存在安全性问题。
+  ///[subProcessFlush] 表示 Android SDK 是否支持多进程上报数据。
+  AndroidConfig({this.maxCacheSize = 32 * 1024 * 1024, this.jellybean = false, this.subProcessFlush = false});
+
+  Map<String, dynamic> get map => {"maxCacheSize": "$maxCacheSize", "jellybean": jellybean, "subProcessFlush": subProcessFlush};
+}
+
+class IOSConfig {
+  final int maxCacheSize;
+
+  ///配置 iOS 部分功能。[maxCacheSize] 表示 iOS 最大缓存事件数目，单位是“条”。
+  IOSConfig({this.maxCacheSize = 10000});
+
+  Map<String, dynamic> get map => {"maxCacheSize": maxCacheSize};
+}
+
+class VisualizedConfig {
+  final bool autoTrack;
+  final bool properties;
+
+  ///配置可视化全埋点功能。[autotrack] 表示开启可视化全埋点，[properties] 表示开启可视化全埋点自定义属性功能。
+  VisualizedConfig({this.autoTrack = false, this.properties = false});
+
+  Map<String, dynamic> get map => {"autoTrack": autoTrack, "properties": properties};
+}
+
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
-  static const String FLUTTER_PLUGIN_VERSION = "2.0.4";
+  static const String FLUTTER_PLUGIN_VERSION = "2.1.0";
   static bool hasAddedFlutterPluginVersion = false;
 
-  static const MethodChannel _channel =
-      const MethodChannel('sensors_analytics_flutter_plugin');
+  static const MethodChannel _channel = const MethodChannel('sensors_analytics_flutter_plugin');
 
-  static Future<String> get getDistinctId async {
+  static Future<String?> get getDistinctId async {
     return await _channel.invokeMethod('getDistinctId');
+  }
+
+  /// 初始化神策 SDK。
+  /// 用户需要尽可能早的调用该初始化方法，建议在 main() 方法中，不过至少要保证 Flutter 项目这段代码执行完毕：
+  /// ```
+  /// WidgetsFlutterBinding.ensureInitialized()
+  /// ```
+  /// 参考示例如下：
+  /// ```
+  /// void main(){
+  ///   WidgetsFlutterBinding.ensureInitialized();
+  ///   SensorsAnalyticsFlutterPlugin.init(...);
+  ///   runApp(MyApp());
+  /// }
+  /// ```
+  /// 如果你不用 Flutter 全埋点功能，也可以放在合适位置进行初始化。另外如果 Native 中也执行了初始化，会以最先执行的为准。
+  ///
+  /// 参数定义如下：  <br/>
+  /// [serverUrl]: 数据接收地址 <br/>
+  /// [autoTrackTypes]: 全埋点类型 <br/>
+  /// [networkTypes]: 数据上报的网络条件<br/>
+  /// [flushInterval]: 数据上报的时间间隔，单位是毫秒，默认是 1500ms <br/>
+  /// [flushBulkSize]：触发上报逻辑的事件数目，默认是 100 条 <br/>
+  /// [enableLog]：是否开启本地 log，该配置只在 debug 阶段有效 <br/>
+  /// [javaScriptBridge]: 是否支持 H5 打通，Android 中需要和 [AndroidConfig.jellybean] 配合使用 <br/>
+  /// [encrypt]: 是否支持加密，Flutter 中初始化只支持 RSA+AES 加密 <br/>
+  /// [android]: Android 部分特有的配置 <br/>
+  /// [ios]: iOS 部分特有的配置 <br/>
+  /// [visualized]: 可视化全埋点部分特有的配置，Flutter 暂不支持可视化，该配置会影响 Native <br/>
+  /// [heatMap]: 是否开启点击图，Flutter 暂不支持点击分析功能，该配置会影响 Native <br/>
+  static Future<void> init(
+      {required String? serverUrl,
+      Set<SAAutoTrackType>? autoTrackTypes,
+      Set<SANetworkType>? networkTypes,
+      int flushInterval = 15000,
+      int flushBulkSize = 100,
+      bool enableLog: false,
+      bool javaScriptBridge = false,
+      bool encrypt = false,
+      AndroidConfig? android,
+      IOSConfig? ios,
+      VisualizedConfig? visualized,
+      bool heatMap = false}) async {
+    Map<String, dynamic> initConfig = {
+      "serverUrl": serverUrl ?? (){
+        assert((){
+          print("Server Url is empty, SDK will not upload data. You can call 'setServerUrl()' to set it later.");
+          return true;
+        }());
+        return "";
+      }(),
+      "enableLog": enableLog,
+      "javaScriptBridge": javaScriptBridge,
+      "encrypt": encrypt,
+      "heatMap": heatMap,
+      "flushInterval": flushInterval,
+      "flushBulkSize": flushBulkSize,
+      if (android != null) "android": android.map,
+      if (ios != null) "ios": ios.map,
+      if (visualized != null) "visualized": visualized.map,
+    };
+
+    if (autoTrackTypes != null) {
+      int result = 0;
+      autoTrackTypes.forEach((element) {
+        switch (element) {
+          case SAAutoTrackType.NONE:
+            result |= 0;
+            break;
+          case SAAutoTrackType.APP_START:
+            result |= 1;
+            break;
+          case SAAutoTrackType.APP_END:
+            result |= 1 << 1;
+            break;
+          case SAAutoTrackType.APP_CLICK:
+            result |= 1 << 2;
+            break;
+          case SAAutoTrackType.APP_VIEW_SCREEN:
+            result |= 1 << 3;
+            break;
+        }
+      });
+      initConfig["autotrackTypes"] = result;
+    }
+
+    if (networkTypes != null && networkTypes.isNotEmpty) {
+      int result = 0;
+      networkTypes.forEach((element) {
+        switch (element) {
+          case SANetworkType.TYPE_NONE:
+            result |= 0;
+            break;
+          case SANetworkType.TYPE_2G:
+            result |= 1;
+            break;
+          case SANetworkType.TYPE_3G:
+            result |= 1 << 1;
+            break;
+          case SANetworkType.TYPE_4G:
+            result |= 1 << 2;
+            break;
+          case SANetworkType.TYPE_5G:
+            result |= 1 << 4;
+            break;
+          case SANetworkType.TYPE_WIFI:
+            result |= 1 << 3;
+            break;
+          case SANetworkType.TYPE_ALL:
+            result |= 0xFF;
+            break;
+        }
+      });
+      initConfig["networkTypes"] = result;
+    }
+    await _channel.invokeMethod("init", [initConfig]);
   }
 
   ///
@@ -43,8 +190,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：
   /// SensorsAnalyticsFlutterPlugin.trackInstallation('AppInstall',{'key1':'value1','key2':'value2'});
   ///
-  static void trackInstallation(
-      String eventName, Map<String, dynamic>? properties) {
+  static void trackInstallation(String eventName, Map<String, dynamic>? properties) {
     properties = properties == null ? null : {...properties};
     _convertDateTime(properties);
     List<dynamic> params = [eventName, properties];
@@ -95,8 +241,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// 使用示例：（计时器事件名称 viewTimer ）
   /// SensorsAnalyticsFlutterPlugin.trackTimerEnd('viewTimer',{});
   ///
-  static void trackTimerEnd(
-      String eventName, Map<String, dynamic>? properties) {
+  static void trackTimerEnd(String eventName, Map<String, dynamic>? properties) {
     properties = properties == null ? {} : {...properties};
     _convertDateTime(properties);
     _setupLibPluginVersion(properties);
@@ -325,14 +470,6 @@ class SensorsAnalyticsFlutterPlugin {
     _channel.invokeMethod("profileUnsetPushId", [pushTypeKey]);
   }
 
-  ///
-  /// 开启数据采集，此方法合规功能，需要配合 SAConfigOptions.disableDataCollect() 方法一起使用，并且此方法只针对 Android 平台：
-  /// 详情请参考：https://manual.sensorsdata.cn/sa/latest/page-22252691.html
-  ///
-  static void enableDataCollect() {
-    _channel.invokeMethod("enableDataCollect");
-  }
-
   /// 如果 map 中的 value 字段是 DateTime 类型，将其转换成
   static void _convertDateTime(Map<String, dynamic>? map) {
     if (map != null) {
@@ -350,15 +487,13 @@ class SensorsAnalyticsFlutterPlugin {
   /// 设置当前 serverUrl
   /// [serverUrl] 当前 serverUrl
   /// [isRequestRemoteConfig] 是否立即请求当前 serverUrl 的远程配置，默认是 false
-  static void setServerUrl(String serverUrl,
-      [bool isRequestRemoteConfig = false]) {
+  static void setServerUrl(String serverUrl, [bool isRequestRemoteConfig = false]) {
     _channel.invokeMethod("setServerUrl", [serverUrl, isRequestRemoteConfig]);
   }
 
   /// 返回预置属性
   static Future<Map<String, dynamic>?> getPresetProperties() async {
-    return await _channel
-        .invokeMapMethod<String, dynamic>("getPresetProperties");
+    return await _channel.invokeMapMethod<String, dynamic>("getPresetProperties");
   }
 
   /// 设置是否开启 log
@@ -368,7 +503,7 @@ class SensorsAnalyticsFlutterPlugin {
   }
 
   /// 设置 flush 时网络发送策略，默认 3G、4G、5G、WI-FI 环境下都会尝试 flush
-  static void setFlushNetworkPolicy(List<SANetworkType> networkType) {
+  static void setFlushNetworkPolicy(Set<SANetworkType> networkType) {
     if (networkType.isNotEmpty) {
       int result = 0;
       networkType.forEach((element) {
@@ -467,8 +602,7 @@ class SensorsAnalyticsFlutterPlugin {
   ///
   /// [properties] 渠道追踪事件的属性
   /// [disableCallback] 是否关闭这次渠道匹配的回调请求
-  static void trackAppInstall(
-      [Map<String, dynamic>? properties, bool disableCallback = false]) {
+  static void trackAppInstall([Map<String, dynamic>? properties, bool disableCallback = false]) {
     properties = properties == null ? null : {...properties};
     _convertDateTime(properties);
     _channel.invokeMethod("trackAppInstall", [properties, disableCallback]);
@@ -486,8 +620,7 @@ class SensorsAnalyticsFlutterPlugin {
 
   /// 获取事件公共属性
   static Future<Map<String, dynamic>?> getSuperProperties() async {
-    return await _channel
-        .invokeMapMethod<String, dynamic>("getSuperProperties");
+    return await _channel.invokeMapMethod<String, dynamic>("getSuperProperties");
   }
 
   /// 设置是否允许请求网络，默认是 true。此方法只针对 Android 平台有效
@@ -504,8 +637,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// [itemType] item 类型
   /// [itemId] item ID
   /// [properties] item 相关属性
-  static void itemSet(String itemType, String itemId,
-      [Map<String, dynamic>? properties]) {
+  static void itemSet(String itemType, String itemId, [Map<String, dynamic>? properties]) {
     properties = properties == null ? null : {...properties};
     _convertDateTime(properties);
     _channel.invokeMethod("itemSet", [itemType, itemId, properties]);
@@ -548,12 +680,6 @@ class SensorsAnalyticsFlutterPlugin {
   }
 }
 
-enum SANetworkType {
-  TYPE_NONE,
-  TYPE_2G,
-  TYPE_3G,
-  TYPE_4G,
-  TYPE_WIFI,
-  TYPE_5G,
-  TYPE_ALL
-}
+enum SANetworkType { TYPE_NONE, TYPE_2G, TYPE_3G, TYPE_4G, TYPE_WIFI, TYPE_5G, TYPE_ALL }
+
+enum SAAutoTrackType { NONE, APP_START, APP_END, APP_CLICK, APP_VIEW_SCREEN }

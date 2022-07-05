@@ -1,9 +1,11 @@
 package com.sensorsdata.analytics.sensorsanalyticsflutterplugin;
 
+import android.app.Activity;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import com.sensorsdata.analytics.android.sdk.SAConfigOptions;
 import com.sensorsdata.analytics.android.sdk.SALog;
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 
@@ -19,28 +21,25 @@ import java.util.List;
 import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /**
  * Sensors Analytics Flutter Plugin
  */
-public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
+public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
     private MethodChannel channel;
+    private Activity mActivity;
     private static final String TAG = "SA.SensorsAnalyticsFlutterPlugin";
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "sensors_analytics_flutter_plugin");
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "sensors_analytics_flutter_plugin");
         channel.setMethodCallHandler(this);
-    }
-
-    public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), "sensors_analytics_flutter_plugin");
-        channel.setMethodCallHandler(new SensorsAnalyticsFlutterPlugin());
     }
 
     @Override
@@ -174,15 +173,14 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
                 case "profileUnsetPushId":
                     profileUnsetPushId(list);
                     break;
-                case "enableDataCollect":
-                    enableDataCollect();
+                case "init":
+                    startWithConfig(list);
                     break;
                 default:
                     result.notImplemented();
                     break;
             }
         } catch (Exception e) {
-            e.printStackTrace();
             SALog.d(TAG, e.getMessage());
         }
     }
@@ -342,7 +340,9 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
     /**
      * trackViewScreen 触发 $AppViewScreen 事件
      */
+    @SuppressWarnings("deprecation")
     private void trackViewScreen(List list) {
+        //使用了 Deprecated 方法，编译时会产生 xxxx 类使用或覆盖了已过时的 API。
         SensorsDataAPI.sharedInstance().trackViewScreen((String) list.get(0), assertProperties((Map) list.get(1)));
     }
 
@@ -490,11 +490,86 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
         SensorsDataAPI.sharedInstance().profileUnsetPushId((String) list.get(0));
     }
 
-    /**
-     * 开启数据采集
-     */
-    private void enableDataCollect() {
-        SensorsDataAPI.sharedInstance().enableDataCollect();
+    private void startWithConfig(List list) {
+        Map map = (Map) list.get(0);
+        Object serverUrl = map.get("serverUrl");
+
+        SAConfigOptions configOptions = new SAConfigOptions(serverUrl == null ? "" : serverUrl.toString());
+        Object autotrackTypes = map.get("autotrackTypes");
+        if (autotrackTypes != null) {
+            configOptions.setAutoTrackEventType((Integer) autotrackTypes);
+        }
+
+        Object networkTypes = map.get("networkTypes");
+        if (networkTypes != null) {
+            configOptions.setNetworkTypePolicy((Integer) networkTypes);
+        }
+
+        Object flushInterval = map.get("flushInterval");
+        if (flushInterval != null) {
+            configOptions.setFlushInterval((Integer) flushInterval);
+        }
+
+        Object flushBulkSize = map.get("flushBulkSize");
+        if (flushBulkSize != null) {
+            configOptions.setFlushBulkSize((Integer) flushBulkSize);
+        }
+
+        Object enableLog = map.get("enableLog");
+        if (enableLog != null) {
+            configOptions.enableLog((Boolean) enableLog);
+        }
+
+        Object encrypt = map.get("encrypt");
+        if (encrypt != null) {
+            configOptions.enableEncrypt((Boolean) encrypt);
+        }
+
+        Object heatMap = map.get("heatMap");
+        if (heatMap != null) {
+            configOptions.enableHeatMap((Boolean) heatMap);
+        }
+
+        Object androidConfig = map.get("android");
+        boolean jellybean = false;
+        if (androidConfig != null) {
+            Map androidConfigMap = (Map) androidConfig;
+            Object maxCacheSize = androidConfigMap.get("maxCacheSize");
+            if (maxCacheSize != null) {
+                configOptions.setMaxCacheSize(Long.parseLong(maxCacheSize.toString()));
+            }
+
+            Object jellybeanObj = androidConfigMap.get("jellybean");
+            if (jellybeanObj != null) {
+                jellybean = (boolean) jellybeanObj;
+            }
+            Object subProcessFlush = androidConfigMap.get("subProcessFlush");
+            if (subProcessFlush != null && (boolean) subProcessFlush) {
+                configOptions.enableSubProcessFlushData();
+            }
+        }
+
+        Object javaScriptBridge = map.get("javaScriptBridge");
+        if (javaScriptBridge != null && (boolean) javaScriptBridge) {
+            configOptions.enableJavaScriptBridge(jellybean);
+        }
+
+        Object visualizedConfig = map.get("visualized");
+        if (visualizedConfig != null) {
+            Map visualizedConfigMap = (Map) visualizedConfig;
+            Object autoTrack = visualizedConfigMap.get("autoTrack");
+            if (autoTrack != null) {
+                configOptions.enableVisualizedAutoTrack((Boolean) autoTrack);
+            }
+
+            Object properties = visualizedConfigMap.get("properties");
+            if (properties != null) {
+                configOptions.enableVisualizedProperties((Boolean) properties);
+            }
+        }
+
+
+        SensorsDataAPI.startWithConfigOptions(mActivity, configOptions);
     }
 
     private JSONObject assertProperties(Map map) {
@@ -522,4 +597,23 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
         return eventName;
     }
 
+    @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        mActivity = binding.getActivity();
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        mActivity = binding.getActivity();
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+        mActivity = null;
+    }
 }
