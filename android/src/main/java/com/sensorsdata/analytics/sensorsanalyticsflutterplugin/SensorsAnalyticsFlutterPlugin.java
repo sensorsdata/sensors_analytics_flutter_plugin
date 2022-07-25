@@ -174,7 +174,7 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
                     profileUnsetPushId(list);
                     break;
                 case "init":
-                    startWithConfig(list);
+                    startWithConfig(list, result);
                     break;
                 default:
                     result.notImplemented();
@@ -490,86 +490,90 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
         SensorsDataAPI.sharedInstance().profileUnsetPushId((String) list.get(0));
     }
 
-    private void startWithConfig(List list) {
-        Map map = (Map) list.get(0);
-        Object serverUrl = map.get("serverUrl");
+    private void startWithConfig(List list, Result result) {
+        try {
+            Map map = (Map) list.get(0);
+            Object serverUrl = map.get("serverUrl");
 
-        SAConfigOptions configOptions = new SAConfigOptions(serverUrl == null ? "" : serverUrl.toString());
-        Object autotrackTypes = map.get("autotrackTypes");
-        if (autotrackTypes != null) {
-            configOptions.setAutoTrackEventType((Integer) autotrackTypes);
-        }
-
-        Object networkTypes = map.get("networkTypes");
-        if (networkTypes != null) {
-            configOptions.setNetworkTypePolicy((Integer) networkTypes);
-        }
-
-        Object flushInterval = map.get("flushInterval");
-        if (flushInterval != null) {
-            configOptions.setFlushInterval((Integer) flushInterval);
-        }
-
-        Object flushBulkSize = map.get("flushBulkSize");
-        if (flushBulkSize != null) {
-            configOptions.setFlushBulkSize((Integer) flushBulkSize);
-        }
-
-        Object enableLog = map.get("enableLog");
-        if (enableLog != null) {
-            configOptions.enableLog((Boolean) enableLog);
-        }
-
-        Object encrypt = map.get("encrypt");
-        if (encrypt != null) {
-            configOptions.enableEncrypt((Boolean) encrypt);
-        }
-
-        Object heatMap = map.get("heatMap");
-        if (heatMap != null) {
-            configOptions.enableHeatMap((Boolean) heatMap);
-        }
-
-        Object androidConfig = map.get("android");
-        boolean jellybean = false;
-        if (androidConfig != null) {
-            Map androidConfigMap = (Map) androidConfig;
-            Object maxCacheSize = androidConfigMap.get("maxCacheSize");
-            if (maxCacheSize != null) {
-                configOptions.setMaxCacheSize(Long.parseLong(maxCacheSize.toString()));
+            SAConfigOptions configOptions = new SAConfigOptions(serverUrl == null ? "" : serverUrl.toString());
+            Object autotrackTypes = map.get("autotrackTypes");
+            if (autotrackTypes != null) {
+                configOptions.setAutoTrackEventType((Integer) autotrackTypes);
             }
 
-            Object jellybeanObj = androidConfigMap.get("jellybean");
-            if (jellybeanObj != null) {
-                jellybean = (boolean) jellybeanObj;
+            Object networkTypes = map.get("networkTypes");
+            if (networkTypes != null) {
+                configOptions.setNetworkTypePolicy((Integer) networkTypes);
             }
-            Object subProcessFlush = androidConfigMap.get("subProcessFlush");
-            if (subProcessFlush != null && (boolean) subProcessFlush) {
-                configOptions.enableSubProcessFlushData();
+
+            Object flushInterval = map.get("flushInterval");
+            if (flushInterval != null) {
+                configOptions.setFlushInterval((Integer) flushInterval);
             }
+
+            Object flushBulkSize = map.get("flushBulkSize");
+            if (flushBulkSize != null) {
+                configOptions.setFlushBulkSize((Integer) flushBulkSize);
+            }
+
+            Object enableLog = map.get("enableLog");
+            if (enableLog != null) {
+                configOptions.enableLog((Boolean) enableLog);
+            }
+
+            Object encrypt = map.get("encrypt");
+            if (encrypt != null) {
+                configOptions.enableEncrypt((Boolean) encrypt);
+            }
+
+            Object heatMap = map.get("heatMap");
+            if (heatMap != null) {
+                configOptions.enableHeatMap((Boolean) heatMap);
+            }
+
+            Object androidConfig = map.get("android");
+            boolean jellybean = false;
+            if (androidConfig != null) {
+                Map androidConfigMap = (Map) androidConfig;
+                Object maxCacheSize = androidConfigMap.get("maxCacheSize");
+                if (maxCacheSize != null) {
+                    configOptions.setMaxCacheSize(Long.parseLong(maxCacheSize.toString()));
+                }
+
+                Object jellybeanObj = androidConfigMap.get("jellybean");
+                if (jellybeanObj != null) {
+                    jellybean = (boolean) jellybeanObj;
+                }
+                Object subProcessFlush = androidConfigMap.get("subProcessFlush");
+                if (subProcessFlush != null && (boolean) subProcessFlush) {
+                    configOptions.enableSubProcessFlushData();
+                }
+            }
+
+            Object javaScriptBridge = map.get("javaScriptBridge");
+            if (javaScriptBridge != null && (boolean) javaScriptBridge) {
+                configOptions.enableJavaScriptBridge(jellybean);
+            }
+
+            Object visualizedConfig = map.get("visualized");
+            if (visualizedConfig != null) {
+                Map visualizedConfigMap = (Map) visualizedConfig;
+                Object autoTrack = visualizedConfigMap.get("autoTrack");
+                if (autoTrack != null) {
+                    configOptions.enableVisualizedAutoTrack((Boolean) autoTrack);
+                }
+
+                Object properties = visualizedConfigMap.get("properties");
+                if (properties != null) {
+                    configOptions.enableVisualizedProperties((Boolean) properties);
+                }
+            }
+
+            SensorsDataAPI.startWithConfigOptions(mActivity, configOptions);
+        } catch (Exception e) {
+            SALog.printStackTrace(e);
         }
-
-        Object javaScriptBridge = map.get("javaScriptBridge");
-        if (javaScriptBridge != null && (boolean) javaScriptBridge) {
-            configOptions.enableJavaScriptBridge(jellybean);
-        }
-
-        Object visualizedConfig = map.get("visualized");
-        if (visualizedConfig != null) {
-            Map visualizedConfigMap = (Map) visualizedConfig;
-            Object autoTrack = visualizedConfigMap.get("autoTrack");
-            if (autoTrack != null) {
-                configOptions.enableVisualizedAutoTrack((Boolean) autoTrack);
-            }
-
-            Object properties = visualizedConfigMap.get("properties");
-            if (properties != null) {
-                configOptions.enableVisualizedProperties((Boolean) properties);
-            }
-        }
-
-
-        SensorsDataAPI.startWithConfigOptions(mActivity, configOptions);
+        result.success(null);
     }
 
     private JSONObject assertProperties(Map map) {
