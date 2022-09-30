@@ -37,7 +37,7 @@ class VisualizedConfig {
 
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
-  static const String FLUTTER_PLUGIN_VERSION = "2.1.1";
+  static const String FLUTTER_PLUGIN_VERSION = "2.2.0";
   static bool hasAddedFlutterPluginVersion = false;
 
   static const MethodChannel _channel = const MethodChannel('sensors_analytics_flutter_plugin');
@@ -86,7 +86,8 @@ class SensorsAnalyticsFlutterPlugin {
       AndroidConfig? android,
       IOSConfig? ios,
       VisualizedConfig? visualized,
-      bool heatMap = false}) async {
+      bool heatMap = false,
+      Map? globalProperties}) async {
     Map<String, dynamic> initConfig = {
       "serverUrl": serverUrl ?? (){
         assert((){
@@ -159,6 +160,8 @@ class SensorsAnalyticsFlutterPlugin {
       });
       initConfig["networkTypes"] = result;
     }
+    //全局公共属性配置
+    initConfig["globalProperties"] = globalProperties;
     await _channel.invokeMethod("init", [initConfig]);
   }
 
