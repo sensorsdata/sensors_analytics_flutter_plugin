@@ -9,3 +9,4 @@ build/
 
 pubspec.lock
 example/pubspec.lock
+example/ios/Podfile.lock
