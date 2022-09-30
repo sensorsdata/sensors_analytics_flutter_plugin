@@ -86,7 +86,8 @@ class SensorsAnalyticsFlutterPlugin {
       AndroidConfig? android,
       IOSConfig? ios,
       VisualizedConfig? visualized,
-      bool heatMap = false}) async {
+      bool heatMap = false,
+      Map? globalProperties}) async {
     Map<String, dynamic> initConfig = {
       "serverUrl": serverUrl ?? (){
         assert((){
@@ -159,6 +160,8 @@ class SensorsAnalyticsFlutterPlugin {
       });
       initConfig["networkTypes"] = result;
     }
+    //全局公共属性配置
+    initConfig["globalProperties"] = globalProperties;
     await _channel.invokeMethod("init", [initConfig]);
   }
 

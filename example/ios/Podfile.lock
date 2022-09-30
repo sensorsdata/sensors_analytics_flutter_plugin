@@ -1,44 +1,43 @@
 PODS:
   - Flutter (1.0.0)
-  - sensors_analytics_flutter_plugin (2.0.4):
+  - sensors_analytics_flutter_plugin (2.1.1):
     - Flutter
-    - SensorsAnalyticsSDK (>= 4.0.0)
-  - SensorsAnalyticsSDK (4.3.4):
-    - SensorsAnalyticsSDK/Core (= 4.3.4)
-  - SensorsAnalyticsSDK/__Store (4.3.4)
-  - SensorsAnalyticsSDK/AutoTrack (4.3.4):
+    - SensorsAnalyticsSDK (>= 4.4.0)
+  - SensorsAnalyticsSDK (4.4.4):
+    - SensorsAnalyticsSDK/Core (= 4.4.4)
+  - SensorsAnalyticsSDK/__Store (4.4.4)
+  - SensorsAnalyticsSDK/AutoTrack (4.4.4):
     - SensorsAnalyticsSDK/Common
-  - SensorsAnalyticsSDK/Base (4.3.4):
+  - SensorsAnalyticsSDK/Base (4.4.4):
     - SensorsAnalyticsSDK/__Store
-  - SensorsAnalyticsSDK/Common (4.3.4):
+  - SensorsAnalyticsSDK/Common (4.4.4):
     - SensorsAnalyticsSDK/Extension
-  - SensorsAnalyticsSDK/Core (4.3.4):
+  - SensorsAnalyticsSDK/Core (4.4.4):
     - SensorsAnalyticsSDK/Common
     - SensorsAnalyticsSDK/Visualized
-  - SensorsAnalyticsSDK/Extension (4.3.4):
+  - SensorsAnalyticsSDK/Extension (4.4.4):
     - SensorsAnalyticsSDK/Base
-  - SensorsAnalyticsSDK/Visualized (4.3.4):
+  - SensorsAnalyticsSDK/Visualized (4.4.4):
     - SensorsAnalyticsSDK/AutoTrack
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - sensors_analytics_flutter_plugin (from `.symlinks/plugins/sensors_analytics_flutter_plugin/ios`)
-
-SPEC REPOS:
-  trunk:
-    - SensorsAnalyticsSDK
+  - SensorsAnalyticsSDK (from `~/Documents/Gitlab_SensorsData/sa-sdk-ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   sensors_analytics_flutter_plugin:
     :path: ".symlinks/plugins/sensors_analytics_flutter_plugin/ios"
+  SensorsAnalyticsSDK:
+    :path: "~/Documents/Gitlab_SensorsData/sa-sdk-ios"
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  sensors_analytics_flutter_plugin: 3c172b37f8b6883c8ed3cb08ae19a49b84810faf
-  SensorsAnalyticsSDK: 159263992e8bf2e61b18fff55939db826050764c
+  sensors_analytics_flutter_plugin: 54ef22a4462601d14ae540726ae9364d21ec0cba
+  SensorsAnalyticsSDK: 4277a63f9cd4797a9e311328fdedd3ad0d8b4576
 
-PODFILE CHECKSUM: 3aaee2e660a2a825e7c3beecb0e4a334b934f851
+PODFILE CHECKSUM: 08cf5346de1bcc701f8332abbfc7cfc38ccb4b41
 
 COCOAPODS: 1.11.2

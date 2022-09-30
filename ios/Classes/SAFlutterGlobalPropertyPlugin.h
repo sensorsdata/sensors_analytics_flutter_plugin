@@ -1,5 +1,5 @@
 //
-// SensorsAnalyticsFlutterPlugin.h
+// SAFlutterGlobalPropertyPlugin.h
 // sensors_analytics_flutter_plugin
 //
 // Created by  储强盛 on 2022/9/14.
@@ -18,8 +18,22 @@
 // limitations under the License.
 //
 
+#import <Foundation/Foundation.h>
+#import "SAPropertyPlugin.h"
 
-#import <Flutter/Flutter.h>
+NS_ASSUME_NONNULL_BEGIN
 
-@interface SensorsAnalyticsFlutterPlugin : NSObject<FlutterPlugin>
+@interface SAFlutterGlobalPropertyPlugin : SAPropertyPlugin
+
+/// 全局属性插件
+///
+/// 全局属性，所有事件都会包含
+///
+/// @param properties 自定义属性
+- (instancetype)initWithGlobleProperties:(NSDictionary *)properties NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
+
 @end
+
+NS_ASSUME_NONNULL_END

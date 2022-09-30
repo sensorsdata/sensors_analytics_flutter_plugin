@@ -5,11 +5,16 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import com.sensorsdata.analytics.android.sdk.PropertyBuilder;
 import com.sensorsdata.analytics.android.sdk.SAConfigOptions;
 import com.sensorsdata.analytics.android.sdk.SALog;
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
+import com.sensorsdata.analytics.android.sdk.plugin.property.SAPropertyPlugin;
+import com.sensorsdata.analytics.android.sdk.plugin.property.SAPropertyPluginPriority;
+import com.sensorsdata.analytics.android.sdk.plugin.property.beans.SAPropertiesFetcher;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -568,7 +573,34 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
                     configOptions.enableVisualizedProperties((Boolean) properties);
                 }
             }
+            final Map globalProperties = (Map) map.get("globalProperties");
+            if (globalProperties != null && globalProperties.size() > 0) {
+                configOptions.registerPropertyPlugin(new SAPropertyPlugin() {
 
+                    @Override
+                    public SAPropertyPluginPriority priority() {
+                        return SAPropertyPluginPriority.LOW;
+                    }
+
+                    @Override
+                    public String getName() {
+                        return "SAFlutterGloblePropertyPlugin";
+                    }
+
+                    @Override
+                    public void properties(SAPropertiesFetcher fetcher) {
+                        Iterator iterator = globalProperties.entrySet().iterator();
+                        while (iterator.hasNext()) {
+                            Map.Entry entry = (Map.Entry) iterator.next();
+                            try {
+                                fetcher.getProperties().put((String) entry.getKey(), entry.getValue());
+                            } catch (JSONException e) {
+                                SALog.printStackTrace(e);
+                            }
+                        }
+                    }
+                });
+            }
             SensorsDataAPI.startWithConfigOptions(mActivity, configOptions);
         } catch (Exception e) {
             SALog.printStackTrace(e);
