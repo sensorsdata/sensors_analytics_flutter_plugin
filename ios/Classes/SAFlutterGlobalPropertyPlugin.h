@@ -19,7 +19,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#if __has_include(<SensorsAnalyticsSDK/SAPropertyPlugin.h>)
+#import <SensorsAnalyticsSDK/SAPropertyPlugin.h>
+#else
 #import "SAPropertyPlugin.h"
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
 
