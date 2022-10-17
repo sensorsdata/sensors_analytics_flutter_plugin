@@ -19,7 +19,7 @@
 //
 
 #import "SensorsAnalyticsFlutterPlugin.h"
-#import "SensorsAnalyticsSDK.h"
+#import <SensorsAnalyticsSDK/SensorsAnalyticsSDK.h>
 #import "SAFlutterGlobalPropertyPlugin.h"
 #import <objc/runtime.h>
 
