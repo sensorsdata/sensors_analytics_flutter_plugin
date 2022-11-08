@@ -19,8 +19,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     SensorsAnalyticsFlutterPlugin.init(
-        serverUrl:
-            "https://sdkdebugtest.datasink.sensorsdata.cn/sa?project=default&token=cfb8b60e42e0ae9b",
+        serverUrl: "https://sdkdebugtest.datasink.sensorsdata.cn/sa?project=default&token=cfb8b60e42e0ae9b",
         autoTrackTypes: <SAAutoTrackType>{
           SAAutoTrackType.APP_START,
           SAAutoTrackType.APP_VIEW_SCREEN,
@@ -41,10 +40,7 @@ class _MyAppState extends State<MyApp> {
         encrypt: true,
         heatMap: true,
         visualized: VisualizedConfig(autoTrack: true, properties: true),
-        android: AndroidConfig(
-            maxCacheSize: 48 * 1024 * 1024,
-            jellybean: true,
-            subProcessFlush: true),
+        android: AndroidConfig(maxCacheSize: 48 * 1024 * 1024, jellybean: true, subProcessFlush: true),
         ios: IOSConfig(maxCacheSize: 10000),
         globalProperties: {'aaa': 'aaa-value', 'bbb': 'bbb-value'});
     initPlatformState();
@@ -87,16 +83,14 @@ class _MyAppState extends State<MyApp> {
               onTap: () {},
             ),
             ListTile(
-              title: Text(
-                  'This is the official Flutter Plugin for Sensors Analytics.'),
+              title: Text('This is the official Flutter Plugin for Sensors Analytics.'),
               onTap: () {},
             ),
             ListTile(
               leading: Icon(Icons.account_circle),
               title: Text('注册成功/登录成功时调用 login '),
               onTap: () {
-                SensorsAnalyticsFlutterPlugin.login(
-                    "flutter_lgoin_test123654", {"hello": "world"});
+                SensorsAnalyticsFlutterPlugin.login("flutter_lgoin_test123654", {"hello": "world"});
               },
             ),
             ListTile(
@@ -104,10 +98,7 @@ class _MyAppState extends State<MyApp> {
               title: Text('触发激活事件 trackInstallation '),
               onTap: () {
                 SensorsAnalyticsFlutterPlugin.trackInstallation(
-                    'AppInstall', <String, dynamic>{
-                  "a_time": DateTime.now(),
-                  "product_name": "Apple 12 max pro"
-                });
+                    'AppInstall', <String, dynamic>{"a_time": DateTime.now(), "product_name": "Apple 12 max pro"});
               },
             ),
             ListTile(
@@ -137,10 +128,7 @@ class _MyAppState extends State<MyApp> {
                 //   "product_name": "Apple 12 max pro"
                 // });
                 List<String?>? list = ["flutter_plugin:12312"];
-                var map = {
-                  r"$lib_plugin_version": list,
-                  "address": "000000000000"
-                };
+                var map = {r"$lib_plugin_version": list, "address": "000000000000"};
                 SensorsAnalyticsFlutterPlugin.track("hello", map);
               },
             ),
@@ -148,16 +136,14 @@ class _MyAppState extends State<MyApp> {
               leading: Icon(Icons.assessment),
               title: Text('设置用户属性 profileSet2'),
               onTap: () {
-                SensorsAnalyticsFlutterPlugin.profileSet(
-                    {'Age': 18, 'Sex': 'Male', "a_time": DateTime.now()});
+                SensorsAnalyticsFlutterPlugin.profileSet({'Age': 18, 'Sex': 'Male', "a_time": DateTime.now()});
               },
             ),
             ListTile(
               leading: Icon(Icons.assessment),
               title: Text('设置用户推送 ID 到用户表'),
               onTap: () {
-                SensorsAnalyticsFlutterPlugin.profilePushId(
-                    "jgId", "12312312312");
+                SensorsAnalyticsFlutterPlugin.profilePushId("jgId", "12312312312");
               },
             ),
             ListTile(
@@ -168,23 +154,20 @@ class _MyAppState extends State<MyApp> {
               },
             ),
             ListTile(
-              title: Text(
-                  'https://github.com/sensorsdata/sensors_analytics_flutter_plugin'),
+              title: Text('https://github.com/sensorsdata/sensors_analytics_flutter_plugin'),
               onTap: () {},
             ),
             ListTile(
               title: Text('set server url'),
               onTap: () async {
                 SensorsAnalyticsFlutterPlugin.setServerUrl(
-                    "https://newsdktest.datasink.sensorsdata.cn/sa?project=zhujiagui&token=5a394d2405c147ca",
-                    true);
+                    "https://newsdktest.datasink.sensorsdata.cn/sa?project=zhujiagui&token=5a394d2405c147ca", true);
               },
             ),
             ListTile(
               title: Text('getPresetProperties'),
               onTap: () async {
-                dynamic map =
-                    await SensorsAnalyticsFlutterPlugin.getPresetProperties();
+                dynamic map = await SensorsAnalyticsFlutterPlugin.getPresetProperties();
                 print("getPresetProperties===$map");
               },
             ),
@@ -198,8 +181,7 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('setFlushNetworkPolicy'),
               onTap: () async {
-                SensorsAnalyticsFlutterPlugin.setFlushNetworkPolicy(
-                    <SANetworkType>{SANetworkType.TYPE_WIFI});
+                SensorsAnalyticsFlutterPlugin.setFlushNetworkPolicy(<SANetworkType>{SANetworkType.TYPE_WIFI});
                 print("setFlushNetworkPolicy===");
               },
             ),
@@ -213,8 +195,7 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('getFlushInterval'),
               onTap: () async {
-                dynamic result =
-                    await SensorsAnalyticsFlutterPlugin.getFlushInterval();
+                dynamic result = await SensorsAnalyticsFlutterPlugin.getFlushInterval();
                 print("getFlushInterval===$result");
               },
             ),
@@ -224,15 +205,11 @@ class _MyAppState extends State<MyApp> {
                 SensorsAnalyticsFlutterPlugin.setFlushInterval(60 * 60 * 1000);
                 SensorsAnalyticsFlutterPlugin.setFlushBulkSize(100);
                 print("setFlushBulkSize===");
-                dynamic result =
-                    await SensorsAnalyticsFlutterPlugin.getFlushBulkSize();
+                dynamic result = await SensorsAnalyticsFlutterPlugin.getFlushBulkSize();
                 print("getFlushBulkSize===$result");
                 for (int index = 0; index <= 100; index++) {
                   SensorsAnalyticsFlutterPlugin.track(
-                      'ViewProduct2', <String, dynamic>{
-                    "a_time": DateTime.now(),
-                    "product_name": "Apple 12 max pro"
-                  });
+                      'ViewProduct2', <String, dynamic>{"a_time": DateTime.now(), "product_name": "Apple 12 max pro"});
                 }
                 print("track end=====");
               },
@@ -240,16 +217,14 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('getFlushBulkSize'),
               onTap: () async {
-                dynamic result =
-                    await SensorsAnalyticsFlutterPlugin.getFlushBulkSize();
+                dynamic result = await SensorsAnalyticsFlutterPlugin.getFlushBulkSize();
                 print("getFlushBulkSize===$result");
               },
             ),
             ListTile(
               title: Text('getAnonymousId'),
               onTap: () async {
-                dynamic result =
-                    await SensorsAnalyticsFlutterPlugin.getAnonymousId();
+                dynamic result = await SensorsAnalyticsFlutterPlugin.getAnonymousId();
                 print("getAnonymousId===$result");
               },
             ),
@@ -257,8 +232,7 @@ class _MyAppState extends State<MyApp> {
               title: Text('getLoginId'),
               onTap: () async {
                 //SensorsAnalyticsFlutterPlugin.login("aa212132");
-                dynamic result =
-                    await SensorsAnalyticsFlutterPlugin.getLoginId();
+                dynamic result = await SensorsAnalyticsFlutterPlugin.getLoginId();
                 print("getLoginId===$result");
               },
             ),
@@ -272,16 +246,14 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('trackAppInstall'),
               onTap: () async {
-                SensorsAnalyticsFlutterPlugin.trackAppInstall(
-                    {"age": 888}, false);
+                SensorsAnalyticsFlutterPlugin.trackAppInstall({"age": 888}, false);
                 print("trackAppInstall==");
               },
             ),
             ListTile(
               title: Text('trackTimerStart'),
               onTap: () async {
-                tmpResult = await SensorsAnalyticsFlutterPlugin.trackTimerStart(
-                    "hello_event");
+                tmpResult = await SensorsAnalyticsFlutterPlugin.trackTimerStart("hello_event");
                 print("trackTimerStart===$tmpResult");
               },
             ),
@@ -330,10 +302,7 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('setsuperproperties'),
               onTap: () async {
-                var map = {
-                  "superproperties_test": "flutter 注册公共属性",
-                  "aaa": "同名公共属性 aaa"
-                };
+                var map = {"superproperties_test": "flutter 注册公共属性", "aaa": "同名公共属性 aaa"};
                 SensorsAnalyticsFlutterPlugin.registerSuperProperties(map);
                 print("setSuperProperties===");
               },
@@ -342,8 +311,7 @@ class _MyAppState extends State<MyApp> {
               title: Text('getSuperProperties'),
               onTap: () async {
                 var a = 10;
-                dynamic map =
-                    await SensorsAnalyticsFlutterPlugin.getSuperProperties();
+                dynamic map = await SensorsAnalyticsFlutterPlugin.getSuperProperties();
                 print("getSuperProperties===$map");
               },
             ),
@@ -357,8 +325,7 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('itemSet'),
               onTap: () async {
-                SensorsAnalyticsFlutterPlugin.itemSet(
-                    "aaatype", "aaaid", {"age": 999});
+                SensorsAnalyticsFlutterPlugin.itemSet("aaatype", "aaaid", {"age": 999});
                 print("itemSet===");
               },
             ),
@@ -372,8 +339,7 @@ class _MyAppState extends State<MyApp> {
             ListTile(
               title: Text('isNetworkRequestEnable'),
               onTap: () async {
-                dynamic result = await SensorsAnalyticsFlutterPlugin
-                    .isNetworkRequestEnable();
+                dynamic result = await SensorsAnalyticsFlutterPlugin.isNetworkRequestEnable();
                 print("isNetworkRequestEnable===$result");
               },
             ),
@@ -382,6 +348,28 @@ class _MyAppState extends State<MyApp> {
               onTap: () async {
                 SensorsAnalyticsFlutterPlugin.logout();
                 print("logout===");
+              },
+            ),
+            ListTile(
+              title: Text('bind'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.bind("sss1", "vvv1");
+                print("bind===");
+              },
+            ),
+            ListTile(
+              title: Text('unbind'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.unbind("sss2", "vvv2");
+                print("unbind===");
+              },
+            ),
+            ListTile(
+              title: Text('loginwithkey'),
+              onTap: () async {
+                SensorsAnalyticsFlutterPlugin.loginWithKey("sss3", "vvv3");
+                //SensorsAnalyticsFlutterPlugin.loginWithKey("sss3", "vvv3", {"p1111": "vvvv1"});
+                print("loginwithkey===");
               },
             ),
           ],
