@@ -37,7 +37,7 @@ class VisualizedConfig {
 
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
-  static const String FLUTTER_PLUGIN_VERSION = "2.2.1";
+  static const String FLUTTER_PLUGIN_VERSION = "2.2.2";
   static bool hasAddedFlutterPluginVersion = false;
 
   static const MethodChannel _channel = const MethodChannel('sensors_analytics_flutter_plugin');
@@ -89,13 +89,14 @@ class SensorsAnalyticsFlutterPlugin {
       bool heatMap = false,
       Map? globalProperties}) async {
     Map<String, dynamic> initConfig = {
-      "serverUrl": serverUrl ?? (){
-        assert((){
-          print("Server Url is empty, SDK will not upload data. You can call 'setServerUrl()' to set it later.");
-          return true;
-        }());
-        return "";
-      }(),
+      "serverUrl": serverUrl ??
+          () {
+            assert(() {
+              print("Server Url is empty, SDK will not upload data. You can call 'setServerUrl()' to set it later.");
+              return true;
+            }());
+            return "";
+          }(),
       "enableLog": enableLog,
       "javaScriptBridge": javaScriptBridge,
       "encrypt": encrypt,
@@ -662,6 +663,23 @@ class SensorsAnalyticsFlutterPlugin {
       return await _channel.invokeMethod("isNetworkRequestEnable");
     }
     return true;
+  }
+
+  ///绑定业务 ID。[key] 为业务 ID 的名，[value] 为业务 ID 的值
+  static Future<void> bind(String key, String value) async {
+    return await _channel.invokeMethod("bind", [key, value]);
+  }
+
+  ///解绑业务 ID。[key] 为业务 ID 的名，[value] 为业务 ID 的值
+  static Future<void> unbind(String key, String value) async {
+    return await _channel.invokeMethod("unbind", [key, value]);
+  }
+
+  ///设置当前用户的登陆 ID。[loginKey] 是登录 id 名，[loginValue] 是登录的值，[properties] 用户登录属性
+  static Future<void> loginWithKey(String loginKey, String loginValue, [Map<String, dynamic>? properties]) async {
+    properties = properties == null ? null : {...properties};
+    _convertDateTime(properties);
+    return await _channel.invokeMethod("loginWithKey", [loginKey, loginValue, properties]);
   }
 
   ///添加 Flutter 插件版本号

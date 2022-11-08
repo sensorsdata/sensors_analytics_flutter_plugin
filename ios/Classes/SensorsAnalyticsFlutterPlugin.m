@@ -32,6 +32,9 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodTrackViewScreenWithUrl
 
 static NSString* const SensorsAnalyticsFlutterPluginMethodLogin = @"login";
 static NSString* const SensorsAnalyticsFlutterPluginMethodLogout = @"logout";
+static NSString* const SensorsAnalyticsFlutterPluginMethodBind = @"bind";
+static NSString* const SensorsAnalyticsFlutterPluginMethodUnbind = @"unbind";
+static NSString* const SensorsAnalyticsFlutterPluginMethodLoginWithKey = @"loginWithKey";
 static NSString* const SensorsAnalyticsFlutterPluginMethodGetDistincsId = @"getDistinctId";
 static NSString* const SensorsAnalyticsFlutterPluginMethodClearKeychainData = @"clearKeychainData";
 
@@ -104,6 +107,27 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodInit = @"init";
         result(nil);
     }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodLogout]){
         [self logout];
+        result(nil);
+    }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodBind]){
+        NSString* key = arguments[0];
+        NSString* value = arguments[1];
+        argumentSetNSNullToNil(&key);
+        argumentSetNSNullToNil(&value);
+        [self bind:key value:value];
+        result(nil);
+    }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodUnbind]){
+        NSString* key = arguments[0];
+        NSString* value = arguments[1];
+        argumentSetNSNullToNil(&key);
+        argumentSetNSNullToNil(&value);
+        [self unbind:key value:value];
+        result(nil);
+    }else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodLoginWithKey]){
+        NSString* key = arguments[0];
+        NSString* value = arguments[1];
+        argumentSetNSNullToNil(&key);
+        argumentSetNSNullToNil(&value);
+        [self loginWithKey:key loginId:value];
         result(nil);
     }else if([method isEqualToString:SensorsAnalyticsFlutterPluginMethodGetDistincsId]){
         result(self.getDistinctId);
@@ -293,6 +317,18 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodInit = @"init";
 
 -(void)logout {
     [SensorsAnalyticsSDK.sharedInstance logout];
+}
+
+- (void)bind:(NSString *)key value:(NSString *)value {
+    [SensorsAnalyticsSDK.sharedInstance bind:key value:value];
+}
+
+- (void)unbind:(NSString *)key value:(NSString *)value {
+    [SensorsAnalyticsSDK.sharedInstance unbind:key value:value];
+}
+
+- (void)loginWithKey:(NSString *)key loginId:(NSString *)loginId {
+    [SensorsAnalyticsSDK.sharedInstance loginWithKey:key loginId:loginId];
 }
 
 -(void)trackViewScreenWithUrl:(NSString *)url porperties:(nullable NSDictionary *)properties {
