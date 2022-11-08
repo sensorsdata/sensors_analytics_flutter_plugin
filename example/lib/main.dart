@@ -127,8 +127,7 @@ class _MyAppState extends State<MyApp> {
                 //   "a_time": DateTime.now(),
                 //   "product_name": "Apple 12 max pro"
                 // });
-                List<String?>? list = ["flutter_plugin:12312"];
-                var map = {r"$lib_plugin_version": list, "address": "000000000000"};
+                var map = { "address": "beijing"};
                 SensorsAnalyticsFlutterPlugin.track("hello", map);
               },
             ),

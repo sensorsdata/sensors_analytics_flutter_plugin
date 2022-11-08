@@ -1,3 +1,7 @@
+## 2.2.2
+
+* 新增接口 bind、unbind、loginWithKey
+
 ## 2.2.1
 
 * Swift 项目中，使用 modular 头文件导入报错的缺陷
