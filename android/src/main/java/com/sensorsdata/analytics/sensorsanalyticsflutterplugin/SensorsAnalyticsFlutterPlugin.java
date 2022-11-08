@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import com.sensorsdata.analytics.android.sdk.PropertyBuilder;
 import com.sensorsdata.analytics.android.sdk.SAConfigOptions;
 import com.sensorsdata.analytics.android.sdk.SALog;
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
@@ -180,6 +179,15 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
                     break;
                 case "init":
                     startWithConfig(list, result);
+                    break;
+                case "bind":
+                    bind(list, result);
+                    break;
+                case "unbind":
+                    unbind(list, result);
+                    break;
+                case "loginWithKey":
+                    loginWithKey(list, result);
                     break;
                 default:
                     result.notImplemented();
@@ -606,6 +614,40 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
             SALog.printStackTrace(e);
         }
         result.success(null);
+    }
+
+    private void bind(List list, Result result) {
+        try {
+            String key = (String) list.get(0);
+            String value = (String) list.get(1);
+            SensorsDataAPI.sharedInstance().bind(key, value);
+            result.success(null);
+        } catch (Exception e) {
+            SALog.printStackTrace(e);
+        }
+    }
+
+    private void unbind(List list, Result result) {
+        try {
+            String key = (String) list.get(0);
+            String value = (String) list.get(1);
+            SensorsDataAPI.sharedInstance().unbind(key, value);
+            result.success(null);
+        } catch (Exception e) {
+            SALog.printStackTrace(e);
+        }
+    }
+
+    private void loginWithKey(List list, Result result) {
+        try {
+            String key = (String) list.get(0);
+            String value = (String) list.get(1);
+            JSONObject properties = assertProperties2(list.get(2));
+            SensorsDataAPI.sharedInstance().loginWithKey(key, value, properties);
+            result.success(null);
+        } catch (Exception e) {
+            SALog.printStackTrace(e);
+        }
     }
 
     private JSONObject assertProperties(Map map) {
