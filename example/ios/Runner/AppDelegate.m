@@ -33,4 +33,15 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     return [super application:application didFinishLaunchingWithOptions:launchOptions];;
 }
 
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
+
+    if ([[SensorsAnalyticsSDK sharedInstance] canHandleURL:url]) {
+        [[SensorsAnalyticsSDK sharedInstance] handleSchemeUrl:url];
+    }
+
+    return NO;
+}
+
+
 @end
