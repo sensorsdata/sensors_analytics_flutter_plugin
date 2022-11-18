@@ -52,15 +52,73 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodProfilePushKey = @"pro
 static NSString* const SensorsAnalyticsFlutterPluginMethodProfileUnsetPushKey = @"profileUnsetPushId";
 static NSString* const SensorsAnalyticsFlutterPluginMethodInit = @"init";
 
+/// 回调返回当前为可视化全埋点连接状态
+static NSString* const SensorsAnalyticsGetVisualizedConnectionStatus = @"getVisualizedConnectionStatus";
+
+/// 回调返回当前自定义属性配置
+static NSString* const SensorsAnalyticsGetVisualizedPropertiesConfig = @"getVisualizedPropertiesConfig";
+
+/// 发送 flutter 发送的页面数据
+static NSString* const SensorsAnalyticsSendVisualizedMessage = @"sendVisualizedMessage";
+
+/// 可视化全埋点状态改变，包括连接状态和自定义属性配置
+static NSNotificationName const kSAFlutterPluginVisualizedStatusChangedNotification = @"SensorsAnalyticsVisualizedStatusChangedNotification";
+
+@interface SensorsAnalyticsFlutterPlugin()
+@property (nonatomic, weak) NSObject<FlutterPluginRegistrar> *registrar;
+
+@end
+
 @implementation SensorsAnalyticsFlutterPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+
     FlutterMethodChannel* channel = [FlutterMethodChannel
                                      methodChannelWithName:@"sensors_analytics_flutter_plugin"
                                      binaryMessenger:[registrar messenger]];
     SensorsAnalyticsFlutterPlugin* instance = [[SensorsAnalyticsFlutterPlugin alloc] init];
     [registrar addMethodCallDelegate:instance channel:channel];
+    instance.registrar = registrar;
 }
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter addObserver:self selector:@selector(chanedVisualizedStatus:) name:kSAFlutterPluginVisualizedStatusChangedNotification object:nil];
+    }
+    return self;
+}
+
+- (void)chanedVisualizedStatus:(NSNotification *)notification {
+    if (![notification.userInfo isKindOfClass:NSDictionary.class]) {
+        return;
+    }
+
+    NSDictionary *statusInfo = notification.userInfo;
+    FlutterMethodChannel *methodChannel = [FlutterMethodChannel methodChannelWithName:@"sensors_analytics_flutter_plugin" binaryMessenger:[self.registrar messenger]];
+
+    if (![statusInfo[@"context"] isKindOfClass:NSString.class]) {
+        return;
+    }
+
+    if ([statusInfo[@"context"] isEqualToString:@"connectionStatus"]) {
+
+        // 调用 Flutter， 通知进入可视化全埋点连接状态
+        // Method : Method 名称
+        // arguments : 传递给 Flutter 的数据
+        [methodChannel invokeMethod:@"visualizedConnectionStatusChanged" arguments:nil];
+        return;
+    }
+
+    if ([statusInfo[@"context"] isEqualToString:@"propertiesConfig"]) {
+        // 调用 Flutter， 通知 Flutter 自定义属性配置修改
+        // Method : Method 名称
+        [methodChannel invokeMethod:@"visualizedPropertiesConfigChanged" arguments:nil];
+        return;
+    }
+}
+
+/// Flutter 调用接口
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     NSString* method = call.method;
     NSArray* arguments = (NSArray *)call.arguments;
@@ -214,14 +272,14 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodInit = @"init";
     }  else if ([method isEqualToString:@"setFlushInterval"]){
         NSNumber *flushInterval = arguments[0];
         argumentSetNSNullToNil(&flushInterval);
-        [self setFlushInterval:flushInterval.unsignedLongLongValue];
+        [self setFlushInterval:flushInterval.integerValue];
         result(nil);
     } else if([method isEqualToString:@"getFlushInterval"]){
         result(@([self getFlushInterval]));
     } else if ([method isEqualToString:@"setFlushBulkSize"]){
         NSNumber *flushBulkSize = arguments[0];
         argumentSetNSNullToNil(&flushBulkSize);
-        [self setFlushBulkSize:flushBulkSize.unsignedLongLongValue];
+        [self setFlushBulkSize:flushBulkSize.integerValue];
         result(nil);
     } else if([method isEqualToString:@"getFlushBulkSize"]){
         result(@([self getFlushBulkSize]));
@@ -284,21 +342,87 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodInit = @"init";
         [self itemDelete:itemType itemId:itemId];
         result(nil);
     }  else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodInit]){
-        NSDictionary *config = [arguments firstObject];
+        // flutter 初始化 iOS SDK
+        NSDictionary *config = arguments[0];
         argumentSetNSNullToNil(&config);
         [self startWithConfig:config];
+        result(nil);
+    } else if ([method isEqualToString:SensorsAnalyticsGetVisualizedConnectionStatus]){
+        // 动态调用 SDK 接口，获取当前连接状态
+        NSNumber *visualizedConnectioned = [self invokeSABridgeWithMethod:method arguments:nil];
+        if (![visualizedConnectioned isKindOfClass:NSNumber.class]) {
+            result(@(NO));
+        }
+        result(visualizedConnectioned);
+    } else if([method isEqualToString:SensorsAnalyticsGetVisualizedPropertiesConfig]) {
+        // 动态调用 SDK 接口，获取当前自定义属性配置
+        NSString *jsonString = [self invokeSABridgeWithMethod:method arguments:nil];
+        result(jsonString);
+    } else if ([method isEqualToString:SensorsAnalyticsSendVisualizedMessage]){
+        // 发送 Flutter 页面元素信息
+        [self invokeSABridgeWithMethod:method arguments:arguments];
         result(nil);
     } else {
         result(FlutterMethodNotImplemented);
     }
 }
 
+/// 动态调用 SA 接口
+- (id)invokeSABridgeWithMethod:(NSString *)methodString arguments:(NSArray *)arguments {
+    Class saBridgeClass = NSClassFromString(@"SAFlutterPluginBridge");
+    SEL sharedInstanceSelector = NSSelectorFromString(@"sharedInstance");
+    if (![saBridgeClass respondsToSelector:sharedInstanceSelector]) {
+        return nil;
+    }
+    id sharedInstance = ((id (*)(id, SEL))[saBridgeClass methodForSelector:sharedInstanceSelector])(saBridgeClass, sharedInstanceSelector);
+    if (!sharedInstance) {
+        return nil;
+    }
+
+    // 获取连接状态
+    if ([methodString isEqualToString:SensorsAnalyticsGetVisualizedConnectionStatus]) {
+        SEL isVisualConnectionedSelector = NSSelectorFromString(@"isVisualConnectioned");
+        if (![sharedInstance respondsToSelector:isVisualConnectionedSelector]) {
+            return nil;
+        }
+        BOOL isVisualConnectioned = ((BOOL (*)(id, SEL))[sharedInstance methodForSelector:isVisualConnectionedSelector])(sharedInstance, isVisualConnectionedSelector);
+        return @(isVisualConnectioned);
+    }
+
+    // 获取自定义属性配置
+    if ([methodString isEqualToString:SensorsAnalyticsGetVisualizedPropertiesConfig]) {
+        SEL visualPropertiesConfigSelector = NSSelectorFromString(@"visualPropertiesConfig");
+        if (![sharedInstance respondsToSelector:visualPropertiesConfigSelector]) {
+            return nil;
+        }
+
+        NSString *jsonString = ((NSString * (*)(id, SEL))[sharedInstance methodForSelector:visualPropertiesConfigSelector])(sharedInstance, visualPropertiesConfigSelector);
+        return jsonString;
+    }
+
+    // 发送 Flutter 页面元素信息
+    if ([methodString isEqualToString:SensorsAnalyticsSendVisualizedMessage]) {
+        NSString *jsonString = arguments[0];
+        if (!jsonString) {
+            return nil;
+        }
+        SEL updateFlutterElementInfoSelector = NSSelectorFromString(@"updateFlutterElementInfo:");
+        if (![sharedInstance respondsToSelector:updateFlutterElementInfoSelector]) {
+            return nil;
+        }
+        ((void (*)(id, SEL, NSString *))[sharedInstance methodForSelector:updateFlutterElementInfoSelector])(sharedInstance, updateFlutterElementInfoSelector, jsonString);
+    }
+    return nil;
+}
+
 -(void)track:(NSString *)event properties:(nullable NSDictionary *)properties{
     [SensorsAnalyticsSDK.sharedInstance track:event withProperties:properties];
 }
+
 -(NSString *)trackTimerStart:(NSString *)event{
     return [SensorsAnalyticsSDK.sharedInstance trackTimerStart:event];
 }
+
 -(void)trackTimerEnd:(NSString *)event properties:(nullable NSDictionary *)properties {
     [SensorsAnalyticsSDK.sharedInstance trackTimerEnd:event withProperties:properties];
 }
@@ -409,28 +533,28 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodInit = @"init";
 #pragma clang diagnostic pop
 }
 
-- (void)setFlushInterval:(UInt64)FlushInterval {
+- (void)setFlushInterval:(NSInteger)FlushInterval {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [SensorsAnalyticsSDK.sharedInstance setFlushInterval:FlushInterval];
 #pragma clang diagnostic pop
 }
 
-- (void)setFlushBulkSize:(UInt64)flushBulkSize {
+- (void)setFlushBulkSize:(NSInteger)flushBulkSize {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [SensorsAnalyticsSDK.sharedInstance setFlushBulkSize:flushBulkSize];
 #pragma clang diagnostic pop
 }
 
-- (UInt64)getFlushBulkSize {
+- (NSInteger)getFlushBulkSize {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     return SensorsAnalyticsSDK.sharedInstance.flushBulkSize;
 #pragma clang diagnostic pop
 }
 
-- (UInt64)getFlushInterval {
+- (NSInteger)getFlushInterval {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     return SensorsAnalyticsSDK.sharedInstance.flushInterval;
@@ -489,14 +613,14 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodInit = @"init";
     if (![config isKindOfClass:[NSDictionary class]]) {
         return;
     }
-    
+
     NSString *serverURL = config[@"serverUrl"];
     if (![serverURL isKindOfClass:[NSString class]]) {
         return;
     }
-    
+
     SAConfigOptions *options = [[SAConfigOptions alloc] initWithServerURL:serverURL launchOptions:nil];
-    
+
     NSNumber *autoTrack = config[@"autotrackTypes"];
     if ([autoTrack isKindOfClass:[NSNumber class]]) {
         options.autoTrackEventType = [autoTrack integerValue];
@@ -521,18 +645,18 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodInit = @"init";
     if ([enableEncrypt isKindOfClass:[NSNumber class]]) {
         options.enableEncrypt = [enableEncrypt boolValue];
     }
-    
+
     NSNumber *enableJavascriptBridge = config[@"javaScriptBridge"];
     if ([enableJavascriptBridge isKindOfClass:[NSNumber class]]) {
         options.enableJavaScriptBridge = [enableJavascriptBridge boolValue];
     }
-    
+
     NSDictionary *iOSConfigs = config[@"ios"];
     if ([iOSConfigs isKindOfClass:[NSDictionary class]] && [iOSConfigs[@"maxCacheSize"] isKindOfClass:[NSNumber class]]) {
         options.maxCacheSize = [iOSConfigs[@"maxCacheSize"] integerValue];
     }
-    
-    NSNumber *enableHeatMap = config[@"heatMap"];
+
+    NSNumber *enableHeatMap = config[@"heat_map"];
     if ([enableHeatMap isKindOfClass:[NSNumber class]]) {
         options.enableHeatMap = [enableHeatMap boolValue];
     }
@@ -551,13 +675,17 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodInit = @"init";
         SAFlutterGlobalPropertyPlugin *propertyPlugin = [[SAFlutterGlobalPropertyPlugin alloc] initWithGlobleProperties:properties];
         [options registerPropertyPlugin:propertyPlugin];
     }
-
-    // 开启 SDK
-    [SensorsAnalyticsSDK startWithConfigOptions:options];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [SensorsAnalyticsSDK startWithConfigOptions:options];
+    });
 }
 
 static inline void argumentSetNSNullToNil(id *arg){
     *arg = (*arg == NSNull.null) ? nil:*arg;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
