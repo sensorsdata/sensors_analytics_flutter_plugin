@@ -5,9 +5,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url '/Users/zhangwei/Documents/work/android_workspace/sa-sdk-android/repo'
-        }
     }
 
     dependencies {
@@ -19,10 +16,6 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url '/Users/zhangwei/Documents/work/android_workspace/sa-sdk-android/repo'
-        }
-
     }
 }
 
@@ -41,7 +34,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    api files('libs/SensorsAnalyticsSDK-6.3.5.2.aar')
-    api 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:6.5.3-build1'
+    api 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:6.6.0'
 //    implementation 'org.json:json:20220320'
 }

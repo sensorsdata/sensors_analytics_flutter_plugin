@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'sensors_analytics_flutter_plugin'
-  s.version          = '2.2.2'
+  s.version          = '2.3.0'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -16,7 +16,7 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   s.platform = :ios, '8.0'
-  s.dependency 'SensorsAnalyticsSDK', ">= 4.4.6"
+  s.dependency 'SensorsAnalyticsSDK', ">= 4.5.0"
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
 end
