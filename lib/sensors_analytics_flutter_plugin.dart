@@ -37,14 +37,15 @@ class VisualizedConfig {
 
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
-  static const String FLUTTER_PLUGIN_VERSION = "2.2.2";
+  static const String FLUTTER_PLUGIN_VERSION = "2.3.0";
   static bool hasAddedFlutterPluginVersion = false;
-
-  static const MethodChannel _channel = const MethodChannel('sensors_analytics_flutter_plugin');
 
   static Future<String?> get getDistinctId async {
     return await _channel.invokeMethod('getDistinctId');
   }
+
+  /// Just for SDK inner used
+  static MethodChannel get _channel => ChannelManager.getInstance().methodChannel;
 
   /// 初始化神策 SDK。
   /// 用户需要尽可能早的调用该初始化方法，建议在 main() 方法中，不过至少要保证 Flutter 项目这段代码执行完毕：
@@ -704,3 +705,16 @@ class SensorsAnalyticsFlutterPlugin {
 enum SANetworkType { TYPE_NONE, TYPE_2G, TYPE_3G, TYPE_4G, TYPE_WIFI, TYPE_5G, TYPE_ALL }
 
 enum SAAutoTrackType { NONE, APP_START, APP_END, APP_CLICK, APP_VIEW_SCREEN }
+
+/// Flutter MethodChannel Manager
+class ChannelManager {
+  static ChannelManager _instance = ChannelManager._();
+
+  factory ChannelManager.getInstance() => _instance;
+
+  final MethodChannel _channel = const MethodChannel('sensors_analytics_flutter_plugin');
+
+  ChannelManager._();
+
+  MethodChannel get methodChannel => _channel;
+}

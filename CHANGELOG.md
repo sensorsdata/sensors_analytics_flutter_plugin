@@ -1,3 +1,7 @@
+## 2.3.0
+
+* 支持 Flutter 项目可视化全埋点及自定义属性
+
 ## 2.2.2
 
 * 新增接口 bind、unbind、loginWithKey

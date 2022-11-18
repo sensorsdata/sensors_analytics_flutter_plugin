@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import com.sensorsdata.analytics.android.sdk.SAConfigOptions;
 import com.sensorsdata.analytics.android.sdk.SALog;
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
+import com.sensorsdata.analytics.android.sdk.core.mediator.Modules;
+import com.sensorsdata.analytics.android.sdk.core.mediator.SAModuleManager;
 import com.sensorsdata.analytics.android.sdk.plugin.property.SAPropertyPlugin;
 import com.sensorsdata.analytics.android.sdk.plugin.property.SAPropertyPluginPriority;
 import com.sensorsdata.analytics.android.sdk.plugin.property.beans.SAPropertiesFetcher;
@@ -44,6 +46,8 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "sensors_analytics_flutter_plugin");
         channel.setMethodCallHandler(this);
+        FlutterVisual.getInstance().setMethodChannel(channel);
+        FlutterVisual.getInstance().registerBroadcast(flutterPluginBinding.getApplicationContext());
     }
 
     @Override
@@ -51,6 +55,17 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
         try {
             List list = (List) call.arguments;
             switch (call.method) {
+                case "getVisualizedConnectionStatus":
+                    result.success(SAModuleManager.getInstance().invokeModuleFunction(Modules.Visual.MODULE_NAME, Modules.Visual.METHOD_GET_VISUAL_STATE));
+                    break;
+                case "sendVisualizedMessage":
+                    String msg = (String) list.get(0);
+                    SAModuleManager.getInstance().invokeModuleFunction(Modules.Visual.MODULE_NAME, Modules.Visual.METHOD_SEND_VISUALIZED_MESSAGE, msg);
+                    result.success(null);
+                    break;
+                case "getVisualizedPropertiesConfig":
+                    result.success(SAModuleManager.getInstance().invokeModuleFunction(Modules.Visual.MODULE_NAME, Modules.Visual.METHOD_FLUTTER_GET_APPVISUAL_CONFIG));
+                    break;
                 case "setServerUrl":
                     setServerUrl(list);
                     break;
@@ -201,6 +216,7 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
+        FlutterVisual.getInstance().unRegisterBroadcast(binding.getApplicationContext());
     }
 
     private void isNetworkRequestEnable(Result result) {
