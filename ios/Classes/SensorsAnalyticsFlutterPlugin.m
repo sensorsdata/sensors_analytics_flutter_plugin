@@ -675,9 +675,14 @@ static NSNotificationName const kSAFlutterPluginVisualizedStatusChangedNotificat
         SAFlutterGlobalPropertyPlugin *propertyPlugin = [[SAFlutterGlobalPropertyPlugin alloc] initWithGlobleProperties:properties];
         [options registerPropertyPlugin:propertyPlugin];
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
+
+    if (NSThread.isMainThread) {
         [SensorsAnalyticsSDK startWithConfigOptions:options];
-    });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SensorsAnalyticsSDK startWithConfigOptions:options];
+        });
+    }
 }
 
 static inline void argumentSetNSNullToNil(id *arg){
