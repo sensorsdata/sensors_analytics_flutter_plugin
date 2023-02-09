@@ -37,7 +37,7 @@ class VisualizedConfig {
 
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
-  static const String FLUTTER_PLUGIN_VERSION = "2.3.0";
+  static const String FLUTTER_PLUGIN_VERSION = "2.3.1";
   static bool hasAddedFlutterPluginVersion = false;
 
   static Future<String?> get getDistinctId async {
