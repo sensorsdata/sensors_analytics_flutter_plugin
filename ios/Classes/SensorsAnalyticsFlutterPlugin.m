@@ -51,6 +51,7 @@ static NSString* const SensorsAnalyticsFlutterPluginMethodClearSuperProperties =
 static NSString* const SensorsAnalyticsFlutterPluginMethodProfilePushKey = @"profilePushId";
 static NSString* const SensorsAnalyticsFlutterPluginMethodProfileUnsetPushKey = @"profileUnsetPushId";
 static NSString* const SensorsAnalyticsFlutterPluginMethodInit = @"init";
+static NSString* const SensorsAnalyticsFlutterPluginMethodIsAutoTrackEventTypeIgnored = @"isAutoTrackEventTypeIgnored";
 
 /// 回调返回当前为可视化全埋点连接状态
 static NSString* const SensorsAnalyticsGetVisualizedConnectionStatus = @"getVisualizedConnectionStatus";
@@ -63,6 +64,9 @@ static NSString* const SensorsAnalyticsSendVisualizedMessage = @"sendVisualizedM
 
 /// 可视化全埋点状态改变，包括连接状态和自定义属性配置
 static NSNotificationName const kSAFlutterPluginVisualizedStatusChangedNotification = @"SensorsAnalyticsVisualizedStatusChangedNotification";
+
+// referrer key
+static NSString* const SensorsAnalyticsPropertyReferrer = @"$referrer";
 
 @interface SensorsAnalyticsFlutterPlugin()
 @property (nonatomic, weak) NSObject<FlutterPluginRegistrar> *registrar;
@@ -362,6 +366,12 @@ static NSNotificationName const kSAFlutterPluginVisualizedStatusChangedNotificat
         // 发送 Flutter 页面元素信息
         [self invokeSABridgeWithMethod:method arguments:arguments];
         result(nil);
+    } else if ([method isEqualToString:SensorsAnalyticsFlutterPluginMethodIsAutoTrackEventTypeIgnored]){
+        // 判断某个 AutoTrack 事件类型是否被忽略
+        NSNumber *autoTrackEventType = arguments[0];
+        argumentSetNSNullToNil(&autoTrackEventType);
+        BOOL ignored = [self isAutoTrackEventTypeIgnored:autoTrackEventType.integerValue];
+        result([NSNumber numberWithBool:ignored]);
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -416,7 +426,13 @@ static NSNotificationName const kSAFlutterPluginVisualizedStatusChangedNotificat
 }
 
 -(void)track:(NSString *)event properties:(nullable NSDictionary *)properties{
-    [SensorsAnalyticsSDK.sharedInstance track:event withProperties:properties];
+    NSMutableDictionary *tempProperties = [NSMutableDictionary dictionary];
+    NSString *referrer = [[SensorsAnalyticsSDK sharedInstance] getLastScreenUrl];
+    tempProperties[SensorsAnalyticsPropertyReferrer] = referrer;
+    if (properties) {
+        [tempProperties addEntriesFromDictionary:properties];
+    }
+    [SensorsAnalyticsSDK.sharedInstance track:event withProperties:[tempProperties copy]];
 }
 
 -(NSString *)trackTimerStart:(NSString *)event{
@@ -683,6 +699,10 @@ static NSNotificationName const kSAFlutterPluginVisualizedStatusChangedNotificat
             [SensorsAnalyticsSDK startWithConfigOptions:options];
         });
     }
+}
+
+- (BOOL)isAutoTrackEventTypeIgnored:(SensorsAnalyticsAutoTrackEventType)eventType {
+    return [[SensorsAnalyticsSDK sharedInstance] isAutoTrackEventTypeIgnored:eventType];
 }
 
 static inline void argumentSetNSNullToNil(id *arg){

@@ -37,7 +37,7 @@ class VisualizedConfig {
 
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
-  static const String FLUTTER_PLUGIN_VERSION = "2.3.1";
+  static const String FLUTTER_PLUGIN_VERSION = "2.4.0";
   static bool hasAddedFlutterPluginVersion = false;
 
   static Future<String?> get getDistinctId async {
@@ -681,6 +681,29 @@ class SensorsAnalyticsFlutterPlugin {
     properties = properties == null ? null : {...properties};
     _convertDateTime(properties);
     return await _channel.invokeMethod("loginWithKey", [loginKey, loginValue, properties]);
+  }
+
+  ///判断全埋点类型是否被忽略
+  static Future<bool> isAutoTrackEventTypeIgnored(SAAutoTrackType type) async {
+    int result = 0;
+    switch (type) {
+      case SAAutoTrackType.NONE:
+        result = 0;
+        break;
+      case SAAutoTrackType.APP_START:
+        result = 1;
+        break;
+      case SAAutoTrackType.APP_END:
+        result = 1 << 1;
+        break;
+      case SAAutoTrackType.APP_CLICK:
+        result = 1 << 2;
+        break;
+      case SAAutoTrackType.APP_VIEW_SCREEN:
+        result = 1 << 3;
+        break;
+    }
+    return await _channel.invokeMethod("isAutoTrackEventTypeIgnored", [result]);
   }
 
   ///添加 Flutter 插件版本号

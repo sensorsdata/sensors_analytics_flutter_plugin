@@ -204,6 +204,9 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
                 case "loginWithKey":
                     loginWithKey(list, result);
                     break;
+                case "isAutoTrackEventTypeIgnored":
+                    isAutoTrackEventTypeIgnored(list, result);
+                    break;
                 default:
                     result.notImplemented();
                     break;
@@ -356,7 +359,16 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
      * track 事件
      */
     private void track(List list) {
-        SensorsDataAPI.sharedInstance().track(assertEventName((String) list.get(0)), assertProperties((Map) list.get(1)));
+        try {
+            String eventName = assertEventName((String) list.get(0));
+            JSONObject properties = assertProperties((Map) list.get(1));
+            if (properties != null && "$AppPageLeave".equals(eventName) && !properties.has("$referrer")) {
+                properties.put("$referrer", SensorsDataAPI.sharedInstance().getLastScreenUrl());
+            }
+            SensorsDataAPI.sharedInstance().track(eventName, properties);
+        } catch (Exception e) {
+            SALog.printStackTrace(e);
+        }
     }
 
     /**
@@ -661,6 +673,16 @@ public class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallH
             JSONObject properties = assertProperties2(list.get(2));
             SensorsDataAPI.sharedInstance().loginWithKey(key, value, properties);
             result.success(null);
+        } catch (Exception e) {
+            SALog.printStackTrace(e);
+        }
+    }
+
+    private void isAutoTrackEventTypeIgnored(List list, Result result) {
+        try {
+            int type = (int) list.get(0);
+            boolean isIgnored = SensorsDataAPI.sharedInstance().isAutoTrackEventTypeIgnored(type);
+            result.success(isIgnored);
         } catch (Exception e) {
             SALog.printStackTrace(e);
         }

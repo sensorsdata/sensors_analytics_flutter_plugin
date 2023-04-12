@@ -17,7 +17,7 @@
 ```yml
 dependencies:
   # 添加神策 flutter plugin 
-  sensors_analytics_flutter_plugin: ^2.3.1
+  sensors_analytics_flutter_plugin: ^2.4.0
 ```
 
 执行 flutter packages get 命令安装插件
@@ -61,7 +61,7 @@ dependencies:
 
 ## License
 
-Copyright 2015－2022 Sensors Data Inc.
+Copyright 2015－2023 Sensors Data Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
