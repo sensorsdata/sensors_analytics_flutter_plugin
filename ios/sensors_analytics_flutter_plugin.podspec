@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'sensors_analytics_flutter_plugin'
-  s.version          = '2.3.1'
+  s.version          = '2.4.0'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
