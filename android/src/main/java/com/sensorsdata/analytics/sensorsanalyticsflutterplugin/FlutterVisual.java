@@ -55,17 +55,25 @@ public class FlutterVisual {
     public synchronized void registerBroadcast(Context context) {
         SALog.i(TAG, "registerBroadcast:" + isRegister);
         if (!isRegister) {
-            SALog.i(TAG, "registerBroadcast");
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(FLUTTER_ACTION);
-            context.registerReceiver(mDynamicReceiver, filter);
-            isRegister = true;
+            try {
+                SALog.i(TAG, "registerBroadcast");
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(FLUTTER_ACTION);
+                context.registerReceiver(mDynamicReceiver, filter);
+                isRegister = true;
+            } catch (Exception e) {
+                SALog.printStackTrace(e);
+            }
         }
     }
 
     public synchronized void unRegisterBroadcast(Context context) {
         SALog.i(TAG, "unRegisterBroadcast");
-        context.unregisterReceiver(mDynamicReceiver);
+        try {
+            context.unregisterReceiver(mDynamicReceiver);
+        } catch (Exception e) {
+            SALog.printStackTrace(e);
+        }
         isRegister = false;
     }
 }
