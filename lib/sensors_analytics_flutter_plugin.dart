@@ -81,7 +81,7 @@ class SensorsAnalyticsFlutterPlugin {
       Set<SANetworkType>? networkTypes,
       int flushInterval = 15000,
       int flushBulkSize = 100,
-      bool enableLog: false,
+      bool enableLog = false,
       bool javaScriptBridge = false,
       bool encrypt = false,
       AndroidConfig? android,
@@ -320,9 +320,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.profileSet({'key1':'value1','key2':'value2'});
   ///
   static void profileSet(Map<String, dynamic> profileProperties) {
-    if (profileProperties != null) {
-      profileProperties = {...profileProperties};
-    }
+    profileProperties = {...profileProperties};
     _convertDateTime(profileProperties);
     List<dynamic> params = [profileProperties];
     _channel.invokeMethod('profileSet', params);
@@ -338,9 +336,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.profileSetOnce({'key1':'value1','key2':'value2'});
   ///
   static void profileSetOnce(Map<String, dynamic> profileProperties) {
-    if (profileProperties != null) {
-      profileProperties = {...profileProperties};
-    }
+    profileProperties = {...profileProperties};
     _convertDateTime(profileProperties);
     List<dynamic> params = [profileProperties];
     _channel.invokeMethod('profileSetOnce', params);
@@ -422,9 +418,7 @@ class SensorsAnalyticsFlutterPlugin {
   /// SensorsAnalyticsFlutterPlugin.registerSuperProperties({'key1':'value1','key2':'value2'});
   ///
   static void registerSuperProperties(Map<String, dynamic> superProperties) {
-    if (superProperties != null) {
-      superProperties = {...superProperties};
-    }
+    superProperties = {...superProperties};
     _convertDateTime(superProperties);
     List<dynamic> params = [superProperties];
     _channel.invokeMethod('registerSuperProperties', params);
