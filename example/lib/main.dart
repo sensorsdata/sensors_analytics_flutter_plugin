@@ -409,6 +409,18 @@ class _MyAppState extends State<MyApp> {
                 print("loginwithkey===");
               },
             ),
+            ListTile(
+              title: Text('isAutoTrackEventTypeIgnored'),
+              onTap: () async {
+                bool click = await SensorsAnalyticsFlutterPlugin.isAutoTrackEventTypeIgnored(SAAutoTrackType.APP_CLICK);
+                bool end = await SensorsAnalyticsFlutterPlugin.isAutoTrackEventTypeIgnored(SAAutoTrackType.APP_END);
+                bool start = await SensorsAnalyticsFlutterPlugin.isAutoTrackEventTypeIgnored(SAAutoTrackType.APP_START);
+                bool screen = await SensorsAnalyticsFlutterPlugin.isAutoTrackEventTypeIgnored(SAAutoTrackType.APP_VIEW_SCREEN);
+
+                //SensorsAnalyticsFlutterPlugin.loginWithKey("sss3", "vvv3", {"p1111": "vvvv1"});
+                print("isAutoTrackEventTypeIgnored====$click====$end====$start====$screen");
+              },
+            ),
           ],
         ),
       ),
