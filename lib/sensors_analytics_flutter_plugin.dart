@@ -37,7 +37,7 @@ class VisualizedConfig {
 
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
-  static const String FLUTTER_PLUGIN_VERSION = "2.4.0";
+  static const String FLUTTER_PLUGIN_VERSION = "2.5.0";
   static bool hasAddedFlutterPluginVersion = false;
 
   static Future<String?> get getDistinctId async {
@@ -582,7 +582,7 @@ class SensorsAnalyticsFlutterPlugin {
   }
 
   /// 获取当前用户的 loginId
-  static Future<String> getLoginId() async {
+  static Future<String?> getLoginId() async {
     return await _channel.invokeMethod("getLoginId");
   }
 
