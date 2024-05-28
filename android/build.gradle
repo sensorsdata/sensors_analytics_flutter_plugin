@@ -34,6 +34,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:6.6.0'
+    api 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:6.8.0'
 //    implementation 'org.json:json:20220320'
 }
