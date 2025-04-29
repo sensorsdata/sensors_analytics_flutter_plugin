@@ -22,7 +22,12 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.sensorsdata.analytics.sensorsanalyticsflutterplugin'
+    }
+
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 16
@@ -35,5 +40,4 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:6.8.0'
-//    implementation 'org.json:json:20220320'
 }

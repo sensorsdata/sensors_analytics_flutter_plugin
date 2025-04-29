@@ -1,0 +1,11 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "sensors_analytics_flutter_plugin": "file:../har/sensors_analytics_flutter_plugin.har"
+  }
+}

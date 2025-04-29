@@ -1,3 +1,25 @@
+## 4.0.0
+
+* 支持 HarmonyOS 埋点
+* 支持 HarmonyOS 全埋点
+
+## 3.0.1
+
+* 修复页面名称字段错误的问题
+
+## 3.0.0
+
+* 支持全埋点
+* Flutter 支持 Web 端数据采集
+
+## 2.8.0
+
+* 新增 namespace 配置以支持 Android AGP 8.0+ 
+
+## 2.7.0
+
+* register Receiver 适配 API 33 及以上版本
+
 ## 2.6.0
 
 * 升级依赖的 Android SDK 版本到 v6.8.0

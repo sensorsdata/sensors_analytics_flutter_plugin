@@ -1,15 +1,20 @@
 name: sensors_analytics_flutter_plugin
 description: This is the official flutter plugin for Sensors Analytics,with this plugin you can easily collect your app data on Android and iOS.
-version: 2.6.0
+version: 4.0.0
 homepage: "https://github.com/sensorsdata/sensors_analytics_flutter_plugin"
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.12.0 <4.0.0"
   flutter: ">=1.10.0"
 
 dependencies:
   flutter:
     sdk: flutter
+
+  flutter_web_plugins:
+    sdk: flutter
+
+  js: ^0.6.4
 
 dev_dependencies:
   flutter_test:
@@ -30,6 +35,11 @@ flutter:
         package: com.sensorsdata.analytics.sensorsanalyticsflutterplugin
         pluginClass: SensorsAnalyticsFlutterPlugin
       ios:
+        pluginClass: SensorsAnalyticsFlutterPlugin
+      web:
+        pluginClass: SensorsAnalyticsFlutterPlugin
+        fileName: sensors_analytics_flutter_plugin_web.dart
+      ohos:
         pluginClass: SensorsAnalyticsFlutterPlugin
 
   # To add assets to your plugin package, add an assets section, like this:

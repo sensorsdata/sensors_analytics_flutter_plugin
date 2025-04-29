@@ -1,1 +1,5 @@
-rootProject.name = 'sensors_analytics_flutter_plugin'
+package android
+
+plugins {
+    id "com.android.application" version "3.5.0" apply false
+}

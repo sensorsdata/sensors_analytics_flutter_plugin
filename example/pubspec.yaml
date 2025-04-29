@@ -14,16 +14,27 @@ dependencies:
   #sensors_analytics_flutter_plugin: ^1.0.5
 
   sensors_analytics_flutter_plugin:
+    path: ../
+
+    # 集成神策数据 flutter 本地目录插件
+  # sensors_analytics_flutter_plugin:
+  #   path: /Users/sdktest/Documents/Gitlab_SensorsData/sensors_analytics_flutter_plugin
+
+# 集成神策数据 flutter 远程分支插件
+  # sensors_analytics_flutter_plugin:
+  #   git:
+  #     url: git@gitlab.sensorsdata.cn:sensors-analytics/sdk/sensors_analytics_flutter_plugin.git
+  #     ref: cqs_feature_suport_harmonyos
+  
     # When depending on this package from a real application you should use:
     #   sensorsanalyticsflutterplugin: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
     # The example app is bundled with the plugin so we use a path dependency on
     # the parent directory to use the current plugin's version.
-    path: ../
-
+   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
+  # cupertino_icons: ^0.1.6
 
 dev_dependencies:
   flutter_test:

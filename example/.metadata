@@ -4,7 +4,27 @@
 # This file should be version controlled.
 
 version:
-  revision: eb6d86ee27deecba4a83536aa20f366a6044895c
-  channel: stable
+  revision: 97eb49008bc1a3f004c78d4cfb47f2e1361114ef
+  channel: master
 
 project_type: app
+
+# Tracks metadata for the flutter migrate command
+migration:
+  platforms:
+    - platform: root
+      create_revision: 97eb49008bc1a3f004c78d4cfb47f2e1361114ef
+      base_revision: 97eb49008bc1a3f004c78d4cfb47f2e1361114ef
+    - platform: ohos
+      create_revision: 97eb49008bc1a3f004c78d4cfb47f2e1361114ef
+      base_revision: 97eb49008bc1a3f004c78d4cfb47f2e1361114ef
+
+  # User provided section
+
+  # List of Local paths (relative to this file) that should be
+  # ignored by the migrate tool.
+  #
+  # Files that are not part of the templates will be ignored by default.
+  unmanaged_files:
+    - 'lib/main.dart'
+    - 'ios/Runner.xcodeproj/project.pbxproj'

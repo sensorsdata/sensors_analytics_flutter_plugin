@@ -1,9 +1,11 @@
 package com.sensorsdata.analytics.sensorsanalyticsflutterplugin;
 
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 
 import com.sensorsdata.analytics.android.sdk.SALog;
 
@@ -59,7 +61,11 @@ public class FlutterVisual {
                 SALog.i(TAG, "registerBroadcast");
                 IntentFilter filter = new IntentFilter();
                 filter.addAction(FLUTTER_ACTION);
-                context.registerReceiver(mDynamicReceiver, filter);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    context.registerReceiver(mDynamicReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+                } else {
+                    context.registerReceiver(mDynamicReceiver, filter);
+                }
                 isRegister = true;
             } catch (Exception e) {
                 SALog.printStackTrace(e);

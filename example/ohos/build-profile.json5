@@ -1,0 +1,45 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/sdktest/.ohos/config/default_ohos_rwYtfdq-WBBUCHYmW7b_T-cB7h96zYChZXwYoUvNlso=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001A7DD40FD24C07F7BCA4924F3B3D83981A3523D9CA6938B10A4D92FD1961D84795E39DB864483B",
+          "profile": "/Users/sdktest/.ohos/config/default_ohos_rwYtfdq-WBBUCHYmW7b_T-cB7h96zYChZXwYoUvNlso=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/sdktest/.ohos/config/default_ohos_rwYtfdq-WBBUCHYmW7b_T-cB7h96zYChZXwYoUvNlso=.p12",
+          "storePassword": "0000001A28624F45CD26DE3EA748B753E528B2F75498626F238F38A689ACC96A69D41CF76F41D3F5CA3D"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compatibleSdkVersion": "5.0.0(12)",
+        "runtimeOS": "HarmonyOS"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SensorsAnalyticsSDK",
+      "srcPath": "../../../sa-sdk-harmony-next/SensorsAnalyticsSDK"
+    }
+  ]
+}

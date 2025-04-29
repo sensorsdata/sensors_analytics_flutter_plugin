@@ -23,9 +23,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     SAConfigOptions *options = [[SAConfigOptions alloc] initWithServerURL:@"http://sdkdebugtest.datasink.sensorsdata.cn/sa?project=default&token=cfb8b60e42e0ae9b" launchOptions:launchOptions];
     // 开启全埋点
     options.autoTrackEventType = SensorsAnalyticsEventTypeAppStart |
-    SensorsAnalyticsEventTypeAppEnd |
-    SensorsAnalyticsEventTypeAppClick |
-    SensorsAnalyticsEventTypeAppViewScreen;
+    SensorsAnalyticsEventTypeAppEnd;
     options.enableLog = YES;
 
     // 在 Flutter 中初始化 SDK

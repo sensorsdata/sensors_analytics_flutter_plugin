@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "sensors_analytics_flutter_plugin",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}

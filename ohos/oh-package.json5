@@ -1,0 +1,23 @@
+{
+  "name": "sensors_analytics_flutter_plugin",
+  "version": "4.0.0",
+  "description": "神策分析 SDK Flutter 组件，支持 HarmonyOS 埋点",
+  "keywords": [
+    "神策分析",
+    "HarmonyOS 埋点",
+    "Flutter 埋点",
+    "Flutter 神策埋点",
+    "Flutter 支持 HarmonyOS 埋点"
+  ],
+  "main": "index.ets",
+  "author": "",
+  "license": "",
+  "homepage": "http://www.sensorsdata.cn",
+  "repository": "https://github.com/sensorsdata/sensors_analytics_flutter_plugin",
+  "dependencies": {
+    "@ohos/flutter_ohos": "flutter.har"
+  },
+  "devDependencies": {
+    "@sensorsdata/analytics": "SensorsAnalyticsSDK_pro_0.5.0.har"
+  }
+}
