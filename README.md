@@ -7,7 +7,7 @@
 
 ## SDK 简介
 
-神策 sensors_analytics_flutter_plugin 插件，封装了神策 iOS & Android SDK 常用 API ，使用此插件，可以完成埋点的统计上报。
+神策 sensors_analytics_flutter_plugin 插件，封装了神策 iOS、Android、Web 和 HarmonyOS SDK 常用 API ，使用此插件，可以完成埋点的统计上报。
 
 ## 使用方式
 
