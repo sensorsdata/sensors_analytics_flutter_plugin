@@ -1,7 +1,7 @@
   
 #include "AppDelegate.h"
 #include "GeneratedPluginRegistrant.h"
-#import <SensorsAnalyticsSDK.h>
+#import <SensorsAnalyticsSDK/SensorsAnalyticsSDK.h>
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application

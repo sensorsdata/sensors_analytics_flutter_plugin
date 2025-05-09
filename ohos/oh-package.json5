@@ -1,6 +1,6 @@
 {
   "name": "sensors_analytics_flutter_plugin",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "神策分析 SDK Flutter 组件，支持 HarmonyOS 埋点",
   "keywords": [
     "神策分析",

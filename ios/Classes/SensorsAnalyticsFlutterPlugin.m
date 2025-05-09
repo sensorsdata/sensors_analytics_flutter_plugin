@@ -19,9 +19,14 @@
 //
 
 #import "SensorsAnalyticsFlutterPlugin.h"
-#import "SensorsAnalyticsSDK.h"
 #import "SAFlutterGlobalPropertyPlugin.h"
 #import <objc/runtime.h>
+
+#if __has_include(<SensorsAnalyticsSDK/SensorsAnalyticsSDK.h>)
+#import <SensorsAnalyticsSDK/SensorsAnalyticsSDK.h>
+#else
+#import "SensorsAnalyticsSDK.h"
+#endif
 
 static NSString* const SensorsAnalyticsFlutterPluginMethodTrack = @"track";
 static NSString* const SensorsAnalyticsFlutterPluginMethodTrackTimerStart = @"trackTimerStart";
