@@ -8,11 +8,11 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
 A new flutter plugin project.
                        DESC
-  s.homepage         = 'https://github.com/sensorsdata/sensors_analytics_flutter_plugin'
+  s.homepage         = 'https://www.sensorsdata.cn/'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'sensorsdata' => 'ziven.xiang@gmail.com' }
-  s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.author           = { "caojiang" => "caojiang@sensorsdata.cn" }
+  s.source           = { :git => 'https://github.com/sensorsdata/sensors_analytics_flutter_plugin.git', :tag => "v#{s.version}" }
+  s.source_files     = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
