@@ -29,8 +29,6 @@ flutter_ios_podfile_setup
 
 target 'Runner' do
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-  # 本地调试运行时，需注释掉上面的 flutter_install, 并使用下面的本地安装
-#  pod 'sensors_analytics_flutter_plugin', :path => '../../'
 end
 
 post_install do |installer|
