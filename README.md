@@ -5,7 +5,7 @@
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/sensorsdata/sensors_analytics_flutter_plugin.svg)](http://isitmaintained.com/project/sensorsdata/sensors_analytics_flutter_plugin "Percentage of issues still open")
 [![GitHub release](https://img.shields.io/github/tag/sensorsdata/sensors_analytics_flutter_plugin.svg?label=release)](https://github.com/sensorsdata/sensors_analytics_flutter_plugin/releases)
 [![GitHub release date](https://img.shields.io/github/release-date/sensorsdata/sensors_analytics_flutter_plugin.svg)](https://github.com/sensorsdata/sensors_analytics_flutter_plugin/releases)
-![platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20Web%20%7C%20HarmonyOS-green)
+![platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20Web%20%7C%20HarmonyOS-yellowgreen)
 
 
 ## 神策简介
