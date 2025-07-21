@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 typedef SAElementWalker = bool Function(Element child, Element? parent);
 
@@ -26,6 +26,13 @@ class SAElementUtil {
   static String? findTitle(Element element) {
     String? title;
     walkElement(element, (child, _) {
+      if (child.widget is AppBar) {
+        AppBar appBar = child.widget as AppBar;
+        if (appBar.title is Text) {
+          title = (appBar.title as Text).data;
+          return false;
+        }
+      }
       if (child.widget is NavigationToolbar) {
         NavigationToolbar toolBar = child.widget as NavigationToolbar;
         if (toolBar.middle == null) {

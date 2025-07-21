@@ -1,13 +1,5 @@
 <img src="https://ow-file.sensorsdata.cn/www/home/header/sensors_header_icon.svg" width="200" >
 
-[![License](https://img.shields.io/badge/license-Commercial-lightgrey)](https://github.com/sensorsdata/sensors_analytics_flutter_plugin/blob/master/LICENSE)
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/sensorsdata/sensors_analytics_flutter_plugin.svg)](http://isitmaintained.com/project/sensorsdata/sensors_analytics_flutter_plugin "Average time to resolve an issue")
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/sensorsdata/sensors_analytics_flutter_plugin.svg)](http://isitmaintained.com/project/sensorsdata/sensors_analytics_flutter_plugin "Percentage of issues still open")
-[![GitHub release](https://img.shields.io/github/tag/sensorsdata/sensors_analytics_flutter_plugin.svg?label=release)](https://github.com/sensorsdata/sensors_analytics_flutter_plugin/releases)
-[![GitHub release date](https://img.shields.io/github/release-date/sensorsdata/sensors_analytics_flutter_plugin.svg)](https://github.com/sensorsdata/sensors_analytics_flutter_plugin/releases)
-![platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20Web%20%7C%20HarmonyOS-yellowgreen)
-
-
 ## 神策简介
 
 [**神策数据**](https://www.sensorsdata.cn/)
@@ -17,15 +9,6 @@
 
 神策 sensors_analytics_flutter_plugin 插件，封装了神策 iOS & Android SDK 常用 API ，使用此插件，可以完成埋点的统计上报。
 
-## 神策埋点 SDK 官网
-如需了解神策埋点 SDK 的更多商业授权信息，请访问[神策埋点 SDK 官网](https://jssdk.debugbox.sensorsdata.cn/)获取更多详细信息。
-
-## 联系我们
-若您有商业合作或产品集成需求，请通过下面的渠道联系我们获取专业服务与支持。
-
-| 加微信号：skycode008，或扫码添加联系人 <img src="https://github.com/sensorsdata/sa-sdk-android/blob/master/WechatIMG180.jpg" width="300" height="450" /> | 扫码关注「神策埋点 SDK」公众号 ![gzh](https://github.com/sensorsdata/sa-sdk-android/blob/master/gzh.jpeg) |
-| ------ | ------ |
-
 ## 使用方式
 
 在 Flutter 项目的 `pubspec.yaml` 文件中添加 `sensors_analytics_flutter_plugin` 依赖
@@ -33,7 +16,7 @@
 ```yml
 dependencies:
   # 添加神策 flutter plugin 
-  sensors_analytics_flutter_plugin: ^4.0.1
+  sensors_analytics_flutter_plugin: ^4.0.2
 ```
 
 执行 flutter packages get 命令安装插件
