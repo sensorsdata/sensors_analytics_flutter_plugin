@@ -21,11 +21,8 @@ type SAFlutterPluginCallMap = Map<string, string | boolean | number | Array<stri
 /** SensorsAnalyticsFlutterPlugin **/
 export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
   private channel: MethodChannel | null = null;
-  private context: Context | null = null;
+  private applicationContext: common.Context | null = null;
   private moduleManager: SAFlutterManager = new SAFlutterManager();
-
-  constructor() {
-  }
 
   getUniqueClassName(): string {
     return "SensorsAnalyticsFlutterPlugin"
@@ -36,7 +33,7 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
     this.channel.setMethodCallHandler(this)
     // 调试出现过 getContext(this) 无法取到结果
     // 如果使用 ApplicationContext，原生 $AppEnd 和 $AppStart 全埋点点无法采集
-    this.context = getContext(this) as common.UIAbilityContext ?? binding.getApplicationContext();
+    this.applicationContext =  binding.getApplicationContext();
   }
 
   onDetachedFromEngine(binding: FlutterPluginBinding): void {
@@ -553,9 +550,10 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
         return map.get(key) as T | undefined;
       };
 
+      let uiContext = getContext(this) as common.UIAbilityContext ?? this.applicationContext;
       // 构建 InitPara 参数
       const initPara: global.InitPara = {
-        context: this.context as object,
+        context: uiContext,
         server_url: map.get('serverUrl') as string
       };
 

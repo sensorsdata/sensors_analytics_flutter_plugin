@@ -1,3 +1,11 @@
+## 4.2.0
+
+* 修复 HarmonyOS $AppStart 全埋点采集失败问题
+
+## 4.1.0
+
+* 支持不依赖 HarmonyOS 埋点 SDK
+
 ## 4.0.2
 
 * 全埋点页面浏览事件采集标题支持 AppBar title

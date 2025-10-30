@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "/Users/sdktest/.ohos/config/default_ohos_rwYtfdq-WBBUCHYmW7b_T-cB7h96zYChZXwYoUvNlso=.cer",
+          "certpath": "/Users/chuqiangsheng/.ohos/config/default_ohos_cB7oaG-xCkvzKYohQvgIzulwnSFBJgrlG7eu77CHoLQ=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001A7DD40FD24C07F7BCA4924F3B3D83981A3523D9CA6938B10A4D92FD1961D84795E39DB864483B",
-          "profile": "/Users/sdktest/.ohos/config/default_ohos_rwYtfdq-WBBUCHYmW7b_T-cB7h96zYChZXwYoUvNlso=.p7b",
+          "keyPassword": "0000001B0FAF69D00DD797B41C29DA9D0EEA04AA0C9785E8D07ED9D0C0CE3451047C93D66CE91BE9920B30",
+          "profile": "/Users/chuqiangsheng/.ohos/config/default_ohos_cB7oaG-xCkvzKYohQvgIzulwnSFBJgrlG7eu77CHoLQ=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "/Users/sdktest/.ohos/config/default_ohos_rwYtfdq-WBBUCHYmW7b_T-cB7h96zYChZXwYoUvNlso=.p12",
-          "storePassword": "0000001A28624F45CD26DE3EA748B753E528B2F75498626F238F38A689ACC96A69D41CF76F41D3F5CA3D"
+          "storeFile": "/Users/chuqiangsheng/.ohos/config/default_ohos_cB7oaG-xCkvzKYohQvgIzulwnSFBJgrlG7eu77CHoLQ=.p12",
+          "storePassword": "0000001BBFF7F6756D3864C2C70210E5BAB6DBDFAB04B126A3020181482B2617FEEC41DF6C69C35CE89B05"
         }
       }
     ],
@@ -40,6 +40,10 @@
     {
       "name": "SensorsAnalyticsSDK",
       "srcPath": "../../../sa-sdk-harmony-next/SensorsAnalyticsSDK"
+    },
+    {
+      "name": "sensors_analytics_flutter_plugin",
+      "srcPath": "../../../sensors_analytics_flutter_plugin/ohos"
     }
   ]
 }

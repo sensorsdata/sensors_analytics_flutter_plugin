@@ -25,6 +25,11 @@ dependencies:
   #   git:
   #     url: git@gitlab.sensorsdata.cn:sensors-analytics/sdk/sensors_analytics_flutter_plugin.git
   #     ref: cqs_feature_suport_harmonyos
+
+  # sensors_analytics_flutter_plugin:
+  #   git:
+  #     url: https://github.com/sensorsdata/sensors_analytics_flutter_plugin.git
+  #     ref: no_ohos   # 指定不包含鸿蒙支持分支
   
     # When depending on this package from a real application you should use:
     #   sensorsanalyticsflutterplugin: ^x.y.z

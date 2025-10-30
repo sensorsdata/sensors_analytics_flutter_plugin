@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'sensors_analytics_flutter_plugin'
-  s.version          = '4.0.2'
+  s.version          = '4.2.0'
   s.summary          = 'The official flutter iOS plugin of Sensors Analytics.'
   s.homepage         = 'https://www.sensorsdata.cn/'
   s.license          = { 
@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
   s.dependency 'SensorsAnalyticsSDK', ">= 4.9.0"
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
-  s.resource_bundle = { 'sensors_analytics_flutter_plugin' => 'Resources/**/*'}
+  s.resource_bundle = { 'sensors_analytics_flutter_plugin_no_ohos' => 'Resources/**/*'}
 end
