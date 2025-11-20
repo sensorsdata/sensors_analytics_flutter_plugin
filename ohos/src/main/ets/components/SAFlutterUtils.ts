@@ -68,6 +68,10 @@ export class SAFlutterUtils extends Object {
    * */
   static mapToJsonObject<K extends string, V>(map: Map<K, V>): Record<K, V> {
     const obj: Record<K, V> = {} as Record<K, V>;
+    // 增加合法性判断
+    if (map == null || !(map instanceof Map) || map.size === 0) {
+      return obj;
+    }
     map.forEach((value, key) => {
       obj[key] = value; //逐项赋值
     });
@@ -81,20 +85,30 @@ export class SAFlutterUtils extends Object {
    * */
   static convertMapToJsonObject(map: SAFlutterNestedMap): SAFlutterNestedObject {
     const result: SAFlutterNestedObject = {};
-    map.forEach((value, key) => {
-      if (value instanceof Map) {
-        // 递归处理嵌套Map
-        result[key] = SAFlutterUtils.convertMapToJsonObject(value);
-      } else if (Array.isArray(value)) {
-        // 处理数组中的Map元素
-        result[key] = value.map(item =>
-        item instanceof Map ? SAFlutterUtils.convertMapToJsonObject(item) : item
-        );
-      } else {
-        // 基础类型直接赋值
-        result[key] = value;
-      }
-    });
+    // 增加合法性判断
+    if (map == null || !(map instanceof Map) || map.size === 0) {
+      return result;
+    }
+    try {
+      map.forEach((value, key) => {
+        if (value instanceof Map) {
+          // 递归处理嵌套Map
+          result[key] = SAFlutterUtils.convertMapToJsonObject(value);
+        } else if (Array.isArray(value)) {
+          // 处理数组中的Map元素
+          result[key] = value.map(item =>
+            item instanceof Map ? SAFlutterUtils.convertMapToJsonObject(item) : item
+          );
+        } else {
+          // 基础类型直接赋值
+          result[key] = value;
+        }
+      });
+    } catch (err) {
+      console.error("convertMapToJsonObject: exception caught", err);
+      return result;
+    }
+
     return result;
   }
 }

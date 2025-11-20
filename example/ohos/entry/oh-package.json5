@@ -7,7 +7,7 @@
   "license": "",
   "dependencies": {
     "sensors_analytics_flutter_plugin": "file:../har/sensors_analytics_flutter_plugin.har",
-//    "sensors_analytics_flutter_plugin": "file:../../../../sensors_analytics_flutter_plugin/ohos",
+    //    "sensors_analytics_flutter_plugin": "file:../../../../sensors_analytics_flutter_plugin/ohos",
     "@ohos/flutter_ohos": "har/flutter.har"
   }
 }

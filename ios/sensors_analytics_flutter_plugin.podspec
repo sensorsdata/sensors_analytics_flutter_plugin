@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'sensors_analytics_flutter_plugin'
-  s.version          = '4.2.0'
+  s.version          = '4.2.1'
   s.summary          = 'The official flutter iOS plugin of Sensors Analytics.'
   s.homepage         = 'https://www.sensorsdata.cn/'
   s.license          = { 

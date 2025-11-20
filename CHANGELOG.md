@@ -1,3 +1,6 @@
+## 4.2.1
+
+* 修复 HarmonyOS SDK 初始化类型判断问题
 ## 4.2.0
 
 * 修复 HarmonyOS $AppStart 全埋点采集失败问题

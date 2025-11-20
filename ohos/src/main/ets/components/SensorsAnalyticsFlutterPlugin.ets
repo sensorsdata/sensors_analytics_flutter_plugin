@@ -631,6 +631,7 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
   }
 }
 
+// BatchSendPara 接口定义
 interface BatchSendPara {
   max_cache_size?: number
   flush_interval?: number,
