@@ -68,7 +68,7 @@ class HarmonyConfig {
 
 // This is the official Flutter Plugin for Sensors Analytics.
 class SensorsAnalyticsFlutterPlugin {
-  static const String FLUTTER_PLUGIN_VERSION = "4.2.1";
+  static const String FLUTTER_PLUGIN_VERSION = "4.2.2";
   static bool hasAddedFlutterPluginVersion = false;
 
   static Future<String?> get getDistinctId async {

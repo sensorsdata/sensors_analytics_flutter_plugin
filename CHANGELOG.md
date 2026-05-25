@@ -1,3 +1,8 @@
+## 4.2.2
+
+* 升级 Android SDK 至 v6.9.3 版本
+* HarmonyOS 桥接实现，增加 result 回调结果
+
 ## 4.2.1
 
 * 修复 HarmonyOS SDK 初始化类型判断问题

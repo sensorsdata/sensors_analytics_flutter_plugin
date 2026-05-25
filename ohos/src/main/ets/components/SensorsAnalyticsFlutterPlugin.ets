@@ -126,6 +126,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       } else {
         sensors.track(eventName);
       }
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("TRACK_ERROR", "Failed to track event", e.toString());
@@ -138,6 +140,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       const timer = sensors.trackTimerStart(eventName);
       this.moduleManager.insertTrackTimer(timer);
       result.success(eventName);
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("TRACK_ERROR", "Failed to trackTimerStart", e.toString());
@@ -158,6 +162,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
         sensors.trackTimerEnd(timer, properties);
         this.moduleManager.cleanTrackTimer(eventName);
       }
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("TRACK_ERROR", "Failed to trackTimerEnd", e.toString());
@@ -169,6 +175,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       sensors.clearAllTrackTimer()
       // 保留 timer，用于直接触发事件
       // this.moduleManager.cleanTrackTimer();
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("TRACK_ERROR", "Failed to clearTrackTimer", e.toString());
@@ -184,6 +192,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       }
       // 保留 timer，用于直接触发事件
       // this.moduleManager.cleanTrackTimer(eventName);
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("TRACK_ERROR", "Failed to removeTimer", e.toString());
@@ -195,6 +205,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       const eventName = call.args[0] as string;
       const timer = this.moduleManager.fetchTrackTimer(eventName);
       sensors.trackTimerResume(timer);
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("TRACK_ERROR", "Failed to trackTimerResume", e.toString());
@@ -206,6 +218,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       const eventName = call.args[0] as string;
       const timer = this.moduleManager.fetchTrackTimer(eventName);
       sensors.trackTimerPause(timer);
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("TRACK_ERROR", "Failed to trackTimerPause", e.toString());
@@ -225,6 +239,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
         $screen_name: url,
       }, properties);
 
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("TRACK_ERROR", "Failed to trackViewScreen", e.toString());
@@ -242,6 +258,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       if (properties) {
         sensors.register(properties);
       }
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("REGISTER_SUPER_PROPERTIES_ERROR", "Failed to register super properties", e.toString());
@@ -251,6 +269,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
   clearSuperProperties(result: MethodResult): void {
     try {
       sensors.clearAllRegister();
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("CLEAR_SUPER_PROPERTIES_ERROR", "Failed to clear super properties", e.toString());
@@ -263,6 +283,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       if (property) {
         sensors.clearAllRegister([property])
       }
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("unregisterSuperProperty", "Failed to clear unregisterSuperProperty", e.toString());
@@ -280,6 +302,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       if (properties) {
         sensors.setProfile(properties);
       }
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("PROFILE_SET_ERROR", "Failed to set profile", e.toString());
@@ -296,6 +320,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       if (properties) {
         sensors.setOnceProfile(properties);
       }
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("PROFILE_SET_ONCE_ERROR", "Failed to set profile once", e.toString());
@@ -308,6 +334,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       if (propertiesMap) {
         sensors.unsetProfile(propertiesMap);
       }
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("PROFILE_UNSET_ERROR", "Failed to unset profile", e.toString());
@@ -326,6 +354,7 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       param[key] = value;
       sensors.incrementProfile(param);
 
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("PROFILE_INCREMENT_ERROR", "Failed to increment profile", e.toString());
@@ -343,6 +372,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       const param = {} as Record<string, Array<string>>;
       param[key] = value;
       sensors.appendProfile(param);
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("PROFILE_APPEND_ERROR", "Failed to append profile", e.toString());
@@ -353,6 +384,7 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
     try {
       sensors.deleteProfile();
 
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("PROFILE_DELETE_ERROR", "Failed to delete profile", e.toString());
@@ -366,6 +398,7 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
         sensors.identify(params);
       }
 
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("IDENTIFY_ERROR", "Failed to identify", e.toString());
@@ -387,6 +420,7 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
         sensors.login(params);
       }
 
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("LOGIN_ERROR", "Failed to login", e.toString());
@@ -397,6 +431,7 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
     try {
       sensors.logout();
 
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("LOGOUT_ERROR", "Failed to logout", e.toString());
@@ -412,6 +447,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
         return;
       }
       sensors.bind(key, value);
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("BIND_ERROR", "Failed to bind", e.toString());
@@ -427,6 +464,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
         return;
       }
       sensors.unbind(key, value);
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("UNBIND_ERROR", "Failed to unbind", e.toString());
@@ -442,6 +481,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
         return;
       }
       sensors.deleteItem(key, value);
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("ITEM_DELETE_ERROR", "Failed to delete item", e.toString());
@@ -463,6 +504,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
         properties = SAFlutterUtils.mapToJsonObject(propertiesMap);
       }
       sensors.setItem(itemType, itemID, properties);
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("ITEM_SET_ERROR", "Failed to set item", e.toString());
@@ -472,6 +515,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
   deleteAll(result: MethodResult): void {
     try {
       sensors.deleteAll();
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("FLUSH_ERROR", "Failed to flush", e.toString());
@@ -481,6 +526,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
   flush(result: MethodResult): void {
     try {
       sensors.flush();
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("FLUSH_ERROR", "Failed to flush", e.toString());
@@ -489,7 +536,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
 
   getDistinctId(call: MethodCall, result: MethodResult): void {
     try {
-      result.success(sensors.getDistinctID() as string);
+      const distinctID: string = sensors.getDistinctID();
+      result.success(distinctID);
     } catch (e) {
       console.error(e);
       result.error("GET_DISTINCT_ID_ERROR", "Failed to get distinct ID", e.toString());
@@ -498,7 +546,9 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
 
   getAnonymousId(call: MethodCall, result: MethodResult): void {
     try {
-      result.success(sensors.getAnonymousID() as string);
+      const anonymousID: string = sensors.getAnonymousID();
+
+      result.success(anonymousID);
     } catch (e) {
       console.error(e);
       result.error("GET_ANONYMOUS_ID_ERROR", "Failed to get anonymous ID", e.toString());
@@ -507,7 +557,9 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
 
   getLoginId(call: MethodCall, result: MethodResult): void {
     try {
-      result.success(sensors.getLoginID() as string);
+      const loginID: string = sensors.getLoginID();
+
+      result.success(loginID);
     } catch (e) {
       console.error(e);
       result.error("GET_LOGIN_ID_ERROR", "Failed to get login ID", e.toString());
@@ -516,7 +568,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
 
   getPresetProperties(result: MethodResult): void {
     try {
-      result.success(sensors.getPresetProperties());
+      const presetProperties = sensors.getPresetProperties();
+      result.success(presetProperties);
     } catch (e) {
       console.error(e);
       result.error("GET_PRESET_PROPERTIES_ERROR", "Failed to get preset properties", e.toString());
@@ -534,6 +587,8 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
       if (properties) {
         sensors.trackAppInstall(properties);
       }
+
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("TRACK_APP_INSTALL_ERROR", "Failed to track app install", e.toString());
@@ -624,6 +679,7 @@ export default class SensorsAnalyticsFlutterPlugin implements FlutterPlugin, Met
         sensors.registerPropertyPlugin(plugin);
       }
 
+      result.success(null);
     } catch (e) {
       console.error(e);
       result.error("START_WITH_CONFIG_ERROR", "Failed to start with config", e.toString());

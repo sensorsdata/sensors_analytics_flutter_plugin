@@ -17,7 +17,7 @@
     "@ohos/flutter_ohos": "file:./har/flutter.har",
     "@ohos/flutter_module": "file:./entry",
     "@sensorsdata/analytics": "file:../../../sa-sdk-harmony-next/SensorsAnalyticsSDK",
-    "sensors_analytics_flutter_plugin": "file:./har/sensors_analytics_flutter_plugin.har"
-    //    "sensors_analytics_flutter_plugin": "file:../../../sensors_analytics_flutter_plugin/ohos"
+//    "sensors_analytics_flutter_plugin": "file:./har/sensors_analytics_flutter_plugin.har"
+    "sensors_analytics_flutter_plugin": "file:../../../sensors_analytics_flutter_plugin/ohos"
   }
 }
